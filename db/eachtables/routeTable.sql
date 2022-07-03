@@ -1,0 +1,21 @@
+CREATE TABLE ROUTES(
+    DIARY_NO NUMBER NOT NULL,
+    ROUTE_NO NUMBER NOT NULL,
+    SIGHT_NO NUMBER NOT NULL,
+    ROUTE_CONTENT VARCHAR2() ,
+    CONSTRAINT ROUTES_PK PRIMARY KEY(DIARY_NO, ROUTE_NO),
+    CONSTRAINT ROUTES_SIGHTS_FK FOREIGN KEY(SIGHT_NO) REFERENCES SIGHTS(SIGHT_NO)
+);
+
+
+INSERT INTO ROUTES VALUES (1, 1, 1, '경복궁갔다옴'); -- 정상
+INSERT INTO ROUTES VALUES (1, 2, 9999, '어디갔다옴'); -- SIGHT_NO가 없는 관광지를 루트에 추가
+INSERT INTO ROUTES VALUES (1, 3, 3, '남산왕돈까스갔다옴'); -- 날짜가 과거가 아니라 미래인 경우
+INSERT INTO ROUTES VALUES (1, 4, 4, '남산왕돈까스2호점갔다옴'); -- 너무 옛날인 경우
+INSERT INTO ROUTES VALUES (1, 5, 4, '남산왕돈까스2호점갔다옴'); -- 같은 다이어리 안에 같은 관광지를 루트에 추가하는 경우
+INSERT INTO ROUTES VALUES (2, 1, 1, '경복궁갔다옴'); -- 정상
+INSERT INTO ROUTES VALUES (2, 2, 2, '남산갔다옴'); -- 여행 2일차
+INSERT INTO ROUTES VALUES (2, 3, 3, '남산왕돈까스갔다옴'); -- 여행 2일차
+INSERT INTO ROUTES VALUES (2, 4, 10, '여행지10갔다옴'); -- 여행 3일차
+INSERT INTO ROUTES VALUES (2, 6, 11, '여행지11갔다옴'); -- ROUTE_NO가 4에서 6으로 건너뛰는 경우
+INSERT INTO ROUTES VALUES (10000, 1, 11, '여행지11갔다옴'); -- 없는 다이어리에 루트를 추가하는 경우
