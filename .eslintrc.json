@@ -1,0 +1,11 @@
+{
+  "root": true,
+  "plugins": ["prettier"],
+  "extends": ["eslint:recommended", "plugin:prettier/recommended"],
+  "rules": {
+    "prettier/prettier": "error",
+    "no-console": "off",
+    "no-undef": "off",
+    "extends": ["eslint:recommended", "google"]
+  }
+}
