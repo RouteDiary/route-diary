@@ -1,3 +1,5 @@
+문제 있을 시, issue #7 프로젝트 규약(https://github.com/kosta224Team/semi-project/issues/7)에 코멘트를 달것
+
 # #1 환경설정, 사용 기술의 버전
 
 ### #1 환경설정
@@ -12,7 +14,7 @@
 
     JDK : 1.8
     node JS : 16.15.1 (includes npm 8.11.0)) *다운로드 주소 : https://nodejs.org/en/download/
-    oracle :11g Express Edition
+    oracle : 11g Express Edition
 
 # #2 용어정리
 
@@ -20,7 +22,7 @@
     다이어리 - 루트다이어리, 게시글의 뜻
     루트 - 다이어리 안에서 글쓴이가 간 각각의 관광지 (ex. 남산, 경복궁, 서촌, 뿅의 전설 등)를 나타내는 이름
     관광지 - 루트로 넣을 수 있는 장소 (ex. 남산, 경복궁, 서촌, 뿅의 전설 등)
-    홈 - 첫번째 화면
+    추천/추천페이지 - 첫번째 화면
     대표이미지 - 각 다이어리를 대표하는 이미지 (다이어리 게시판에 뜨는 사진임)
     루트이미지 - 각 루트에 대한 이미지들
 
@@ -784,7 +786,6 @@
 
         - 세로공백이 필요한 경우
             - 메서드와 메서드 간의 사이 등 (작성자가 생각하기에) 서로 역할이 다른 / 다른 의미를 가진 코드群 사이
-            - overload된 메서드, 생성자 사이에선 공백이 필요하지 않음
          - 가로공백이 필요한 경우
          1.  Separating any reserved word (such as `if`, `for`, or `catch`) except for `function` and `super`, from an open parenthesis (`(`) that follows it on that line.
         2.  Separating any reserved word (such as `else` or `catch`) from a closing curly brace (`}`) that precedes it on that line.
