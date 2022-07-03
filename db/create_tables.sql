@@ -8,40 +8,41 @@ CREATE TABLE clients (
     client_addr VARCHAR2(20 CHAR) NOT NULL,
     client_cellphone_no VARCHAR2(15) NOT NULL,
     nickname VARCHAR2(10 CHAR) NOT NULL,
+    status_flag NUMBER(1) NOT NULL, -- 가입 = 1 / 탈퇴 = 0
     CONSTRAINT clients_pk PRIMARY KEY(id),
     CONSTRAINT clients_uk UNIQUE(nickname)
 );
 --시험용데이터
 INSERT INTO clients 
-     VALUES ('koreaman@gmail.com', 'asd11','성남시 어딘가', '830호', '010-1111-2234','한국남자1');
+     VALUES ('koreaman@gmail.com', 'asd11','성남시 어딘가', '830호', '010-1111-2234','한국남자1', 1);
 INSERT INTO clients 
-     VALUES clients ('japanman@gmail.com', 'asd12','성남시 어딘가', '831호', '010-1112-2234','도로 주소 중복'); -- 도로 주소 중복
+     VALUES clients ('japanman@gmail.com', 'asd12','성남시 어딘가', '831호', '010-1112-2234','도로 주소 중복', 1); -- 도로 주소 중복
 INSERT INTO clients 
-     VALUES ('chinaman@gmail.com', 'asd13','성남시 어딘가1', '832호', '010-1113-2234','한국남자3');
+     VALUES ('chinaman@gmail.com', 'asd13','성남시 어딘가1', '832호', '010-1113-2234','한국남자3', 1);
 INSERT INTO clients 
-     VALUES ('americaman@gmail.com', 'asd14','성남시 어딘가2', '833호', '010-1114-2234','한국남자4');
+     VALUES ('americaman@gmail.com', 'asd14','성남시 어딘가2', '833호', '010-1114-2234','한국남자4', 1);
 INSERT INTO clients 
-     VALUES ('koreawoman@gmail.com', 'asd15','성남시 어딘가3', '834호', '010-1115-2234','한국남자5');
+     VALUES ('koreawoman@gmail.com', 'asd15','성남시 어딘가3', '834호', '010-1115-2234','한국남자5', 1);
 INSERT INTO clients 
-     VALUES ('japanwoman@gmail.com', 'asd16','성남시 어딘가4', '835호', '010-1116-2234','한국남자6');
+     VALUES ('japanwoman@gmail.com', 'asd16','성남시 어딘가4', '835호', '010-1116-2234','한국남자6', 1);
 INSERT INTO clients 
-     VALUES ('chinawoman@gmail.com', 'asd17','성남시 어딘가5', '836호', '010-1117-2234','한국남자7');
+     VALUES ('chinawoman@gmail.com', 'asd17','성남시 어딘가5', '836호', '010-1117-2234','한국남자7', 1);
 INSERT INTO clients 
-     VALUES ('americawoman@gmail.com', 'asd18','성남시 어딘가6', '837호', '010-1118-2234','한국남자8');
+     VALUES ('americawoman@gmail.com', 'asd18','성남시 어딘가6', '837호', '010-1118-2234','한국남자8', 1);
 INSERT INTO clients 
-     VALUES ('americawoman@naver.com', 'asd19','성남시 어딘가7', '838호', '010-1119-2234','김정은');
+     VALUES ('americawoman@naver.com', 'asd19','성남시 어딘가7', '838호', '010-1119-2234','김정은', 1);
 INSERT INTO clients 
-     VALUES ('americaman@daum.net', 'asd11','성남시 어딘가8', '839호', '010-1110-2234','비번 중복'); -- 비번 중복
+     VALUES ('americaman@daum.net', 'asd11','성남시 어딘가8', '839호', '010-1110-2234','비번 중복', 1); -- 비번 중복
 INSERT INTO clients 
-     VALUES ('koreaman@naver.com', 'asd20','성남시 어딘가9', '840호', '010-1111-2234','전화 번호 중복'); -- 전화 번호 중복
+     VALUES ('koreaman@naver.com', 'asd20','성남시 어딘가9', '840호', '010-1111-2234','전화 번호 중복', 1); -- 전화 번호 중복
 INSERT INTO clients 
-     VALUES ('koreawoman@naver.com', 'asd21','성남시 어딘가0', '830호', '010-1121-2235','상세 주소 중복'); -- 상세 주소 중복
+     VALUES ('koreawoman@naver.com', 'asd21','성남시 어딘가0', '830호', '010-1121-2235','상세 주소 중복', 1); -- 상세 주소 중복
 INSERT INTO clients 
-     VALUES ('koreawoman@daum.net', 'asd22','성남시 어딘가1', '841호', '010-1121-2236','아이디와 이메일 주소가 다름'); -- 아이디와 이메일 주소 중복
+     VALUES ('koreawoman@daum.net', 'asd22','성남시 어딘가1', '841호', '010-1121-2236','아아아', 1);
 INSERT INTO clients 
-     VALUES ('japanwoman@naver.com', 'asd23','성남시 어딘가2', '842호', '010-1121-2237','한국남자1'); -- 닉네임 중복
+     VALUES ('japanwoman@naver.com', 'asd23','성남시 어딘가2', '842호', '010-1121-2237','한국남자1', 1); -- 닉네임 중복
 INSERT INTO clients 
-     VALUES ('japanwoman@naver.com', 'asd23','성남시 어딘가2', '842호', '010-1121-2237','한국남자1'); -- 아이디 중복 (에러 예상)
+     VALUES ('japanwoman@naver.com', 'asd23','성남시 어딘가2', '842호', '010-1121-2237','한국남자1', 1); -- 아이디 중복 (에러 예상)
 
 
 --diaries table
@@ -49,10 +50,10 @@ CREATE TABLE diaries (
     diary_no NUMBER(6) NOT NULL, -- PK
     id VARCHAR2(20 CHAR) NOT NULL, -- FK 20자리까지 가능
     diary_title VARCHAR2(30 CHAR) NOT NULL,  -- 한글로 30자 가능
-    diary_writting_time DATE NOT NULL,
+    diary_writing_time DATE NOT NULL,
     diary_start_date DATE NOT NULL,
     diary_end_date DATE NOT NULL,
-    diary_flag NUMBER(1) NOT NULL, -- 1이 보이기 0은 숨기기
+    diary_flag NUMBER(1) NOT NULL, -- 공개 = 1 / 비공개 = 0
     view_cnt NUMBER(5) NOT NULL,
     like_cnt NUMBER(5) NOT NULL,
     CONSTRAINT diaries_pk PRIMARY KEY(diary_no),
@@ -66,7 +67,7 @@ INSERT INTO diaries
 INSERT INTO diaries
      VALUES (diary_no_seq.NEXTVAL, 'japanman@gmail.com', '즐거운 부산으로 떠나요',
              TO_DATE('20220623 102311','yyyy-mm-dd hh24:mi:ss'), TO_DATE('20200711','yyyy-mm-dd'), TO_DATE('20200714','yyyy-mm-dd'),
-             0, 1525,  1);
+             1, 1525,  1);
 
 INSERT INTO diaries
      VALUES (diary_no_seq.NEXTVAL, 'chinaman@gmail.com', '즐거운 대구로 떠나요',
@@ -81,7 +82,7 @@ INSERT INTO diaries
 INSERT INTO diaries
      VALUES (diary_no_seq.NEXTVAL, 'koreawoman@gmail.com', '즐거운 인천으로 떠나요',
              TO_DATE('20220626 102011','yyyy-mm-dd hh24:mi:ss'), TO_DATE('20200101','yyyy-mm-dd'), TO_DATE('20200320','yyyy-mm-dd'),
-             0, 15231,  6);
+             1, 15231,  6);
 
 INSERT INTO diaries
      VALUES (diary_no_seq.NEXTVAL, 'japanwoman@gmail.com', '즐거운 대전으로 떠나요',
@@ -96,7 +97,7 @@ INSERT INTO diaries
 INSERT INTO diaries
      VALUES (diary_no_seq.NEXTVAL, 'americawoman@gmail.com', '즐거운 세종으로 떠나요',
              TO_DATE('20220629 102011','yyyy-mm-dd hh24:mi:ss'), TO_DATE('20200401','yyyy-mm-dd'), TO_DATE('20200520','yyyy-mm-dd'),
-             0, 15231, 2);
+             1, 15231, 2);
 
 INSERT INTO diaries
      VALUES (diary_no_seq.NEXTVAL, 'americawoman@gmail.com', '즐거운 경남으로 떠나요',
@@ -122,10 +123,6 @@ INSERT INTO diaries
      VALUES (diary_no_seq.NEXTVAL, 'koreaman@naver.com', '즐거운 전북으로 떠나요',
              TO_DATE('20220629 132011','yyyy-mm-dd hh24:mi:ss'), TO_DATE('20200404','yyyy-mm-dd'), TO_DATE('20200520','yyyy-mm-dd'),
              0, 1231, 8); -- 뷰 수가 같을 경우
-INSERT INTO diaries
-     VALUES (diary_no_seq.NEXTVAL, 'man@naver.com', '즐거운 전북으로 떠나요',
-             TO_DATE('20220629 132011','yyyy-mm-dd hh24:mi:ss'), TO_DATE('20200404','yyyy-mm-dd'), TO_DATE('20200520','yyyy-mm-dd'),
-             0, 1231, 9); -- id가 client 테이블에 없을 경우 (에러 예상)
 INSERT INTO diaries
      VALUES (diary_no_seq.NEXTVAL, 'koreaman@naver.com', '즐거운 전북으로 떠나요2',
              TO_DATE('20210601 132011','yyyy-mm-dd hh24:mi:ss'), TO_DATE('20200404','yyyy-mm-dd'), TO_DATE('20200520','yyyy-mm-dd'),
@@ -177,14 +174,18 @@ INSERT INTO diaries
 INSERT INTO diaries
      VALUES (diary_no_seq.NEXTVAL, 'koreaman@naver.com', '즐거운 전남으로 떠나요9',
              TO_DATE('20210521 132011','yyyy-mm-dd hh24:mi:ss'), TO_DATE('20200505','yyyy-mm-dd'), TO_DATE('20200510','yyyy-mm-dd'),
-             1, 2031, 41);             
+             1, 2031, 41);    
+INSERT INTO diaries
+     VALUES (diary_no_seq.NEXTVAL, 'man@naver.com', '즐거운 전북으로 떠나요',
+             TO_DATE('20220629 132011','yyyy-mm-dd hh24:mi:ss'), TO_DATE('20200404','yyyy-mm-dd'), TO_DATE('20200520','yyyy-mm-dd'),
+             0, 1231, 9); -- id가 client 테이블에 없을 경우 (에러 예상)             
              
 --comments table
 CREATE TABLE comments(
     comment_no NUMBER(8) NOT NULL, -- PK
     diary_no NUMBER(6) NOT NULL, -- FK
     comment_content VARCHAR2(300 CHAR) NOT NULL,
-    comment_writting_time DATE NOT NULL,
+    comment_writing_time DATE NOT NULL,
     CONSTRAINT comments_pk PRIMARY KEY(comment_no, diary_no),
     CONSTRAINT comments_travels_fk FOREIGN KEY(diary_no) REFERENCES diaries(diary_no)
 );
