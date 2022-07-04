@@ -3,19 +3,19 @@
 --로그인화면 SQL 구문
 SELECT *
   FROM clients
- WHERE id='nkman@naver.com'
-   AND pwd='asdasd'
-   AND status_flag=1; --(0은 탈퇴회원이므로 로그인 실패, 1은 로그인)
+ WHERE client_id='nkman@naver.com'
+   AND client_pwd='asdasd'
+   AND client_status_flag=1; --(0은 탈퇴회원이므로 로그인 실패, 1은 로그인)
    
 --로그인화면 ( 관리자 ) SQL 구문
 SELECT *
   FROM admins
- WHERE id=?
-   AND pwd=?;
+ WHERE admin_id=?
+   AND admin_pwd=?;
 
 --회원가입화면 SQL 구문
-INSERT INTO clients (id,pwd,client_roadaddr,client_addr,client_cellphone_no,nickname,status_flag) 
-     VALUES ('taiwanman@google.com','asd','타이페이시','어딘가','010-9900-0000','대만인',1);
+INSERT INTO clients  
+     VALUES ('taiwanman@google.com','asd','010-9900-0000','대만인',1);
 
 -- 다이어리 게시판 SQL 구문
 
@@ -23,16 +23,16 @@ INSERT INTO clients (id,pwd,client_roadaddr,client_addr,client_cellphone_no,nick
          SELECT d.diary_no -- 나중에 뺄것
               , d.diary_title
               , d.diary_writing_time
-              , d.id 
-              , c.nickname
+              , d.client_id 
+              , c.client_nickname
               , d.diary_start_date
               , d.diary_end_date
-              , d.view_cnt
-              , d.like_cnt
+              , d.diary_view_cnt
+              , d.diary_like_cnt
            FROM diaries d
-LEFT OUTER JOIN clients c ON (d.id = c.id)
+LEFT OUTER JOIN clients c ON (d.client_id = c.client_id)
           WHERE diary_flag = 1 -- 공개글만 반환
-            AND delete_flag = 1 -- 삭제안된 상태 : 1 / 상제된 상태 : 0 
+            AND diary_delete_flag = 1 -- 삭제안된 상태 : 1 / 상제된 상태 : 0 
             AND ROWNUM <= 10 -- 1~10번째 글만 반환
        ORDER BY diary_writing_time DESC;
 -- 11~20번째 반환
@@ -40,17 +40,17 @@ SELECT *
   FROM (SELECT d.diary_no -- 나중에 뺄것
              , d.diary_title
              , d.diary_writing_time
-             , d.id 
-             , c.nickname
+             , d.client_id 
+             , c.client_nickname
              , d.diary_start_date
              , d.diary_end_date
-             , d.view_cnt
-             , d.like_cnt
+             , d.diary_view_cnt
+             , d.diary_like_cnt
              , ROWNUM r
           FROM diaries d
-LEFT OUTER JOIN clients c ON (d.id = c.id)
+LEFT OUTER JOIN clients c ON (d.client_id = c.client_id)
           WHERE diary_flag = 1 -- 공개글만 반환
-            AND delete_flag = 1 -- 삭제안된 상태 : 1 / 상제된 상태 : 0 
+            AND diary_delete_flag = 1 -- 삭제안된 상태 : 1 / 상제된 상태 : 0 
        ORDER BY diary_writing_time DESC)
  WHERE r BETWEEN 11 AND 20;
 
@@ -59,36 +59,36 @@ LEFT OUTER JOIN clients c ON (d.id = c.id)
          SELECT d.diary_no -- 나중에 뺄것
               , d.diary_title
               , d.diary_writing_time
-              , d.id 
-              , c.nickname
+              , d.client_id 
+              , c.client_nickname
               , d.diary_start_date
               , d.diary_end_date
-              , d.view_cnt
-              , d.like_cnt
+              , d.diary_view_cnt
+              , d.diary_like_cnt
            FROM diaries d
-LEFT OUTER JOIN clients c ON (d.id = c.id)
+LEFT OUTER JOIN clients c ON (d.client_id = c.client_id)
           WHERE diary_flag = 1 -- 공개글만 반환
-            AND delete_flag = 1 -- 삭제안된 상태 : 1 / 상제된 상태 : 0           
+            AND diary_delete_flag = 1 -- 삭제안된 상태 : 1 / 상제된 상태 : 0           
             AND ROWNUM <= 10 -- 1~10번째 글만 반환
-       ORDER BY like_cnt DESC,
+       ORDER BY diary_like_cnt DESC,
                 diary_writing_time DESC;
 -- 11~20번째 반환
 SELECT * 
   FROM (SELECT d.diary_no -- 나중에 뺄것
-             , d.diary_title
-             , d.diary_writing_time
-             , d.id 
-             , c.nickname
-             , d.diary_start_date
-             , d.diary_end_date
-             , d.view_cnt
-             , d.like_cnt
+              , d.diary_title
+              , d.diary_writing_time
+              , d.client_id 
+              , c.client_nickname
+              , d.diary_start_date
+              , d.diary_end_date
+              , d.diary_view_cnt
+              , d.diary_like_cnt
              , ROWNUM r
           FROM diaries d
-LEFT OUTER JOIN clients c ON (d.id = c.id)
+LEFT OUTER JOIN clients c ON (d.client_id = c.client_id)
           WHERE diary_flag = 1 -- 공개글만 반환
-            AND delete_flag = 1 -- 삭제안된 상태 : 1 / 상제된 상태 : 0           
-       ORDER BY like_cnt DESC,
+            AND diary_delete_flag = 1 -- 삭제안된 상태 : 1 / 상제된 상태 : 0           
+       ORDER BY diary_like_cnt DESC,
                 diary_writing_time DESC)
  WHERE r BETWEEN 11 AND 20;
 
@@ -96,36 +96,36 @@ LEFT OUTER JOIN clients c ON (d.id = c.id)
          SELECT d.diary_no -- 나중에 뺄것
               , d.diary_title
               , d.diary_writing_time
-              , d.id 
-              , c.nickname
+              , d.client_id 
+              , c.client_nickname
               , d.diary_start_date
               , d.diary_end_date
-              , d.view_cnt
-              , d.like_cnt
+              , d.diary_view_cnt
+              , d.diary_like_cnt
            FROM diaries d
-LEFT OUTER JOIN clients c ON (d.id = c.id)
+LEFT OUTER JOIN clients c ON (d.client_id = c.client_id)
           WHERE diary_flag = 1 -- 공개글만 반환
-            AND delete_flag = 1 -- 삭제안된 상태 : 1 / 상제된 상태 : 0           
+            AND diary_delete_flag = 1 -- 삭제안된 상태 : 1 / 상제된 상태 : 0           
             AND ROWNUM <= 10 -- 1~10번째 글만 반환
-       ORDER BY view_cnt DESC,
+       ORDER BY diary_view_cnt DESC,
                 diary_writing_time DESC;
 -- 11~20번째 반환
 SELECT * 
-  FROM (SELECT d.diary_no -- 나중에 뺄것
-             , d.diary_title
-             , d.diary_writing_time
-             , d.id 
-             , c.nickname
-             , d.diary_start_date
-             , d.diary_end_date
-             , d.view_cnt
-             , d.like_cnt
+  FROM (SELECT  d.diary_no -- 나중에 뺄것
+              , d.diary_title
+              , d.diary_writing_time
+              , d.client_id 
+              , c.client_nickname
+              , d.diary_start_date
+              , d.diary_end_date
+              , d.diary_view_cnt
+              , d.diary_like_cnt
              , ROWNUM r
           FROM diaries d
-LEFT OUTER JOIN clients c ON (d.id = c.id)
+LEFT OUTER JOIN clients c ON (d.client_id = c.client_id)
           WHERE diary_flag = 1 -- 공개글만 반환
-            AND delete_flag = 1 -- 삭제안된 상태 : 1 / 상제된 상태 : 0           
-       ORDER BY view_cnt DESC,
+            AND diary_delete_flag = 1 -- 삭제안된 상태 : 1 / 상제된 상태 : 0           
+       ORDER BY diary_view_cnt DESC,
                 diary_writing_time DESC)
  WHERE r BETWEEN 11 AND 20;
 
@@ -133,29 +133,29 @@ LEFT OUTER JOIN clients c ON (d.id = c.id)
 SELECT DISTINCT diary_no 
               , diary_title
               , diary_writing_time
-              , id
-              , nickname
+              , client_id 
+              , client_nickname
               , diary_start_date
               , diary_end_date
-              , view_cnt
-              , like_cnt
+              , diary_view_cnt
+              , diary_like_cnt
               , route_content -- 나중에 뺄것
            FROM (SELECT d.diary_no
                       , d.diary_title
                       , d.diary_writing_time
-                      , d.id 
-                      , c.nickname
+                      , d.client_id 
+                      , c.client_nickname
                       , d.diary_start_date
                       , d.diary_end_date
-                      , d.view_cnt
-                      , d.like_cnt
+                      , d.diary_view_cnt
+                      , d.diary_like_cnt
                       , r.route_no -- 나중에 뺄것
                    FROM diaries d
         LEFT OUTER JOIN routes r ON (d.diary_no = r.diary_no)
         LEFT OUTER JOIN sights s ON (r.sight_no = s.sight_no)
-        LEFT OUTER JOIN clients c ON (d.id = c.id)
+        LEFT OUTER JOIN clients c ON (d.client_id = c.client_id)
                   WHERE diary_flag = 1 -- 공개글만 반환
-                    AND delete_flag = 1 -- 삭제안된 상태 : 1 / 상제된 상태 : 0 
+                    AND diary_delete_flag = 1 -- 삭제안된 상태 : 1 / 상제된 상태 : 0 
                     AND (r.route_content LIKE '%경복궁%'
                          OR d.diary_title LIKE '%경복궁%'
                          OR s.sight_name LIKE '%경복궁%')
@@ -168,39 +168,39 @@ SELECT DISTINCT diary_no
 SELECT DISTINCT diary_no 
               , diary_title
               , diary_writing_time
-              , id
-              , nickname
+              , client_id
+              , client_nickname
               , diary_start_date
               , diary_end_date
-              , view_cnt
-              , like_cnt
+              , diary_view_cnt
+              , diary_like_cnt
            FROM (SELECT diary_no 
                       , diary_title
                       , diary_writing_time
-                      , id
-                      , nickname
+                      , client_id
+                      , client_nickname
                       , diary_start_date
                       , diary_end_date
-                      , view_cnt
-                      , like_cnt
+                      , diary_view_cnt
+                      , diary_like_cnt
                       , ROWNUM r
                    FROM (SELECT d.diary_no
                               , d.diary_title
                               , d.diary_writing_time
-                              , d.id 
-                              , c.nickname
+                              , d.client_id 
+                              , c.client_nickname
                               , d.diary_start_date
                               , d.diary_end_date
-                              , d.view_cnt
-                              , d.like_cnt
+                              , d.diary_view_cnt
+                              , d.diary_like_cnt
                               , r.route_content -- 나중에 뺄것
                               , r.route_no -- 나중에 뺄것
                            FROM diaries d
                 LEFT OUTER JOIN routes r ON (d.diary_no = r.diary_no)
                 LEFT OUTER JOIN sights s ON (r.sight_no = s.sight_no)
-                LEFT OUTER JOIN clients c ON (d.id = c.id)
+                LEFT OUTER JOIN clients c ON (d.client_id = c.client_id)
                           WHERE diary_flag = 1 -- 공개글만 반환
-                            AND delete_flag = 1 -- 삭제안된 상태 : 1 / 상제된 상태 : 0                           
+                            AND diary_delete_flag = 1 -- 삭제안된 상태 : 1 / 상제된 상태 : 0                           
                             AND (r.route_content LIKE '%경복궁%'
                                  OR d.diary_title LIKE '%경복궁%'
                                  OR s.sight_name LIKE '%경복궁%')
@@ -214,16 +214,16 @@ SELECT DISTINCT diary_no
          SELECT d.diary_no -- 나중에 뺄것
               , d.diary_title
               , d.diary_writing_time
-              , d.id 
-              , c.nickname
+              , d.client_id 
+              , c.client_nickname
               , d.diary_start_date
               , d.diary_end_date
-              , d.view_cnt
-              , d.like_cnt
+              , d.diary_view_cnt
+              , d.diary_like_cnt
            FROM diaries d
-LEFT OUTER JOIN clients c ON (d.id = c.id)
-          WHERE d.id = 'koreaman@naver.com' -- 현재 로그인 중인 계정
-            AND delete_flag = 1 -- 삭제안된 상태 : 1 / 상제된 상태 : 0     
+LEFT OUTER JOIN clients c ON (d.client_id = c.client_id)
+          WHERE d.client_id = 'koreaman@naver.com' -- 현재 로그인 중인 계정
+            AND diary_delete_flag = 1 -- 삭제안된 상태 : 1 / 상제된 상태 : 0     
             AND ROWNUM <= 10 -- 1~10번째 글만 반환
        ORDER BY diary_writing_time DESC;
 -- 11~20번째 반환
@@ -231,17 +231,17 @@ SELECT *
   FROM (SELECT d.diary_no -- 나중에 뺄것
              , d.diary_title
              , d.diary_writing_time
-             , d.id 
-             , c.nickname
+             , d.client_id 
+             , c.client_nickname
              , d.diary_start_date
              , d.diary_end_date
-             , d.view_cnt
-             , d.like_cnt
+             , d.diary_view_cnt
+             , d.diary_like_cnt
              , ROWNUM r
           FROM diaries d
-LEFT OUTER JOIN clients c ON (d.id = c.id)
-          WHERE d.id = 'koreaman@naver.com' -- 현재 로그인 중인 계정
-            AND delete_flag = 1 -- 삭제안된 상태 : 1 / 상제된 상태 : 0     
+LEFT OUTER JOIN clients c ON (d.client_id = c.client_id)
+          WHERE d.client_id = 'koreaman@naver.com' -- 현재 로그인 중인 계정
+            AND diary_delete_flag = 1 -- 삭제안된 상태 : 1 / 상제된 상태 : 0     
        ORDER BY diary_writing_time DESC)
  WHERE r BETWEEN 11 AND 20;
  
@@ -249,16 +249,11 @@ LEFT OUTER JOIN clients c ON (d.id = c.id)
  --관광지 추가 SQL
 INSERT INTO sights 
      VALUES (sight_no_seq.NEXTVAL
-           , 1
            , '관광지 이름'
            , '관광지 주소'
            , 10001
            , '관광지 카테고리 이름'
 );
-
---광역자치단체 정보보기 SQL
-SELECT *
-  FROM regions;
 
 --루트 추가 SQL
 INSERT INTO ROUTES 
@@ -287,16 +282,14 @@ INSERT INTO likes
 
 --내 계정 정보 업데이트 SQL구문
 UPDATE clients
-   SET pwd = '?'
-     , client_roadaddr = '?'
-     , client_addr = '?'
+   SET client_pwd = '?'
      , client_cellphone_no = '?'
-     , nickname = '?'
-WHERE id = 'koreaman@naver.com'; --업데이트 할 id값
+     , client_nickname = '?'
+WHERE cleint_id = 'koreaman@naver.com'; --업데이트 할 id값
 SELECT * 
   FROM clients;
 
 --회원탈퇴
-UPDATE CLIENTS
-SET STATUS_FLAG = '0' --0 탈퇴 ,
-WHERE ID = 'koreaman@naver.com';
+UPDATE clients
+SET client_status_flag = '0' --0 탈퇴 ,
+WHERE client_id = 'koreaman@naver.com';
