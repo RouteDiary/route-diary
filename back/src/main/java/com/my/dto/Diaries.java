@@ -6,8 +6,9 @@ import java.util.Date;
  * diary_no NUMBER(6) NOT NULL, -- PK id VARCHAR2(20 CHAR) NOT NULL, -- FK 20자리까지 가능 diary_title
  * VARCHAR2(30 CHAR) NOT NULL, -- 한글로 30자 가능 diary_writing_time DATE NOT NULL, diary_start_date DATE
  * NOT NULL, diary_end_date DATE NOT NULL, diary_flag NUMBER(1) NOT NULL, -- 공개 = 1 / 비공개 = 0
- * view_cnt NUMBER(5) NOT NULL, like_cnt NUMBER(5) NOT NULL, CONSTRAINT diaries_pk PRIMARY
- * KEY(diary_no), CONSTRAINT diaries_clients_fk FOREIGN KEY(id) REFERENCES clients(id)
+ * view_cnt NUMBER(5) NOT NULL, like_cnt NUMBER(5) NOT NULL, delete_flag NUMBER(1) NOT NULL, --
+ * 삭제안된상태 = 1 / 삭제된상태 = 0 CONSTRAINT diaries_pk PRIMARY KEY(diary_no), CONSTRAINT diaries_clients_fk
+ * FOREIGN KEY(id) REFERENCES clients(id)
  *
  */
 public class Diaries {
@@ -20,6 +21,7 @@ public class Diaries {
   private int diaryFlag;
   private int viewCnt;
   private int likeCnt;
+  private int deleteFlag;
   private Clients clients;
   private Routes routes;
   private Comments comments;
@@ -28,7 +30,7 @@ public class Diaries {
 
   public Diaries(int diaryNo, String id, String diaryTitle, String diaryWritingTime,
       Date diaryStartDate, Date diaryEndDate, int diaryFlag, int viewCnt, int likeCnt,
-      Clients clients, Routes routes) {
+      int deleteFlag, Clients clients, Routes routes, Comments comments) {
     this.diaryNo = diaryNo;
     this.id = id;
     this.diaryTitle = diaryTitle;
@@ -38,22 +40,7 @@ public class Diaries {
     this.diaryFlag = diaryFlag;
     this.viewCnt = viewCnt;
     this.likeCnt = likeCnt;
-    this.clients = clients;
-    this.routes = routes;
-  }
-
-  public Diaries(int diaryNo, String id, String diaryTitle, String diaryWritingTime,
-      Date diaryStartDate, Date diaryEndDate, int diaryFlag, int viewCnt, int likeCnt,
-      Clients clients, Routes routes, Comments comments) {
-    this.diaryNo = diaryNo;
-    this.id = id;
-    this.diaryTitle = diaryTitle;
-    this.diaryWritingTime = diaryWritingTime;
-    this.diaryStartDate = diaryStartDate;
-    this.diaryEndDate = diaryEndDate;
-    this.diaryFlag = diaryFlag;
-    this.viewCnt = viewCnt;
-    this.likeCnt = likeCnt;
+    this.deleteFlag = deleteFlag;
     this.clients = clients;
     this.routes = routes;
     this.comments = comments;
@@ -131,6 +118,14 @@ public class Diaries {
     this.likeCnt = likeCnt;
   }
 
+  public int getDeleteFlag() {
+    return deleteFlag;
+  }
+
+  public void setDeleteFlag(int deleteFlag) {
+    this.deleteFlag = deleteFlag;
+  }
+
   public Clients getClients() {
     return clients;
   }
@@ -160,7 +155,7 @@ public class Diaries {
     return "Diaries [diaryNo=" + diaryNo + ", id=" + id + ", diaryTitle=" + diaryTitle
         + ", diaryWritingTime=" + diaryWritingTime + ", diaryStartDate=" + diaryStartDate
         + ", diaryEndDate=" + diaryEndDate + ", diaryFlag=" + diaryFlag + ", viewCnt=" + viewCnt
-        + ", likeCnt=" + likeCnt + ", clients=" + clients + ", routes=" + routes + ", comments="
-        + comments + "]";
+        + ", likeCnt=" + likeCnt + ", deleteFlag=" + deleteFlag + ", clients=" + clients
+        + ", routes=" + routes + ", comments=" + comments + "]";
   }
 }
