@@ -19,7 +19,7 @@ CREATE TABLE diaries (
     diary_writing_time DATE NOT NULL,
     diary_start_date DATE NOT NULL,
     diary_end_date DATE NOT NULL,
-    diary_flag NUMBER(1) NOT NULL, -- 공개 = 1 / 비공개 = 0
+    diary_disclosure_flag NUMBER(1) NOT NULL, -- 공개 = 1 / 비공개 = 0
     diary_view_cnt NUMBER(5) NOT NULL,
     diary_like_cnt NUMBER(5) NOT NULL,
     diary_delete_flag NUMBER(1) NOT NULL, -- 삭제안된상태 = 1 / 삭제된상태 = 0

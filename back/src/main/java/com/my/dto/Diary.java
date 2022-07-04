@@ -10,7 +10,7 @@ public class Diary {
   private String diaryWritingTime;
   private Date diaryStartDate;
   private Date diaryEndDate;
-  private int diaryFlag;
+  private int diaryDisclosureFlag;
   private int diaryViewCnt;
   private int diaryLikeCnt;
   private int diaryDeleteFlag;
