@@ -2,7 +2,7 @@
 
 --clients table
 CREATE TABLE clients (
-    id VARCHAR2(20 CHAR) NOT NULL,
+    id VARCHAR2(40 CHAR) NOT NULL,
     pwd VARCHAR2(20 CHAR) NOT NULL,
     client_roadaddr VARCHAR2(20 CHAR) NOT NULL,
     client_addr VARCHAR2(20 CHAR) NOT NULL,
@@ -43,7 +43,8 @@ INSERT INTO clients
      VALUES ('japanwoman@naver.com', 'asd23','성남시 어딘가2', '842호', '010-1121-2237','한국남자1', 1); -- 닉네임 중복
 INSERT INTO clients 
      VALUES ('japanwoman@naver.com', 'asd23','성남시 어딘가2', '842호', '010-1121-2237','한국남자1', 1); -- 아이디 중복 (에러 예상)
-
+INSERT INTO clients 
+     VALUES ('northkoreaman@naver.com', 'asdasd','평양시', '838호', '010-1119-2234','김정은', 0);
 
 --diaries table
 CREATE TABLE diaries (
