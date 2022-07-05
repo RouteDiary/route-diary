@@ -13,6 +13,8 @@
 ### #2 사용 기술의 버전
 
     JDK : 1.8
+    tomcat server : v9.0
+    ojdbc8.jar
     node JS : 16.15.1 (includes npm 8.11.0)) *다운로드 주소 : https://nodejs.org/en/download/
     oracle : 11g Express Edition
 

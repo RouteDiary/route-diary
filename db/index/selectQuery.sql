@@ -5,19 +5,16 @@
 INSERT INTO clients  
      VALUES ('taiwanman@google.com','asd','010-9900-0000','대만인',1);
 
---내 계정 정보 업데이트 SQL구문
+--내 계정 정보 업데이트 OR 회원탈퇴 SQL구문 
 UPDATE clients
    SET client_pwd = '?'
      , client_cellphone_no = '?'
      , client_nickname = '?'
+     , client_status_flag = '0'
 WHERE cleint_id = 'koreaman@naver.com'; --업데이트 할 id값
 SELECT * 
   FROM clients;
 
---회원탈퇴
-UPDATE clients
-SET client_status_flag = '0' --0 탈퇴 ,
-WHERE client_id = 'koreaman@naver.com';
      
 --로그인화면 SQL 구문
 SELECT *
@@ -275,6 +272,14 @@ INSERT INTO ROUTES
            , 1
            , 1
            , '루트내용');
+--루트 수정 SQL 
+UPDATE routes 
+   SET sight_no = 1
+     , route_content = '새로운내용' 
+ WHERE route_no = 1;          
+--루트 삭제 SQL       
+DELETE FROM routes 
+      WHERE diary_no = 1; 
 
 -- 다이어리 추가 SQL
 INSERT INTO diaries 
@@ -289,14 +294,22 @@ INSERT INTO diaries
            , 0 -- 좋아요수
            , 1 -- 삭제여부 (삭제안된상태 : 1, 상제된상태 : 0)
 );
+--다이어리 수정 & 삭제 SQL
+UPDATE diaries 
+   SET diary_title = '새로운제목'
+     , diary_writing_time = TO_DATE(SYSDATE, 'yyyy/mm/dd')
+     , diary_start_date	= TO_DATE('2022/04/12', 'yyyy/mm/dd')
+     , diary_end_date = TO_DATE('2022/05/12', 'yyyy/mm/dd')
+     , diary_disclosure_flag = 1
+     , diary_delete_flag = 1
+ WHERE diary_no = 1; 
+
 
 --유저가 다이어리에 좋아요 클릭시 (americaman@gmail.com 유저가 1번 다이어리에 좋아요 눌렀을때)
 INSERT INTO likes 
      VALUES (1
            , 'americaman@gmail.com');
-
--- 유저가 다이어리에 좋아요 클릭시 diaries table의 diary_like_cnt 증가/감소 트리거
--- 구현해야함     
+   
 
 --댓글 추가
 INSERT INTO comments 
@@ -314,18 +327,26 @@ UPDATE comments
 DELETE FROM comments 
       WHERE client_id='koreaman@gmail.com';
            
---다이어리 조회 (미완성)
+--다이어리 조회 4개 SQL 이용
 		   SELECT d.diary_title
-			    , 다이어리작성자닉네임
+			    , c.client_nickname
 			    , d.diary_writing_time
 			    , d.diary_start_date
 			    , d.diary_end_date
 			    , d.diary_view_cnt
 			    , d.diary_like_cnt
-			    , route_content
-			    , sight_name
-			    , 댓글작성자닉네임
-			    , comment_content
-			    , comment_writing_time
              FROM diaries d;
   LEFT OUTER JOIN clients c ON (d.client_id = c.client_id);
+SELECT *
+  FROM routes;
+ WHERE diary_no = 1;
+SELECT *
+  FROM comments;
+ WHERE diary_no = 1; 
+SELECT *
+  FROM sights;
+ WHERE sight_no = (SELECT sight_no
+ 					 FROM routes
+ 					WHERE routes_no = 1); 
+ 					
+ 
