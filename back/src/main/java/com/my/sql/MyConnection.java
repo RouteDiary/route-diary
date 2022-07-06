@@ -22,6 +22,7 @@ public class MyConnection {
     String pwd = env.getProperty("DB_PWD");
     Class.forName(driver);
     con = DriverManager.getConnection(url, id, pwd);
+    System.out.println("MyConnection.java : db connection success!");
     return con;
   }
 

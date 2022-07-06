@@ -7,7 +7,7 @@ public class Diary {
   private int diaryNo;
   private String clientId;
   private String diaryTitle;
-  private String diaryWritingTime;
+  private Date diaryWritingTime;
   private Date diaryStartDate;
   private Date diaryEndDate;
   private int diaryDisclosureFlag;
@@ -20,7 +20,7 @@ public class Diary {
 
   public Diary() {}
 
-  public Diary(int diaryNo, String clientId, String diaryTitle, String diaryWritingTime,
+  public Diary(int diaryNo, String clientId, String diaryTitle, Date diaryWritingTime,
       Date diaryStartDate, Date diaryEndDate, int diaryDisclosureFlag, int diaryViewCnt,
       int diaryLikeCnt, int diaryDeleteFlag, Client client, List<Route> route,
       List<Comment> comment) {
@@ -63,11 +63,11 @@ public class Diary {
     this.diaryTitle = diaryTitle;
   }
 
-  public String getDiaryWritingTime() {
+  public Date getDiaryWritingTime() {
     return diaryWritingTime;
   }
 
-  public void setDiaryWritingTime(String diaryWritingTime) {
+  public void setDiaryWritingTime(Date diaryWritingTime) {
     this.diaryWritingTime = diaryWritingTime;
   }
 

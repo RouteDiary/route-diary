@@ -13,7 +13,7 @@
 <%
 String envPath = application.getRealPath("project.properties");
 Connection con = MyConnection.getConnection(envPath);
-	String result="ok jdbc";
+	String result=envPath;
 	if(con==null) result="error db";
 %>
 <h1><%=result %></h1>

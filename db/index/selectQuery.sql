@@ -31,21 +31,24 @@ SELECT *
    
 -- 다이어리 게시판 SQL 구문
 -- 다이어리 게시판에 들어갔을때 1번째부터 10번째 다이어리 반환 (최신글 순) : 다이어리 번호, 다이어리 제목, 닉네임, 조회수, 좋아요수, 여행시작일자, 종료일자 반환
-         SELECT d.diary_no -- 나중에 뺄것
-              , d.diary_title
-              , d.diary_writing_time
-              , d.client_id 
-              , c.client_nickname
-              , d.diary_start_date
-              , d.diary_end_date
-              , d.diary_view_cnt
-              , d.diary_like_cnt
+-- Return diaries, clients' columns 
+         SELECT *
            FROM diaries d
 LEFT OUTER JOIN clients c ON (d.client_id = c.client_id)
           WHERE diary_disclosure_flag = 1 -- 공개글만 반환
             AND diary_delete_flag = 1 -- 삭제안된 상태 : 1 / 상제된 상태 : 0 
             AND ROWNUM <= 10 -- 1~10번째 글만 반환
        ORDER BY diary_writing_time DESC;
+-- Return diaries, clients, routes, comments' columns        
+         SELECT *
+           FROM diaries d
+LEFT OUTER JOIN clients c ON (d.client_id = c.client_id)
+LEFT OUTER JOIN routes r ON (d.diary_no = r.diary_no)
+LEFT OUTER JOIN comments c ON (d.diary_no = c.diary_no)
+          WHERE diary_disclosure_flag = 1 -- 공개글만 반환
+            AND diary_delete_flag = 1 -- 삭제안된 상태 : 1 / 상제된 상태 : 0 
+            AND ROWNUM <= 10 -- 1~10번째 글만 반환
+       ORDER BY diary_writing_time DESC;       
 -- 11~20번째 반환
 SELECT * 
   FROM (SELECT d.diary_no -- 나중에 뺄것
