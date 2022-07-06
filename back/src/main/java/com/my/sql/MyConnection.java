@@ -1,28 +1,27 @@
 package com.my.sql;
 
+import java.io.FileInputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Properties;
 
 public class MyConnection {
-  static {
-    try {
-      Class.forName("oracle.jdbc.driver.OracleDriver");
-    } catch (ClassNotFoundException e) {
-      e.printStackTrace();
-    }
-  }
+  public static Connection getConnection(String envPath) throws Exception {
 
-  public static Connection getConnection() throws SQLException {
     Connection con = null;
-    String url =
-        "jdbc:oracle:thin:@semiprojectdb_high?TNS_ADMIN= /Users/minseong/Downloads/Wallet_semiprojectdb";
-    String user = "admin";
-    String password = "Kosta12345678";
+    // String url = "jdbc:oracle:thin:@전자지갑이름성능?TNS_ADMIN=/전자지갑파일경로/전자지갑파일";
+    Properties env = new Properties();
 
-    con = DriverManager.getConnection(url, user, password);
+    env.load(new FileInputStream(envPath));
+    String driver = env.getProperty("DB_DRIVER");
+    String url = env.getProperty("DB_URL");
+    String id = env.getProperty("DB_ID");
+    String pwd = env.getProperty("DB_PWD");
+    Class.forName(driver);
+    con = DriverManager.getConnection(url, id, pwd);
     return con;
   }
 
@@ -49,7 +48,6 @@ public class MyConnection {
   }
 
   public static void close(Statement stat, Connection con) {
-    // TODO Auto-generated method stub
     close(null, stat, con);
   }
 

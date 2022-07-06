@@ -2,19 +2,19 @@ package com.my.sql;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import io.github.cdimascio.dotenv.Dotenv;
 
 public class JdbcConectionTest {
 
   public static void main(String[] args) {
+    Dotenv dotenv = Dotenv.load();
 
-    String driver = "oracle.jdbc.driver.OracleDriver";
+    String driver = dotenv.get("DB_DRIVER");
 
-    // String url = "jdbc:oracle:thin:@전자지갑이름_성능?TNS_ADMIN=/전자지갑파일경로/전자지갑파일";
-    String url =
-        "jdbc:oracle:thin:@semiprojectdb_high?TNS_ADMIN= /Users/minseong/Downloads/Wallet_semiprojectdb";
-
-    String id = "admin";
-    String pwd = "Kosta12345678";
+    // String url = "jdbc:oracle:thin:@전자지갑이름성능?TNS_ADMIN=/전자지갑파일경로/전자지갑파일";
+    String url = dotenv.get("DB_URL");
+    String id = dotenv.get("DB_ID");
+    String pwd = dotenv.get("DB_PWD");
 
     Connection con = null;
 

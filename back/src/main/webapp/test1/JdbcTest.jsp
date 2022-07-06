@@ -1,3 +1,4 @@
+<%@page import="io.github.cdimascio.dotenv.Dotenv"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@page import="com.my.sql.MyConnection" %>
@@ -10,7 +11,8 @@
 </head>
 <body>
 <%
-	Connection con = new MyConnection().getConnection();
+String envPath = application.getRealPath("project.properties");
+Connection con = MyConnection.getConnection(envPath);
 	String result="ok jdbc";
 	if(con==null) result="error db";
 %>
