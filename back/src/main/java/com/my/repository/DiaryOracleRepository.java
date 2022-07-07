@@ -9,65 +9,21 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import com.my.dto.Client;
+import com.my.dto.Comment;
 import com.my.dto.Diary;
+import com.my.dto.Route;
+import com.my.dto.Sight;
+import com.my.exception.InsertException;
+import com.my.exception.SelectException;
+import com.my.exception.UpdateException;
 import com.my.sql.MyConnection;
 
 public class DiaryOracleRepository implements DiaryRepository {
-  // 추가해야할 부분 START
+
   private String envPath;
 
   public DiaryOracleRepository(String envPath) {
     this.envPath = envPath;
-  }
-  // 추가해야할 부분 END
-
-  @Override
-  public List<Diary> selectDirariesByWritingDate() {
-    List<Diary> diaries = new ArrayList<Diary>();
-    Connection con = null;
-    try {
-      try {
-        con = MyConnection.getConnection(envPath);
-        System.out.println("envPath : " + envPath + "\nFrom DiaryOracleRepository");
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
-
-      try {
-        selectFirstToTenthDirariesByWritingDate(con, diaries);
-      } catch (ParseException e) {
-        e.printStackTrace();
-      }
-
-    } catch (SQLException e) {
-      e.printStackTrace();
-    } finally {
-      MyConnection.close(null, con);
-    }
-
-    return diaries;
-  }
-
-  private void selectFirstToTenthDirariesByWritingDate(Connection con, List<Diary> diaries)
-      throws SQLException, ParseException {
-    PreparedStatement pstmt = null;
-    ResultSet rs = null;
-    String selectSQL = "         SELECT *\r\n" + "           FROM diaries d\r\n"
-        + "LEFT OUTER JOIN clients c ON (d.client_id = c.client_id)\r\n"
-        + "          WHERE diary_disclosure_flag = 1 -- 공개글만 반환\r\n"
-        + "            AND diary_delete_flag = 1 -- 삭제안된 상태 : 1 / 상제된 상태 : 0 \r\n"
-        + "            AND ROWNUM <= 10 -- 1~10번째 글만 반환\r\n"
-        + "       ORDER BY diary_writing_time DESC";
-    pstmt = con.prepareStatement(selectSQL);
-
-    rs = pstmt.executeQuery();
-    while (rs.next()) {
-      Diary diary = setDiaryData(rs);
-      Client client = setClientData(rs);
-      diary.setClient(client);
-      System.out.println("diaryOracleRepository - diary table의 row 불러옴 : " + diary);
-      diaries.add(diary);
-    }
   }
 
   private Client setClientData(ResultSet rs) throws SQLException, ParseException {
@@ -97,50 +53,565 @@ public class DiaryOracleRepository implements DiaryRepository {
     return diary;
   }
 
+  private Route setRouteData(ResultSet rs) throws SQLException, ParseException {
+    Route route = new Route();
+    route.setDiaryNo(Integer.parseInt(rs.getString("diary_no")));
+    route.setRouteNo(Integer.parseInt(rs.getString("route_no")));
+    route.setRouteContent(rs.getString("route_content"));
+    return route;
+  }
+
+  private Sight setSightData(ResultSet rs) throws SQLException, ParseException {
+    Sight sight = new Sight();
+    sight.setSightNo(Integer.parseInt(rs.getString("sight_no")));
+    sight.setSightName(rs.getString("sight_name"));
+    sight.setSightAddr(rs.getString("sight_addr"));
+    sight.setSightId(Integer.parseInt(rs.getString("sight_id")));
+    sight.setSightCategoryName(rs.getString("sight_category_name"));
+    return sight;
+  }
+
+  private Comment setCommentData(ResultSet rs) throws SQLException, ParseException {
+    Comment comment = new Comment();
+    comment.setDiaryNo(Integer.parseInt(rs.getString("diary_no")));
+    comment.setCommentNo(Integer.parseInt(rs.getString("comment_no")));
+    comment.setCommentContent(rs.getString("comment_content"));
+    comment.setCommentWritingTime(
+        new SimpleDateFormat("yyyy-MM-dd").parse(rs.getString("comment_writing_time")));
+    return comment;
+  }
+
   @Override
-  public List<Diary> selectDirariesByViewCnt() {
+  public List<Diary> selectDirariesFromFirstRowByWritingDate(int diaryEndNo)
+      throws SelectException {
+    List<Diary> diaries = new ArrayList<Diary>();
+    Connection con = null;
+    PreparedStatement pstmt = null;
+    ResultSet rs = null;
+    try {
+      con = MyConnection.getConnection(envPath);
+      System.out.println("envPath : " + envPath + "\nFrom DiaryOracleRepository");
+
+      String selectSQL = "SELECT * \r\n" + "           FROM diaries d\r\n"
+          + "LEFT OUTER JOIN clients c ON (d.client_id = c.client_id)\r\n"
+          + "          WHERE diary_disclosure_flag = 1\r\n"
+          + "            AND diary_delete_flag = 1\r\n" + "            AND ROWNUM <= ? \r\n"
+          + "       ORDER BY diary_writing_time DESC";
+      pstmt = con.prepareStatement(selectSQL);
+      pstmt.setInt(1, diaryEndNo);
+      rs = pstmt.executeQuery();
+
+      while (rs.next()) {
+        Diary diary = setDiaryData(rs);
+        Client client = setClientData(rs);
+        diary.setClient(client);
+        diaries.add(diary);
+      }
+
+      if (diaries.size() == 0) {
+        throw new SelectException("선택된 다이어리가 없습니다.");
+      }
+    } catch (ParseException e) {
+      e.printStackTrace();
+    } catch (SQLException e) {
+      e.printStackTrace();
+    } catch (Exception e) {
+      e.printStackTrace();
+    } finally {
+      MyConnection.close(rs, pstmt, con);
+    }
+    return diaries;
+  }
+
+  @Override
+  public List<Diary> selectDirariesFromMiddleRowByWritingDate(int diaryStartNo, int diaryEndNo)
+      throws SelectException {
+    List<Diary> diaries = new ArrayList<Diary>();
+    Connection con = null;
+    PreparedStatement pstmt = null;
+    ResultSet rs = null;
+    try {
+      con = MyConnection.getConnection(envPath);
+      System.out.println("envPath : " + envPath + "\nFrom DiaryOracleRepository");
+
+      String selectSQL = "SELECT * \r\n" + "  FROM (SELECT d.*\r\n"
+          + "             , client_pwd\r\n" + "             , client_cellphone_no\r\n"
+          + "             , client_nickname\r\n" + "             , client_status_flag\r\n"
+          + "             , ROWNUM r\r\n" + "          FROM diaries d\r\n"
+          + "LEFT OUTER JOIN clients c ON (d.client_id = c.client_id)\r\n"
+          + "          WHERE diary_disclosure_flag = 1\r\n"
+          + "            AND diary_delete_flag = 1\r\n"
+          + "       ORDER BY diary_writing_time DESC)\r\n" + " WHERE r BETWEEN ? AND ?";
+      pstmt = con.prepareStatement(selectSQL);
+      pstmt.setInt(1, diaryStartNo);
+      pstmt.setInt(2, diaryEndNo);
+      rs = pstmt.executeQuery();
+
+      while (rs.next()) {
+        Diary diary = setDiaryData(rs);
+        Client client = setClientData(rs);
+        diary.setClient(client);
+        diaries.add(diary);
+      }
+
+      if (diaries.size() == 0) {
+        throw new SelectException("선택된 다이어리가 없습니다.");
+      }
+    } catch (ParseException e) {
+      e.printStackTrace();
+    } catch (SQLException e) {
+      e.printStackTrace();
+    } catch (Exception e) {
+      e.printStackTrace();
+    } finally {
+      MyConnection.close(rs, pstmt, con);
+    }
+    return diaries;
+  }
+
+  @Override
+  public List<Diary> selectDirariesFromFirstRowByViewCnt(int diaryEndNo) throws SelectException {
+    List<Diary> diaries = new ArrayList<Diary>();
+    Connection con = null;
+    PreparedStatement pstmt = null;
+    ResultSet rs = null;
+    try {
+      con = MyConnection.getConnection(envPath);
+      System.out.println("envPath : " + envPath + "\nFrom DiaryOracleRepository");
+
+      String selectSQL = "SELECT *\r\n" + "           FROM diaries d\r\n"
+          + "LEFT OUTER JOIN clients c ON (d.client_id = c.client_id)\r\n"
+          + "          WHERE diary_disclosure_flag = 1\r\n"
+          + "            AND diary_delete_flag = 1    \r\n" + "            AND ROWNUM <= ? \r\n"
+          + "       ORDER BY diary_view_cnt DESC,\r\n" + "                diary_writing_time DESC";
+      pstmt = con.prepareStatement(selectSQL);
+      pstmt.setInt(1, diaryEndNo);
+      rs = pstmt.executeQuery();
+
+      while (rs.next()) {
+        Diary diary = setDiaryData(rs);
+        Client client = setClientData(rs);
+        diary.setClient(client);
+        diaries.add(diary);
+      }
+
+      if (diaries.size() == 0) {
+        throw new SelectException("선택된 다이어리가 없습니다.");
+      }
+    } catch (ParseException e) {
+      e.printStackTrace();
+    } catch (SQLException e) {
+      e.printStackTrace();
+    } catch (Exception e) {
+      e.printStackTrace();
+    } finally {
+      MyConnection.close(rs, pstmt, con);
+    }
+    return diaries;
+  }
+
+  @Override
+  public List<Diary> selectDirariesFromMiddleRowByViewCnt(int diaryStartNo, int diaryEndNo)
+      throws SelectException {
+    List<Diary> diaries = new ArrayList<Diary>();
+    Connection con = null;
+    PreparedStatement pstmt = null;
+    ResultSet rs = null;
+    try {
+      con = MyConnection.getConnection(envPath);
+      System.out.println("envPath : " + envPath + "\nFrom DiaryOracleRepository");
+
+      String selectSQL = "SELECT * \r\n" + "  FROM (SELECT d.*\r\n"
+          + "             , client_pwd\r\n" + "             , client_cellphone_no\r\n"
+          + "             , client_nickname\r\n" + "             , client_status_flag\r\n"
+          + "             , ROWNUM r\r\n" + "          FROM diaries d\r\n"
+          + "LEFT OUTER JOIN clients c ON (d.client_id = c.client_id)\r\n"
+          + "          WHERE diary_disclosure_flag = 1 \r\n"
+          + "            AND diary_delete_flag = 1 \r\n"
+          + "       ORDER BY diary_view_cnt DESC,\r\n"
+          + "                diary_writing_time DESC)\r\n" + " WHERE r BETWEEN ? AND ?";
+      pstmt = con.prepareStatement(selectSQL);
+      pstmt.setInt(1, diaryStartNo);
+      pstmt.setInt(2, diaryEndNo);
+      rs = pstmt.executeQuery();
+
+      while (rs.next()) {
+        Diary diary = setDiaryData(rs);
+        Client client = setClientData(rs);
+        diary.setClient(client);
+        diaries.add(diary);
+      }
+
+      if (diaries.size() == 0) {
+        throw new SelectException("선택된 다이어리가 없습니다.");
+      }
+    } catch (ParseException e) {
+      e.printStackTrace();
+    } catch (SQLException e) {
+      e.printStackTrace();
+    } catch (Exception e) {
+      e.printStackTrace();
+    } finally {
+      MyConnection.close(rs, pstmt, con);
+    }
+    return diaries;
+  }
+
+  @Override
+  public List<Diary> selectDirariesFromFirstRowByLikeCnt(int diaryEndNo) throws SelectException {
+    List<Diary> diaries = new ArrayList<Diary>();
+    Connection con = null;
+    PreparedStatement pstmt = null;
+    ResultSet rs = null;
+    try {
+      con = MyConnection.getConnection(envPath);
+      System.out.println("envPath : " + envPath + "\nFrom DiaryOracleRepository");
+
+      String selectSQL = "SELECT *\r\n" + "           FROM diaries d\r\n"
+          + "LEFT OUTER JOIN clients c ON (d.client_id = c.client_id)\r\n"
+          + "          WHERE diary_disclosure_flag = 1\r\n"
+          + "            AND diary_delete_flag = 1    \r\n" + "            AND ROWNUM <= ? \r\n"
+          + "       ORDER BY diary_like_cnt DESC,\r\n" + "                diary_writing_time DESC";
+      pstmt = con.prepareStatement(selectSQL);
+      pstmt.setInt(1, diaryEndNo);
+      rs = pstmt.executeQuery();
+
+      while (rs.next()) {
+        Diary diary = setDiaryData(rs);
+        Client client = setClientData(rs);
+        diary.setClient(client);
+        diaries.add(diary);
+      }
+
+      if (diaries.size() == 0) {
+        throw new SelectException("선택된 다이어리가 없습니다.");
+      }
+    } catch (ParseException e) {
+      e.printStackTrace();
+    } catch (SQLException e) {
+      e.printStackTrace();
+    } catch (Exception e) {
+      e.printStackTrace();
+    } finally {
+      MyConnection.close(rs, pstmt, con);
+    }
+    return diaries;
+  }
+
+  @Override
+  public List<Diary> selectDirariesFromMiddleRowByLikeCnt(int diaryStartNo, int diaryEndNo)
+      throws SelectException {
+    List<Diary> diaries = new ArrayList<Diary>();
+    Connection con = null;
+    PreparedStatement pstmt = null;
+    ResultSet rs = null;
+    try {
+      con = MyConnection.getConnection(envPath);
+      System.out.println("envPath : " + envPath + "\nFrom DiaryOracleRepository");
+
+      String selectSQL = "SELECT * \r\n" + "  FROM (SELECT d.*\r\n"
+          + "             , client_pwd\r\n" + "             , client_cellphone_no\r\n"
+          + "             , client_nickname\r\n" + "             , client_status_flag\r\n"
+          + "             , ROWNUM r\r\n" + "          FROM diaries d\r\n"
+          + "LEFT OUTER JOIN clients c ON (d.client_id = c.client_id)\r\n"
+          + "          WHERE diary_disclosure_flag = 1 \r\n"
+          + "            AND diary_delete_flag = 1 \r\n"
+          + "       ORDER BY diary_like_cnt DESC,\r\n"
+          + "                diary_writing_time DESC)\r\n" + " WHERE r BETWEEN ? AND ?";
+      pstmt = con.prepareStatement(selectSQL);
+      pstmt.setInt(1, diaryStartNo);
+      pstmt.setInt(2, diaryEndNo);
+      rs = pstmt.executeQuery();
+
+      while (rs.next()) {
+        Diary diary = setDiaryData(rs);
+        Client client = setClientData(rs);
+        diary.setClient(client);
+        diaries.add(diary);
+      }
+
+      if (diaries.size() == 0) {
+        throw new SelectException("선택된 다이어리가 없습니다.");
+      }
+    } catch (ParseException e) {
+      e.printStackTrace();
+    } catch (SQLException e) {
+      e.printStackTrace();
+    } catch (Exception e) {
+      e.printStackTrace();
+    } finally {
+      MyConnection.close(rs, pstmt, con);
+    }
+    return diaries;
+  }
+
+  @Override
+  public List<Diary> selectDirariesFromFirstRowById(String clientId, int diaryEndNo)
+      throws SelectException {
+    List<Diary> diaries = new ArrayList<Diary>();
+    Connection con = null;
+    PreparedStatement pstmt = null;
+    ResultSet rs = null;
+    try {
+      con = MyConnection.getConnection(envPath);
+      System.out.println("envPath : " + envPath + "\nFrom DiaryOracleRepository");
+
+      String selectSQL = "SELECT *\r\n" + "           FROM diaries d\r\n"
+          + "LEFT OUTER JOIN clients c ON (d.client_id = c.client_id)\r\n"
+          + "          WHERE d.client_id = ? \r\n" + "            AND diary_delete_flag = 1 \r\n"
+          + "            AND ROWNUM <= ? \r\n" + "       ORDER BY diary_writing_time DESC";
+      pstmt = con.prepareStatement(selectSQL);
+      pstmt.setString(1, clientId);
+      pstmt.setInt(2, diaryEndNo);
+      rs = pstmt.executeQuery();
+
+      while (rs.next()) {
+        Diary diary = setDiaryData(rs);
+        Client client = setClientData(rs);
+        diary.setClient(client);
+        diaries.add(diary);
+      }
+
+      if (diaries.size() == 0) {
+        throw new SelectException("선택된 다이어리가 없습니다.");
+      }
+    } catch (ParseException e) {
+      e.printStackTrace();
+    } catch (SQLException e) {
+      e.printStackTrace();
+    } catch (Exception e) {
+      e.printStackTrace();
+    } finally {
+      MyConnection.close(rs, pstmt, con);
+    }
+    return diaries;
+  }
+
+  @Override
+  public List<Diary> selectDirariesFromMiddleRowById(String clientId, int diaryStartNo,
+      int diaryEndNo) throws SelectException {
+    List<Diary> diaries = new ArrayList<Diary>();
+    Connection con = null;
+    PreparedStatement pstmt = null;
+    ResultSet rs = null;
+    try {
+      con = MyConnection.getConnection(envPath);
+      System.out.println("envPath : " + envPath + "\nFrom DiaryOracleRepository");
+
+      String selectSQL = "SELECT * \r\n" + "  FROM (SELECT d.*\r\n"
+          + "             , client_pwd\r\n" + "             , client_cellphone_no\r\n"
+          + "             , client_nickname\r\n" + "             , client_status_flag\r\n"
+          + "             , ROWNUM r\r\n" + "          FROM diaries d\r\n"
+          + "LEFT OUTER JOIN clients c ON (d.client_id = c.client_id)\r\n"
+          + "          WHERE d.client_id = ? \r\n" + "            AND diary_delete_flag = 1 \r\n"
+          + "       ORDER BY diary_writing_time DESC)\r\n" + " WHERE r BETWEEN ? AND ?";
+      pstmt = con.prepareStatement(selectSQL);
+      pstmt.setString(1, clientId);
+      pstmt.setInt(2, diaryStartNo);
+      pstmt.setInt(3, diaryEndNo);
+      rs = pstmt.executeQuery();
+
+      while (rs.next()) {
+        Diary diary = setDiaryData(rs);
+        Client client = setClientData(rs);
+        diary.setClient(client);
+        diaries.add(diary);
+      }
+
+      if (diaries.size() == 0) {
+        throw new SelectException("선택된 다이어리가 없습니다.");
+      }
+    } catch (ParseException e) {
+      e.printStackTrace();
+    } catch (SQLException e) {
+      e.printStackTrace();
+    } catch (Exception e) {
+      e.printStackTrace();
+    } finally {
+      MyConnection.close(rs, pstmt, con);
+    }
+    return diaries;
+  }
+
+  @Override
+  public List<Diary> selectDirariesFromFirstRowByKeyword(String keyword, int diaryEndNo)
+      throws SelectException {
+    List<Diary> diaries = new ArrayList<Diary>();
+    Connection con = null;
+    PreparedStatement pstmt = null;
+    ResultSet rs = null;
+    try {
+      con = MyConnection.getConnection(envPath);
+      System.out.println("envPath : " + envPath + "\nFrom DiaryOracleRepository");
+
+      String selectSQL = "SELECT DISTINCT diary_no \r\n" + "              , client_id \r\n"
+          + "              , diary_title\r\n" + "              , diary_writing_time\r\n"
+          + "              , diary_start_date\r\n" + "              , diary_end_date\r\n"
+          + "              , diary_disclosure_flag\r\n" + "              , diary_view_cnt\r\n"
+          + "              , diary_like_cnt\r\n" + "              , diary_delete_flag\r\n"
+          + "              , client_pwd\r\n" + "              , client_cellphone_no\r\n"
+          + "              , client_nickname\r\n" + "              , client_status_flag\r\n"
+          + "           FROM (SELECT d.diary_no\r\n" + "                      , d.client_id \r\n"
+          + "                      , d.diary_title\r\n"
+          + "                      , d.diary_writing_time\r\n"
+          + "                      , d.diary_start_date\r\n"
+          + "                      , d.diary_end_date\r\n"
+          + "                      , d.diary_disclosure_flag\r\n"
+          + "                      , d.diary_view_cnt\r\n"
+          + "                      , d.diary_like_cnt\r\n"
+          + "                      , d.diary_delete_flag\r\n"
+          + "                      , c.client_pwd\r\n"
+          + "                      , c.client_cellphone_no\r\n"
+          + "                      , c.client_nickname\r\n"
+          + "                      , c.client_status_flag\r\n"
+          + "                      , r.route_no\r\n" + "                   FROM diaries d\r\n"
+          + "        LEFT OUTER JOIN routes r ON (d.diary_no = r.diary_no)\r\n"
+          + "        LEFT OUTER JOIN sights s ON (r.sight_no = s.sight_no)\r\n"
+          + "        LEFT OUTER JOIN clients c ON (d.client_id = c.client_id)\r\n"
+          + "                  WHERE diary_disclosure_flag = 1\r\n"
+          + "                    AND diary_delete_flag = 1\r\n"
+          + "                    AND (r.route_content LIKE '%' || ? || '%' \r\n"
+          + "                         OR d.diary_title LIKE '%' || ? || '%' \r\n"
+          + "                         OR s.sight_name LIKE '%' || ? || '%' )\r\n"
+          + "                    AND ROWNUM <= ? \r\n"
+          + "                    ORDER BY diary_writing_time DESC)";
+      pstmt = con.prepareStatement(selectSQL);
+      pstmt.setString(1, keyword);
+      pstmt.setString(2, keyword);
+      pstmt.setString(3, keyword);
+      pstmt.setInt(4, diaryEndNo);
+      rs = pstmt.executeQuery();
+
+      while (rs.next()) {
+        Diary diary = setDiaryData(rs);
+        Client client = setClientData(rs);
+        diary.setClient(client);
+        diaries.add(diary);
+      }
+
+      if (diaries.size() == 0) {
+        throw new SelectException("선택된 다이어리가 없습니다.");
+      }
+    } catch (ParseException e) {
+      e.printStackTrace();
+    } catch (SQLException e) {
+      e.printStackTrace();
+    } catch (Exception e) {
+      e.printStackTrace();
+    } finally {
+      MyConnection.close(rs, pstmt, con);
+    }
+    return diaries;
+  }
+
+  @Override
+  public List<Diary> selectDirariesFromMiddleRowByKeyword(String keyword, int diaryStartNo,
+      int diaryEndNo) throws SelectException {
+    List<Diary> diaries = new ArrayList<Diary>();
+    Connection con = null;
+    PreparedStatement pstmt = null;
+    ResultSet rs = null;
+    try {
+      con = MyConnection.getConnection(envPath);
+      System.out.println("envPath : " + envPath + "\nFrom DiaryOracleRepository");
+
+      String selectSQL = "SELECT DISTINCT diary_no \r\n" + "              , client_id \r\n"
+          + "              , diary_title\r\n" + "              , diary_writing_time\r\n"
+          + "              , diary_start_date\r\n" + "              , diary_end_date\r\n"
+          + "              , diary_disclosure_flag\r\n" + "              , diary_view_cnt\r\n"
+          + "              , diary_like_cnt\r\n" + "              , diary_delete_flag\r\n"
+          + "              , client_pwd\r\n" + "              , client_cellphone_no\r\n"
+          + "              , client_nickname\r\n" + "              , client_status_flag \r\n"
+          + "           FROM (SELECT diary_no \r\n" + "                      , client_id \r\n"
+          + "                      , diary_title\r\n"
+          + "                      , diary_writing_time\r\n"
+          + "                      , diary_start_date\r\n"
+          + "                      , diary_end_date\r\n"
+          + "                      , diary_disclosure_flag\r\n"
+          + "                      , diary_view_cnt\r\n"
+          + "                      , diary_like_cnt\r\n"
+          + "                      , diary_delete_flag\r\n"
+          + "                      , client_pwd\r\n"
+          + "                      , client_cellphone_no\r\n"
+          + "                      , client_nickname\r\n"
+          + "                      , client_status_flag \r\n"
+          + "                      , ROWNUM r\r\n"
+          + "                   FROM (SELECT d.diary_no\r\n"
+          + "                              , d.client_id \r\n"
+          + "                              , d.diary_title\r\n"
+          + "                              , d.diary_writing_time\r\n"
+          + "                              , d.diary_start_date\r\n"
+          + "                              , d.diary_end_date\r\n"
+          + "                              , d.diary_disclosure_flag\r\n"
+          + "                              , d.diary_view_cnt\r\n"
+          + "                              , d.diary_like_cnt\r\n"
+          + "                              , d.diary_delete_flag\r\n"
+          + "                              , c.client_pwd\r\n"
+          + "                              , c.client_cellphone_no\r\n"
+          + "                              , c.client_nickname\r\n"
+          + "                              , c.client_status_flag\r\n"
+          + "                              , r.route_no\r\n"
+          + "                           FROM diaries d\r\n"
+          + "                LEFT OUTER JOIN routes r ON (d.diary_no = r.diary_no)\r\n"
+          + "                LEFT OUTER JOIN sights s ON (r.sight_no = s.sight_no)\r\n"
+          + "                LEFT OUTER JOIN clients c ON (d.client_id = c.client_id)\r\n"
+          + "                          WHERE diary_disclosure_flag = 1\r\n"
+          + "                            AND diary_delete_flag = 1                        \r\n"
+          + "                            AND (r.route_content LIKE '%' || ? || '%' \r\n"
+          + "                                 OR d.diary_title LIKE '%' || ? || '%' \r\n"
+          + "                                 OR s.sight_name LIKE '%' || ? || '%' )\r\n"
+          + "                        ORDER BY diary_writing_time DESC)\r\n"
+          + "     )            \r\n" + " WHERE r BETWEEN ? AND ? ";
+      pstmt = con.prepareStatement(selectSQL);
+      pstmt.setString(1, keyword);
+      pstmt.setString(2, keyword);
+      pstmt.setString(3, keyword);
+      pstmt.setInt(4, diaryStartNo);
+      pstmt.setInt(5, diaryEndNo);
+      rs = pstmt.executeQuery();
+
+      while (rs.next()) {
+        Diary diary = setDiaryData(rs);
+        Client client = setClientData(rs);
+        diary.setClient(client);
+        diaries.add(diary);
+      }
+
+      if (diaries.size() == 0) {
+        throw new SelectException("선택된 다이어리가 없습니다.");
+      }
+    } catch (ParseException e) {
+      e.printStackTrace();
+    } catch (SQLException e) {
+      e.printStackTrace();
+    } catch (Exception e) {
+      e.printStackTrace();
+    } finally {
+      MyConnection.close(rs, pstmt, con);
+    }
+    return diaries;
+  }
+
+  @Override
+  public Diary selectDiraryByDiaryNo(int diaryNo) throws SelectException {
     // TODO Auto-generated method stub
     return null;
   }
 
   @Override
-  public List<Diary> selectDirariesByLikeCnt() {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
-  @Override
-  public List<Diary> selectDirariesById(String clientId) {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
-  @Override
-  public List<Diary> selectDirariesByKeyword(String keyword) {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
-  @Override
-  public Diary selectDiraryByDiaryNo(int diaryNo) {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
-  @Override
-  public int updateViewCnt(int diaryNo) {
+  public int updateViewCnt(int diaryNo) throws UpdateException {
     // TODO Auto-generated method stub
     return 0;
   }
 
   @Override
-  public void insert(Diary diary) {
+  public void insert(Diary diary) throws InsertException {
     // TODO Auto-generated method stub
 
   }
 
   @Override
-  public void update(Diary diary) {
+  public void update(Diary diary) throws UpdateException {
     // TODO Auto-generated method stub
 
   }

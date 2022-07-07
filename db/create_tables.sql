@@ -29,8 +29,8 @@ CREATE TABLE diaries (
 
 --comments table
 CREATE TABLE comments(
-    comment_no NUMBER(8) NOT NULL, -- PK
     diary_no NUMBER(6) NOT NULL, -- FK
+    comment_no NUMBER(8) NOT NULL, -- PK
     client_id VARCHAR2(40 CHAR) NOT NULL, -- FK
     comment_content VARCHAR2(300 CHAR) NOT NULL,
     comment_writing_time DATE NOT NULL,
