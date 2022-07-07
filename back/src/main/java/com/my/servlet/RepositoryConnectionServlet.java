@@ -31,22 +31,29 @@ public class RepositoryConnectionServlet extends HttpServlet {
 
     // 테스트용 코드
     try {
-      // List<Diary> diaries = diaryRepository.selectDirariesFromFirstRowByWritingDate(10);
-      // List<Diary> diaries2 = diaryRepository.selectDirariesFromMiddleRowByWritingDate(11, 20);
-      // List<Diary> diaries = diaryRepository.selectDirariesFromFirstRowByViewCnt(10);
-      // List<Diary> diaries2 = diaryRepository.selectDirariesFromMiddleRowByViewCnt(11, 20);
-      // List<Diary> diaries = diaryRepository.selectDirariesFromFirstRowByLikeCnt(10);
-      // List<Diary> diaries2 = diaryRepository.selectDirariesFromMiddleRowByLikeCnt(11, 20);
-      // List<Diary> diaries = diaryRepository.selectDirariesFromFirstRowById("a", 10);
-      // List<Diary> diaries2 = diaryRepository.selectDirariesFromMiddleRowById("a", 11, 20);
-      List<Diary> diaries = diaryRepository.selectDirariesFromFirstRowByKeyword("경복궁", 10);
-      List<Diary> diaries2 = diaryRepository.selectDirariesFromMiddleRowByKeyword("경복궁", 11, 20);
+      List<Diary> diaries = diaryRepository.selectDirariesByWritingDate(11, 20);
+      List<Diary> diaries2 = diaryRepository.selectDirariesByViewCnt(11, 20);
+      List<Diary> diaries3 = diaryRepository.selectDirariesByLikeCnt(11, 20);
+      List<Diary> diaries4 = diaryRepository.selectDirariesById("a", 11, 20);
+      List<Diary> diaries5 = diaryRepository.selectDirariesByKeyword("경복궁", 11, 20);
       for (int i = 0; i < diaries.size(); i++) {
         out.print(i + 1 + " : " + diaries.get(i).toString() + "<br>");
       }
-      out.print("<br><br>--------<br>");
+      out.print("<br> -------------<br>");
       for (int i = 0; i < diaries2.size(); i++) {
         out.print(i + 1 + " : " + diaries2.get(i).toString() + "<br>");
+      }
+      out.print("<br> -------------<br>");
+      for (int i = 0; i < diaries3.size(); i++) {
+        out.print(i + 1 + " : " + diaries3.get(i).toString() + "<br>");
+      }
+      out.print("<br> -------------<br>");
+      for (int i = 0; i < diaries4.size(); i++) {
+        out.print(i + 1 + " : " + diaries4.get(i).toString() + "<br>");
+      }
+      out.print("<br> -------------<br>");
+      for (int i = 0; i < diaries5.size(); i++) {
+        out.print(i + 1 + " : " + diaries5.get(i).toString() + "<br>");
       }
     } catch (SelectException e) {
       e.printStackTrace();
