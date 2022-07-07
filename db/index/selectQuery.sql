@@ -39,16 +39,7 @@ LEFT OUTER JOIN clients c ON (d.client_id = c.client_id)
             AND diary_delete_flag = 1 -- 삭제안된 상태 : 1 / 상제된 상태 : 0 
             AND ROWNUM <= 10 -- 1~10번째 글만 반환
        ORDER BY diary_writing_time DESC;
--- Return diaries, clients, routes, comments' columns        
-         SELECT *
-           FROM diaries d
-LEFT OUTER JOIN clients c ON (d.client_id = c.client_id)
-LEFT OUTER JOIN routes r ON (d.diary_no = r.diary_no)
-LEFT OUTER JOIN comments c ON (d.diary_no = c.diary_no)
-          WHERE diary_disclosure_flag = 1 -- 공개글만 반환
-            AND diary_delete_flag = 1 -- 삭제안된 상태 : 1 / 상제된 상태 : 0 
-            AND ROWNUM <= 10 -- 1~10번째 글만 반환
-       ORDER BY diary_writing_time DESC;       
+       
 -- 11~20번째 반환
 SELECT * 
   FROM (SELECT d.diary_no -- 나중에 뺄것

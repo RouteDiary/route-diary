@@ -62,10 +62,10 @@ public class DiaryOracleRepository implements DiaryRepository {
 
     rs = pstmt.executeQuery();
     while (rs.next()) {
-
       Diary diary = setDiaryData(rs);
       Client client = setClientData(rs);
-      System.out.println("diary table의 row 불러옴 : " + diary);
+      diary.setClient(client);
+      System.out.println("diaryOracleRepository - diary table의 row 불러옴 : " + diary);
       diaries.add(diary);
     }
   }
