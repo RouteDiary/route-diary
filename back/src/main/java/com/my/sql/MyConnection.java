@@ -9,20 +9,21 @@ import java.sql.Statement;
 import java.util.Properties;
 
 public class MyConnection {
-  public static Connection getConnection(String envPath) throws Exception {
 
+  public static Connection getConnection(String envPath) throws Exception {
     Connection con = null;
-    // String url = "jdbc:oracle:thin:@전자지갑이름성능?TNS_ADMIN=/전자지갑파일경로/전자지갑파일";
+    // Dotenv dotenv = Dotenv.load();
     Properties env = new Properties();
 
     env.load(new FileInputStream(envPath));
+
     String driver = env.getProperty("DB_DRIVER");
+
     String url = env.getProperty("DB_URL");
-    String id = env.getProperty("DB_ID");
-    String pwd = env.getProperty("DB_PWD");
+    String user = env.getProperty("DB_ID");
+    String password = env.getProperty("DB_PWD");
     Class.forName(driver);
-    con = DriverManager.getConnection(url, id, pwd);
-    System.out.println("MyConnection.java : db connection success!");
+    con = DriverManager.getConnection(url, user, password);
     return con;
   }
 
@@ -49,6 +50,7 @@ public class MyConnection {
   }
 
   public static void close(Statement stat, Connection con) {
+    // TODO Auto-generated method stub
     close(null, stat, con);
   }
 
