@@ -6,6 +6,7 @@ import com.my.exception.SelectException;
 import com.my.exception.UpdateException;
 
 public interface ClientRepository {
+
   Client selectByIdAndPwd(String clientId, String clientPwd) throws SelectException;
 
   void insert(Client client) throws InsertException;
