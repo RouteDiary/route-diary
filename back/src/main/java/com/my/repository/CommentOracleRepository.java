@@ -23,9 +23,8 @@ public class CommentOracleRepository implements CommentRepository {
     PreparedStatement pstmt = null;
     try {
       con = MyConnection.getConnection(envPath);
-      String insertSQL = " INSERT INTO comments(diary_no, comment_no, client_id, comment_content"
-          + ",comment_writing_time) VALUES ( ? ,(SELECT NVL(MAX(comment_no), 0)+1 "
-          + "FROM comments WHERE diary_no = ? ), ? , ? , SYSDATE);";
+      String insertSQL = " INSERT INTO comments VALUES ( ? ,(SELECT NVL(MAX(comment_no), 0) + 1 "
+          + "FROM comments WHERE diary_no = ? ), ? , ? , SYSDATE)";
       pstmt = con.prepareStatement(insertSQL);
       pstmt.setInt(1, comment.getDiaryNo());
       pstmt.setInt(2, comment.getDiaryNo());

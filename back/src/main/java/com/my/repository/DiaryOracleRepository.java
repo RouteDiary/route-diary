@@ -480,7 +480,6 @@ public class DiaryOracleRepository implements DiaryRepository {
   public void insert(Diary diary) throws InsertException {
     Connection con = null;
     PreparedStatement pstmt = null;
-    ResultSet rs = null;
     try {
       con = MyConnection.getConnection(envPath);
       System.out.println("envPath : " + envPath + "\nFrom DiaryOracleRepository");
@@ -491,8 +490,7 @@ public class DiaryOracleRepository implements DiaryRepository {
           + "           , ? \r\n" + "           , 1\r\n" + "           , 0\r\n"
           + "           , 0\r\n" + "           , 1\r\n" + ")";
       pstmt = con.prepareStatement(insertSQL);
-      Client client = diary.getClient();
-      pstmt.setString(1, client.getClientId());
+      pstmt.setString(1, diary.getClient().getClientId());
       pstmt.setString(2, diary.getDiaryTitle());
       pstmt.setDate(3, new java.sql.Date(diary.getDiaryStartDate().getTime()));
       pstmt.setDate(4, new java.sql.Date(diary.getDiaryEndDate().getTime()));
@@ -504,7 +502,7 @@ public class DiaryOracleRepository implements DiaryRepository {
     } catch (Exception e) {
       e.printStackTrace();
     } finally {
-      MyConnection.close(rs, pstmt, con);
+      MyConnection.close(pstmt, con);
     }
   }
 
@@ -512,7 +510,6 @@ public class DiaryOracleRepository implements DiaryRepository {
   public void update(Diary diary) throws UpdateException {
     Connection con = null;
     PreparedStatement pstmt = null;
-    ResultSet rs = null;
     try {
       con = MyConnection.getConnection(envPath);
       System.out.println("envPath : " + envPath + "\nFrom DiaryOracleRepository");
@@ -537,7 +534,7 @@ public class DiaryOracleRepository implements DiaryRepository {
     } catch (Exception e) {
       e.printStackTrace();
     } finally {
-      MyConnection.close(rs, pstmt, con);
+      MyConnection.close(pstmt, con);
     }
   }
 }

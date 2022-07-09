@@ -160,24 +160,27 @@ INSERT INTO sights
      VALUES (sight_no_seq.NEXTVAL
            , '관광지 이름'
            , '관광지 주소'
-           , 10001
-           , '관광지 카테고리 이름'
+           , 20000
+           , '관광지 카테고리'
 );
 
---루트 추가 SQL
+--루트 추가 SQL 
 INSERT INTO ROUTES 
-     VALUES (diary_no_seq.NEXTVAL
-           , 1
+     VALUES (1
+           , (SELECT NVL(MAX(route_no), 0) + 1
+          FROM routes WHERE diary_no = 1)
            , 1
            , '루트내용');
 --루트 수정 SQL 
 UPDATE routes 
-   SET sight_no = 1
+   SET sight_no = 16
      , route_content = '새로운내용' 
- WHERE route_no = 1;          
+ WHERE diary_no = 46
+   AND route_no = 4;          
 --루트 삭제 SQL       
 DELETE FROM routes 
-      WHERE diary_no = 1; 
+      WHERE diary_no = 46
+        AND route_no = 4; 
 
 -- 다이어리 추가 SQL
 INSERT INTO diaries 
@@ -215,7 +218,8 @@ INSERT INTO likes
 --댓글 추가
 INSERT INTO comments 
      VALUES (1
-           , 1
+           , (SELECT NVL(MAX(comment_no), 0) + 1
+          FROM comments WHERE diary_no = 1)
            , 'koreaman@gmail.com'
            , '댓글내용'
            , TO_DATE(SYSDATE, 'yyyy/mm/dd'));          
