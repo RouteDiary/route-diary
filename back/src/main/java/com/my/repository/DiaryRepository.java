@@ -22,7 +22,7 @@ public interface DiaryRepository {
 
   Diary selectDiraryByDiaryNo(int diaryNo) throws SelectException;
 
-  int updateViewCnt(int diaryNo) throws UpdateException;
+  void updateViewCnt(Diary diary) throws UpdateException;
 
   void insert(Diary diary) throws InsertException;
 

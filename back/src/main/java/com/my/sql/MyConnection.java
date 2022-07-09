@@ -53,7 +53,4 @@ public class MyConnection {
     // TODO Auto-generated method stub
     close(null, stat, con);
   }
-
-
-
 }

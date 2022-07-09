@@ -2,6 +2,7 @@ package com.my.repository;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import com.my.dto.Like;
 import com.my.exception.DeleteException;
 import com.my.exception.InsertException;
@@ -15,8 +16,6 @@ public class LikeOracleRepository implements LikeRepository {
     this.envPath = envPath;
   }
 
-
-  // 좋아요 선택
   @Override
   public void insertLike(Like like) throws InsertException {
     Connection con = null;
@@ -28,15 +27,15 @@ public class LikeOracleRepository implements LikeRepository {
       pstmt.setInt(1, like.getDiaryNo());
       pstmt.setString(2, like.getClientId());
       pstmt.executeUpdate();
+    } catch (SQLException e) {
+      throw new InsertException(e.getMessage());
     } catch (Exception e) {
-
       e.printStackTrace();
     } finally {
       MyConnection.close(pstmt, con);
     }
   }
 
-  // 좋아요 취소
   @Override
   public void deleteLike(Like like) throws DeleteException {
     Connection con = null;
@@ -48,7 +47,8 @@ public class LikeOracleRepository implements LikeRepository {
       pstmt.setInt(1, like.getDiaryNo());
       pstmt.setString(2, like.getClientId());
       pstmt.executeUpdate();
-
+    } catch (SQLException e) {
+      throw new DeleteException(e.getMessage());
     } catch (Exception e) {
       e.printStackTrace();
     } finally {

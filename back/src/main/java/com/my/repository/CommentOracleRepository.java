@@ -2,6 +2,7 @@ package com.my.repository;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import com.my.dto.Comment;
 import com.my.exception.DeleteException;
 import com.my.exception.InsertException;
@@ -20,73 +21,64 @@ public class CommentOracleRepository implements CommentRepository {
   public void insert(Comment comment) throws InsertException {
     Connection con = null;
     PreparedStatement pstmt = null;
-    String insertSQL = " INSERT INTO comments(diary_no, comment_no, client_id, comment_content"
-        + ",comment_writing_time) VALUES (?,(SELECT NVL(MAX(comment_no), 0)+1 "
-        + "FROM comments WHERE diary_no = ?),?,?, SYSDATE);";
-
     try {
       con = MyConnection.getConnection(envPath);
-      System.out.println("envPath : " + envPath + "\nFrom CommentOracleRepository");
+      String insertSQL = " INSERT INTO comments(diary_no, comment_no, client_id, comment_content"
+          + ",comment_writing_time) VALUES ( ? ,(SELECT NVL(MAX(comment_no), 0)+1 "
+          + "FROM comments WHERE diary_no = ? ), ? , ? , SYSDATE);";
       pstmt = con.prepareStatement(insertSQL);
       pstmt.setInt(1, comment.getDiaryNo());
       pstmt.setInt(2, comment.getDiaryNo());
       pstmt.setString(3, comment.getClient().getClientId());
       pstmt.setString(4, comment.getCommentContent());
       pstmt.executeUpdate();
+    } catch (SQLException e) {
+      throw new InsertException(e.getMessage());
     } catch (Exception e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     } finally {
       MyConnection.close(pstmt, con);
     }
-
-
   }
-
-
-  // "INSERT INTO order_info(ORDER_NO,ORDER_ID,ORDER_DT) VALUES (order_seq.NEXTVAL, ?, SYSDATE)";
-
-
 
   @Override
   public void update(Comment comment) throws UpdateException {
     Connection con = null;
     PreparedStatement pstmt = null;
-    String updateSQL = "UPDATE comments set comment_content=?, comment_writing_time=SYSDATE "
-        + "WHERE diary_no=? AND comment_no=?";
-    // UPDATE comments set comment_content='안~~녕', comment_writing_time=SYSDATE WHERE (diary_no=1
-    // AND comment_no=1);
     try {
-
       con = MyConnection.getConnection(envPath);
+      String updateSQL = "UPDATE comments set comment_content= ? , comment_writing_time=SYSDATE "
+          + "WHERE diary_no= ? AND comment_no= ? ";
       pstmt = con.prepareStatement(updateSQL);
       pstmt.setString(1, comment.getCommentContent());
       pstmt.setInt(2, comment.getDiaryNo());
       pstmt.setInt(3, comment.getCommentNo());
       pstmt.executeUpdate();
+    } catch (SQLException e) {
+      throw new UpdateException(e.getMessage());
     } catch (Exception e) {
       e.printStackTrace();
     } finally {
       MyConnection.close(pstmt, con);
     }
-
   }
 
   @Override
   public void delete(Comment comment) throws DeleteException {
     Connection con = null;
     PreparedStatement pstmt = null;
-    String deleteSQL = "DELETE FROM comments WHERE diary_no=? AND comment_no=?";
     try {
       con = MyConnection.getConnection(envPath);
+      String deleteSQL = "DELETE FROM comments WHERE diary_no= ? AND comment_no= ? ";
       pstmt = con.prepareStatement(deleteSQL);
       pstmt.setInt(1, comment.getDiaryNo());
       pstmt.setInt(2, comment.getCommentNo());
+    } catch (SQLException e) {
+      throw new DeleteException(e.getMessage());
     } catch (Exception e) {
       e.printStackTrace();
     } finally {
       MyConnection.close(pstmt, con);
     }
   }
-
 }

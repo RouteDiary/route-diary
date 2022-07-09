@@ -5,7 +5,6 @@ import java.util.List;
 
 public class Diary {
   private int diaryNo;
-  private String clientId;
   private String diaryTitle;
   private Date diaryWritingTime;
   private Date diaryStartDate;
@@ -15,17 +14,15 @@ public class Diary {
   private int diaryLikeCnt;
   private int diaryDeleteFlag;
   private Client client;
-  private List<Route> route;
-  private List<Comment> comment;
+  private List<Route> routes;
+  private List<Comment> comments;
 
   public Diary() {}
 
-  public Diary(int diaryNo, String clientId, String diaryTitle, Date diaryWritingTime,
-      Date diaryStartDate, Date diaryEndDate, int diaryDisclosureFlag, int diaryViewCnt,
-      int diaryLikeCnt, int diaryDeleteFlag, Client client, List<Route> route,
-      List<Comment> comment) {
+  public Diary(int diaryNo, String diaryTitle, Date diaryWritingTime, Date diaryStartDate,
+      Date diaryEndDate, int diaryDisclosureFlag, int diaryViewCnt, int diaryLikeCnt,
+      int diaryDeleteFlag, Client client, List<Route> routes, List<Comment> comments) {
     this.diaryNo = diaryNo;
-    this.clientId = clientId;
     this.diaryTitle = diaryTitle;
     this.diaryWritingTime = diaryWritingTime;
     this.diaryStartDate = diaryStartDate;
@@ -35,8 +32,8 @@ public class Diary {
     this.diaryLikeCnt = diaryLikeCnt;
     this.diaryDeleteFlag = diaryDeleteFlag;
     this.client = client;
-    this.route = route;
-    this.comment = comment;
+    this.routes = routes;
+    this.comments = comments;
   }
 
   public int getDiaryNo() {
@@ -45,14 +42,6 @@ public class Diary {
 
   public void setDiaryNo(int diaryNo) {
     this.diaryNo = diaryNo;
-  }
-
-  public String getClientId() {
-    return clientId;
-  }
-
-  public void setClientId(String clientId) {
-    this.clientId = clientId;
   }
 
   public String getDiaryTitle() {
@@ -127,30 +116,28 @@ public class Diary {
     this.client = client;
   }
 
-  public List<Route> getRoute() {
-    return route;
+  public List<Route> getRoutes() {
+    return routes;
   }
 
-  public void setRoute(List<Route> route) {
-    this.route = route;
+  public void setRoutes(List<Route> routes) {
+    this.routes = routes;
   }
 
-  public List<Comment> getComment() {
-    return comment;
+  public List<Comment> getComments() {
+    return comments;
   }
 
-  public void setComment(List<Comment> comment) {
-    this.comment = comment;
+  public void setComments(List<Comment> comments) {
+    this.comments = comments;
   }
 
   @Override
   public String toString() {
-    return "Diary [diaryNo=" + diaryNo + ", clientId=" + clientId + ", diaryTitle=" + diaryTitle
-        + ", diaryWritingTime=" + diaryWritingTime + ", diaryStartDate=" + diaryStartDate
-        + ", diaryEndDate=" + diaryEndDate + ", diaryDisclosureFlag=" + diaryDisclosureFlag
-        + ", diaryViewCnt=" + diaryViewCnt + ", diaryLikeCnt=" + diaryLikeCnt + ", diaryDeleteFlag="
-        + diaryDeleteFlag + ", client=" + client + ", route=" + route + ", comment=" + comment
-        + "]";
+    return "Diary [diaryNo=" + diaryNo + ", diaryTitle=" + diaryTitle + ", diaryWritingTime="
+        + diaryWritingTime + ", diaryStartDate=" + diaryStartDate + ", diaryEndDate=" + diaryEndDate
+        + ", diaryDisclosureFlag=" + diaryDisclosureFlag + ", diaryViewCnt=" + diaryViewCnt
+        + ", diaryLikeCnt=" + diaryLikeCnt + ", diaryDeleteFlag=" + diaryDeleteFlag + ", client="
+        + client + ", routes=" + routes + ", comments=" + comments + "]";
   }
-
 }

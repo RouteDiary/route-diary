@@ -39,7 +39,6 @@ public class DiaryOracleRepository implements DiaryRepository {
   private Diary setDiaryData(ResultSet rs) throws SQLException, ParseException {
     Diary diary = new Diary();
     diary.setDiaryNo(Integer.parseInt(rs.getString("diary_no")));
-    diary.setClientId(rs.getString("client_id"));
     diary.setDiaryTitle(rs.getString("diary_title"));
     diary.setDiaryWritingTime(
         new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(rs.getString("diary_writing_time")));
@@ -356,28 +355,189 @@ public class DiaryOracleRepository implements DiaryRepository {
     return diaries;
   }
 
-  @Override
-  public Diary selectDiraryByDiaryNo(int diaryNo) throws SelectException {
-    // TODO Auto-generated method stub
-    return null;
+  private Diary BringDiaryDataByDiaryNo(Connection con, ResultSet rs, PreparedStatement pstmt,
+      int diaryNo) throws SelectException, SQLException, ParseException {
+    String selectSQL = "SELECT * \r\n" + "             FROM diaries d\r\n"
+        + "  LEFT OUTER JOIN clients c ON (d.client_id = c.client_id)\r\n"
+        + "            WHERE diary_no = ? ";
+    pstmt = con.prepareStatement(selectSQL);
+    pstmt.setInt(1, diaryNo);
+    rs = pstmt.executeQuery();
+    Diary diary = null;
+    Client client = null;
+    if (rs.next()) {
+      diary = setDiaryData(rs);
+      client = setClientData(rs);
+      diary.setClient(client);
+    } else {
+      throw new SelectException("찾으려는 다이어리가 없습니다. diaryNo를 다시 확인하세요.");
+    }
+    return diary;
+  }
+
+  private List<Route> BringRouteDataByDiaryNo(Connection con, ResultSet rs, PreparedStatement pstmt,
+      int diaryNo) throws SelectException, SQLException, ParseException {
+    List<Route> routes = new ArrayList<Route>();
+    String selectSQL = "SELECT *\r\n" + "           FROM routes r\r\n"
+        + "LEFT OUTER JOIN sights s ON (r.sight_no = s.sight_no)\r\n"
+        + "          WHERE diary_no = ? ";
+    pstmt = con.prepareStatement(selectSQL);
+    pstmt.setInt(1, diaryNo);
+    rs = pstmt.executeQuery();
+    Route route = null;
+    Sight sight = null;
+    while (rs.next()) {
+      route = setRouteData(rs);
+      sight = setSightData(rs);
+      route.setSight(sight);
+      routes.add(route);
+    }
+    if (routes.size() == 0) {
+      throw new SelectException("diaryNo에 해당하는 route가 없습니다.");
+    }
+    return routes;
+  }
+
+  private List<Comment> BringCommentDataByDiaryNo(Connection con, ResultSet rs,
+      PreparedStatement pstmt, int diaryNo) throws SelectException, SQLException, ParseException {
+    List<Comment> comments = new ArrayList<Comment>();
+    String selectSQL = "SELECT *\r\n" + "           FROM comments co\r\n"
+        + "LEFT OUTER JOIN clients cl ON (co.client_id = cl.client_id)\r\n"
+        + "          WHERE diary_no = ? ";
+    pstmt = con.prepareStatement(selectSQL);
+    pstmt.setInt(1, diaryNo);
+    rs = pstmt.executeQuery();
+    Comment comment = null;
+    Client client = null;
+    while (rs.next()) {
+      comment = setCommentData(rs);
+      client = setClientData(rs);
+      comment.setClient(client);
+      comments.add(comment);
+    }
+    if (comments.size() == 0) {
+      throw new SelectException("diaryNo에 해당하는 comment가 없습니다.");
+    }
+    return comments;
   }
 
   @Override
-  public int updateViewCnt(int diaryNo) throws UpdateException {
-    // TODO Auto-generated method stub
-    return 0;
+  public Diary selectDiraryByDiaryNo(int diaryNo) throws SelectException {
+    Diary diary = new Diary();
+    List<Route> routes = new ArrayList<Route>();
+    List<Comment> comments = new ArrayList<Comment>();
+    Connection con = null;
+    PreparedStatement pstmt = null;
+    ResultSet rs = null;
+    try {
+      con = MyConnection.getConnection(envPath);
+      System.out.println("envPath : " + envPath + "\nFrom DiaryOracleRepository");
+
+      routes = BringRouteDataByDiaryNo(con, rs, pstmt, diaryNo);
+      comments = BringCommentDataByDiaryNo(con, rs, pstmt, diaryNo);
+      diary = BringDiaryDataByDiaryNo(con, rs, pstmt, diaryNo);
+      diary.setRoutes(routes);
+      diary.setComments(comments);
+    } catch (ParseException e) {
+      e.printStackTrace();
+    } catch (SQLException e) {
+      e.printStackTrace();
+    } catch (Exception e) {
+      e.printStackTrace();
+    } finally {
+      MyConnection.close(rs, pstmt, con);
+    }
+    return diary;
+  }
+
+  @Override
+  public void updateViewCnt(Diary diary) throws UpdateException {
+    Connection con = null;
+    PreparedStatement pstmt = null;
+    ResultSet rs = null;
+    try {
+      con = MyConnection.getConnection(envPath);
+      System.out.println("envPath : " + envPath + "\nFrom DiaryOracleRepository");
+
+      String updateSQL =
+          "UPDATE diaries  \r\n" + "   SET diary_view_cnt = ? \r\n" + " WHERE diary_no = ? ";
+      pstmt = con.prepareStatement(updateSQL);
+      pstmt.setInt(1, diary.getDiaryViewCnt() + 1);
+      pstmt.setInt(2, diary.getDiaryNo());
+      pstmt.executeUpdate();
+    } catch (SQLException e) {
+      throw new UpdateException(e.getMessage());
+    } catch (ParseException e) {
+      e.printStackTrace();
+    } catch (Exception e) {
+      e.printStackTrace();
+    } finally {
+      MyConnection.close(rs, pstmt, con);
+    }
   }
 
   @Override
   public void insert(Diary diary) throws InsertException {
-    // TODO Auto-generated method stub
+    Connection con = null;
+    PreparedStatement pstmt = null;
+    ResultSet rs = null;
+    try {
+      con = MyConnection.getConnection(envPath);
+      System.out.println("envPath : " + envPath + "\nFrom DiaryOracleRepository");
 
+      String insertSQL = "INSERT INTO diaries \r\n" + "     VALUES (diary_no_seq.NEXTVAL\r\n"
+          + "           , ? \r\n" + "           , ? \r\n"
+          + "           , TO_DATE(SYSDATE, 'yyyy/mm/dd')\r\n" + "           , ? \r\n"
+          + "           , ? \r\n" + "           , 1\r\n" + "           , 0\r\n"
+          + "           , 0\r\n" + "           , 1\r\n" + ")";
+      pstmt = con.prepareStatement(insertSQL);
+      Client client = diary.getClient();
+      pstmt.setString(1, client.getClientId());
+      pstmt.setString(2, diary.getDiaryTitle());
+      pstmt.setDate(3, new java.sql.Date(diary.getDiaryStartDate().getTime()));
+      pstmt.setDate(4, new java.sql.Date(diary.getDiaryEndDate().getTime()));
+      pstmt.executeUpdate();
+    } catch (SQLException e) {
+      throw new InsertException(e.getMessage());
+    } catch (ParseException e) {
+      e.printStackTrace();
+    } catch (Exception e) {
+      e.printStackTrace();
+    } finally {
+      MyConnection.close(rs, pstmt, con);
+    }
   }
 
   @Override
   public void update(Diary diary) throws UpdateException {
-    // TODO Auto-generated method stub
+    Connection con = null;
+    PreparedStatement pstmt = null;
+    ResultSet rs = null;
+    try {
+      con = MyConnection.getConnection(envPath);
+      System.out.println("envPath : " + envPath + "\nFrom DiaryOracleRepository");
 
+      String updateSQL = "UPDATE diaries \r\n" + "   SET diary_title = ? \r\n"
+          + "     , diary_writing_time = TO_DATE(SYSDATE, 'yyyy/mm/dd')\r\n"
+          + "     , diary_start_date = ? \r\n" + "     , diary_end_date = ? \r\n"
+          + "     , diary_disclosure_flag = ? \r\n" + "     , diary_delete_flag = ? \r\n"
+          + " WHERE diary_no = ? ";
+      pstmt = con.prepareStatement(updateSQL);
+      pstmt.setString(1, diary.getDiaryTitle());
+      pstmt.setDate(2, new java.sql.Date(diary.getDiaryStartDate().getTime()));
+      pstmt.setDate(3, new java.sql.Date(diary.getDiaryEndDate().getTime()));
+      pstmt.setInt(4, diary.getDiaryDisclosureFlag());
+      pstmt.setInt(5, diary.getDiaryDeleteFlag());
+      pstmt.setInt(6, diary.getDiaryNo());
+      pstmt.executeUpdate();
+    } catch (SQLException e) {
+      throw new UpdateException(e.getMessage());
+    } catch (ParseException e) {
+      e.printStackTrace();
+    } catch (Exception e) {
+      e.printStackTrace();
+    } finally {
+      MyConnection.close(rs, pstmt, con);
+    }
   }
-
 }

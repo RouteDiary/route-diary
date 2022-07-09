@@ -11,7 +11,7 @@ UPDATE clients
      , client_cellphone_no = '?'
      , client_nickname = '?'
      , client_status_flag = '0'
-WHERE cleint_id = 'koreaman@naver.com'; --업데이트 할 id값
+WHERE client_id = 'koreaman@naver.com'; --업데이트 할 id값
 SELECT * 
   FROM clients;
 
@@ -195,13 +195,16 @@ INSERT INTO diaries
 --다이어리 수정 & 삭제 SQL
 UPDATE diaries 
    SET diary_title = '새로운제목'
-     , diary_writing_time = TO_DATE(SYSDATE, 'yyyy/mm/dd')
      , diary_start_date	= TO_DATE('2022/04/12', 'yyyy/mm/dd')
      , diary_end_date = TO_DATE('2022/05/12', 'yyyy/mm/dd')
      , diary_disclosure_flag = 1
      , diary_delete_flag = 1
  WHERE diary_no = 1; 
 
+ --다이어리 조회수 1 증가
+UPDATE diaries  
+   SET diary_view_cnt = ?
+ WHERE diary_no = ? ;
 
 --유저가 다이어리에 좋아요 클릭시 (americaman@gmail.com 유저가 1번 다이어리에 좋아요 눌렀을때)
 INSERT INTO likes 
@@ -226,25 +229,17 @@ DELETE FROM comments
       WHERE client_id='koreaman@gmail.com';
            
 --다이어리 조회 4개 SQL 이용
-		   SELECT d.diary_title
-			    , c.client_nickname
-			    , d.diary_writing_time
-			    , d.diary_start_date
-			    , d.diary_end_date
-			    , d.diary_view_cnt
-			    , d.diary_like_cnt
-             FROM diaries d;
-  LEFT OUTER JOIN clients c ON (d.client_id = c.client_id);
-SELECT *
-  FROM routes;
- WHERE diary_no = 1;
-SELECT *
-  FROM comments;
- WHERE diary_no = 1; 
-SELECT *
-  FROM sights;
- WHERE sight_no = (SELECT sight_no
- 					 FROM routes
- 					WHERE routes_no = 1); 
+		   SELECT *
+             FROM diaries d
+  LEFT OUTER JOIN clients c ON (d.client_id = c.client_id)
+            WHERE diary_no = 45;
+	         SELECT *
+           FROM routes r
+LEFT OUTER JOIN sights s ON (r.sight_no = s.sight_no)
+          WHERE diary_no = 46;
+	         SELECT *
+           FROM comments co
+LEFT OUTER JOIN clients cl ON (co.client_id = cl.client_id)
+          WHERE diary_no = 46; 
  					
  
