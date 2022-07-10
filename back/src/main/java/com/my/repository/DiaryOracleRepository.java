@@ -4,8 +4,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import com.my.dto.Client;
@@ -26,57 +24,54 @@ public class DiaryOracleRepository implements DiaryRepository {
     this.envPath = envPath;
   }
 
-  private Client setClientData(ResultSet rs) throws SQLException, ParseException {
+  private Client setClientData(ResultSet rs) throws SQLException {
     Client client = new Client();
     client.setClientId(rs.getString("client_id"));
     client.setClientPwd(rs.getString("client_pwd"));
     client.setClientCellphoneNo(rs.getString("client_cellphone_no"));
     client.setClientNickname(rs.getString("client_nickname"));
-    client.setClientStatusFlag(Integer.parseInt(rs.getString("client_status_flag")));
+    client.setClientStatusFlag(rs.getInt("client_status_flag"));
     return client;
   }
 
-  private Diary setDiaryData(ResultSet rs) throws SQLException, ParseException {
+  private Diary setDiaryData(ResultSet rs) throws SQLException {
     Diary diary = new Diary();
-    diary.setDiaryNo(Integer.parseInt(rs.getString("diary_no")));
+    diary.setDiaryNo(rs.getInt("diary_no"));
     diary.setDiaryTitle(rs.getString("diary_title"));
-    diary.setDiaryWritingTime(
-        new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(rs.getString("diary_writing_time")));
-    diary.setDiaryStartDate(
-        new SimpleDateFormat("yyyy-MM-dd").parse(rs.getString("diary_start_date")));
-    diary.setDiaryEndDate(new SimpleDateFormat("yyyy-MM-dd").parse(rs.getString("diary_end_date")));
-    diary.setDiaryDisclosureFlag(Integer.parseInt(rs.getString("diary_disclosure_flag")));
-    diary.setDiaryViewCnt(Integer.parseInt(rs.getString("diary_view_cnt")));
-    diary.setDiaryLikeCnt(Integer.parseInt(rs.getString("diary_like_cnt")));
-    diary.setDiaryDeleteFlag(Integer.parseInt(rs.getString("diary_delete_flag")));
+    diary.setDiaryWritingTime(rs.getDate("diary_writing_time"));
+    diary.setDiaryStartDate(rs.getDate("diary_start_date"));
+    diary.setDiaryEndDate(rs.getDate("diary_end_date"));
+    diary.setDiaryDisclosureFlag(rs.getInt("diary_disclosure_flag"));
+    diary.setDiaryViewCnt(rs.getInt("diary_view_cnt"));
+    diary.setDiaryLikeCnt(rs.getInt("diary_like_cnt"));
+    diary.setDiaryDeleteFlag(rs.getInt("diary_delete_flag"));
     return diary;
   }
 
-  private Route setRouteData(ResultSet rs) throws SQLException, ParseException {
+  private Route setRouteData(ResultSet rs) throws SQLException {
     Route route = new Route();
-    route.setDiaryNo(Integer.parseInt(rs.getString("diary_no")));
-    route.setRouteNo(Integer.parseInt(rs.getString("route_no")));
+    route.setDiaryNo(rs.getInt("diary_no"));
+    route.setRouteNo(rs.getInt("route_no"));
     route.setRouteContent(rs.getString("route_content"));
     return route;
   }
 
-  private Sight setSightData(ResultSet rs) throws SQLException, ParseException {
+  private Sight setSightData(ResultSet rs) throws SQLException {
     Sight sight = new Sight();
-    sight.setSightNo(Integer.parseInt(rs.getString("sight_no")));
+    sight.setSightNo(rs.getInt("sight_no"));
     sight.setSightName(rs.getString("sight_name"));
     sight.setSightAddr(rs.getString("sight_addr"));
-    sight.setSightId(Integer.parseInt(rs.getString("sight_id")));
+    sight.setSightId(rs.getInt("sight_id"));
     sight.setSightCategoryName(rs.getString("sight_category_name"));
     return sight;
   }
 
-  private Comment setCommentData(ResultSet rs) throws SQLException, ParseException {
+  private Comment setCommentData(ResultSet rs) throws SQLException {
     Comment comment = new Comment();
-    comment.setDiaryNo(Integer.parseInt(rs.getString("diary_no")));
-    comment.setCommentNo(Integer.parseInt(rs.getString("comment_no")));
+    comment.setDiaryNo(rs.getInt("diary_no"));
+    comment.setCommentNo(rs.getInt("comment_no"));
     comment.setCommentContent(rs.getString("comment_content"));
-    comment.setCommentWritingTime(
-        new SimpleDateFormat("yyyy-MM-dd").parse(rs.getString("comment_writing_time")));
+    comment.setCommentWritingTime(rs.getDate("comment_writing_time"));
     return comment;
   }
 
@@ -89,7 +84,6 @@ public class DiaryOracleRepository implements DiaryRepository {
     ResultSet rs = null;
     try {
       con = MyConnection.getConnection(envPath);
-      System.out.println("envPath : " + envPath + "\nFrom DiaryOracleRepository");
 
       String selectSQL = "SELECT * \r\n" + "  FROM  (SELECT d.*\r\n"
           + "              , client_pwd\r\n" + "              , client_cellphone_no\r\n"
@@ -115,8 +109,6 @@ public class DiaryOracleRepository implements DiaryRepository {
       if (diaries.size() == 0) {
         throw new SelectException("선택된 다이어리가 없습니다.");
       }
-    } catch (ParseException e) {
-      e.printStackTrace();
     } catch (SQLException e) {
       e.printStackTrace();
     } catch (Exception e) {
@@ -136,7 +128,6 @@ public class DiaryOracleRepository implements DiaryRepository {
     ResultSet rs = null;
     try {
       con = MyConnection.getConnection(envPath);
-      System.out.println("envPath : " + envPath + "\nFrom DiaryOracleRepository");
 
       String selectSQL = "SELECT * \r\n" + "  FROM  (SELECT d.*\r\n"
           + "              , client_pwd\r\n" + "              , client_cellphone_no\r\n"
@@ -162,8 +153,6 @@ public class DiaryOracleRepository implements DiaryRepository {
       if (diaries.size() == 0) {
         throw new SelectException("선택된 다이어리가 없습니다.");
       }
-    } catch (ParseException e) {
-      e.printStackTrace();
     } catch (SQLException e) {
       e.printStackTrace();
     } catch (Exception e) {
@@ -183,7 +172,6 @@ public class DiaryOracleRepository implements DiaryRepository {
     ResultSet rs = null;
     try {
       con = MyConnection.getConnection(envPath);
-      System.out.println("envPath : " + envPath + "\nFrom DiaryOracleRepository");
 
       String selectSQL = "SELECT * \r\n" + "  FROM  (SELECT d.*\r\n"
           + "              , client_pwd\r\n" + "              , client_cellphone_no\r\n"
@@ -209,8 +197,6 @@ public class DiaryOracleRepository implements DiaryRepository {
       if (diaries.size() == 0) {
         throw new SelectException("선택된 다이어리가 없습니다.");
       }
-    } catch (ParseException e) {
-      e.printStackTrace();
     } catch (SQLException e) {
       e.printStackTrace();
     } catch (Exception e) {
@@ -230,7 +216,6 @@ public class DiaryOracleRepository implements DiaryRepository {
     ResultSet rs = null;
     try {
       con = MyConnection.getConnection(envPath);
-      System.out.println("envPath : " + envPath + "\nFrom DiaryOracleRepository");
 
       String selectSQL = "SELECT * \r\n" + "  FROM (SELECT d.*\r\n"
           + "             , client_pwd\r\n" + "             , client_cellphone_no\r\n"
@@ -256,8 +241,6 @@ public class DiaryOracleRepository implements DiaryRepository {
       if (diaries.size() == 0) {
         throw new SelectException("선택된 다이어리가 없습니다.");
       }
-    } catch (ParseException e) {
-      e.printStackTrace();
     } catch (SQLException e) {
       e.printStackTrace();
     } catch (Exception e) {
@@ -277,7 +260,6 @@ public class DiaryOracleRepository implements DiaryRepository {
     ResultSet rs = null;
     try {
       con = MyConnection.getConnection(envPath);
-      System.out.println("envPath : " + envPath + "\nFrom DiaryOracleRepository");
 
       String selectSQL = "SELECT DISTINCT diary_no\r\n" + "              , client_id \r\n"
           + "              , diary_title\r\n" + "              , diary_writing_time\r\n"
@@ -343,8 +325,6 @@ public class DiaryOracleRepository implements DiaryRepository {
       if (diaries.size() == 0) {
         throw new SelectException("선택된 다이어리가 없습니다.");
       }
-    } catch (ParseException e) {
-      e.printStackTrace();
     } catch (SQLException e) {
       e.printStackTrace();
     } catch (Exception e) {
@@ -356,7 +336,7 @@ public class DiaryOracleRepository implements DiaryRepository {
   }
 
   private Diary BringDiaryDataByDiaryNo(Connection con, ResultSet rs, PreparedStatement pstmt,
-      int diaryNo) throws SelectException, SQLException, ParseException {
+      int diaryNo) throws SelectException, SQLException {
     String selectSQL = "SELECT * \r\n" + "             FROM diaries d\r\n"
         + "  LEFT OUTER JOIN clients c ON (d.client_id = c.client_id)\r\n"
         + "            WHERE diary_no = ? ";
@@ -376,7 +356,7 @@ public class DiaryOracleRepository implements DiaryRepository {
   }
 
   private List<Route> BringRouteDataByDiaryNo(Connection con, ResultSet rs, PreparedStatement pstmt,
-      int diaryNo) throws SelectException, SQLException, ParseException {
+      int diaryNo) throws SelectException, SQLException {
     List<Route> routes = new ArrayList<Route>();
     String selectSQL = "SELECT *\r\n" + "           FROM routes r\r\n"
         + "LEFT OUTER JOIN sights s ON (r.sight_no = s.sight_no)\r\n"
@@ -399,7 +379,7 @@ public class DiaryOracleRepository implements DiaryRepository {
   }
 
   private List<Comment> BringCommentDataByDiaryNo(Connection con, ResultSet rs,
-      PreparedStatement pstmt, int diaryNo) throws SelectException, SQLException, ParseException {
+      PreparedStatement pstmt, int diaryNo) throws SelectException, SQLException {
     List<Comment> comments = new ArrayList<Comment>();
     String selectSQL = "SELECT *\r\n" + "           FROM comments co\r\n"
         + "LEFT OUTER JOIN clients cl ON (co.client_id = cl.client_id)\r\n"
@@ -431,15 +411,11 @@ public class DiaryOracleRepository implements DiaryRepository {
     ResultSet rs = null;
     try {
       con = MyConnection.getConnection(envPath);
-      System.out.println("envPath : " + envPath + "\nFrom DiaryOracleRepository");
-
       routes = BringRouteDataByDiaryNo(con, rs, pstmt, diaryNo);
       comments = BringCommentDataByDiaryNo(con, rs, pstmt, diaryNo);
       diary = BringDiaryDataByDiaryNo(con, rs, pstmt, diaryNo);
       diary.setRoutes(routes);
       diary.setComments(comments);
-    } catch (ParseException e) {
-      e.printStackTrace();
     } catch (SQLException e) {
       e.printStackTrace();
     } catch (Exception e) {
@@ -457,8 +433,6 @@ public class DiaryOracleRepository implements DiaryRepository {
     ResultSet rs = null;
     try {
       con = MyConnection.getConnection(envPath);
-      System.out.println("envPath : " + envPath + "\nFrom DiaryOracleRepository");
-
       String updateSQL =
           "UPDATE diaries  \r\n" + "   SET diary_view_cnt = ? \r\n" + " WHERE diary_no = ? ";
       pstmt = con.prepareStatement(updateSQL);
@@ -467,8 +441,6 @@ public class DiaryOracleRepository implements DiaryRepository {
       pstmt.executeUpdate();
     } catch (SQLException e) {
       throw new UpdateException(e.getMessage());
-    } catch (ParseException e) {
-      e.printStackTrace();
     } catch (Exception e) {
       e.printStackTrace();
     } finally {
@@ -482,8 +454,7 @@ public class DiaryOracleRepository implements DiaryRepository {
     PreparedStatement pstmt = null;
     try {
       con = MyConnection.getConnection(envPath);
-      System.out.println("envPath : " + envPath + "\nFrom DiaryOracleRepository");
-
+      con.setAutoCommit(false);
       String insertSQL = "INSERT INTO diaries \r\n" + "     VALUES (diary_no_seq.NEXTVAL\r\n"
           + "           , ? \r\n" + "           , ? \r\n"
           + "           , TO_DATE(SYSDATE, 'yyyy/mm/dd')\r\n" + "           , ? \r\n"
@@ -497,8 +468,6 @@ public class DiaryOracleRepository implements DiaryRepository {
       pstmt.executeUpdate();
     } catch (SQLException e) {
       throw new InsertException(e.getMessage());
-    } catch (ParseException e) {
-      e.printStackTrace();
     } catch (Exception e) {
       e.printStackTrace();
     } finally {
@@ -512,8 +481,7 @@ public class DiaryOracleRepository implements DiaryRepository {
     PreparedStatement pstmt = null;
     try {
       con = MyConnection.getConnection(envPath);
-      System.out.println("envPath : " + envPath + "\nFrom DiaryOracleRepository");
-
+      con.setAutoCommit(false);
       String updateSQL = "UPDATE diaries \r\n" + "   SET diary_title = ? \r\n"
           + "     , diary_writing_time = TO_DATE(SYSDATE, 'yyyy/mm/dd')\r\n"
           + "     , diary_start_date = ? \r\n" + "     , diary_end_date = ? \r\n"
@@ -527,10 +495,9 @@ public class DiaryOracleRepository implements DiaryRepository {
       pstmt.setInt(5, diary.getDiaryDeleteFlag());
       pstmt.setInt(6, diary.getDiaryNo());
       pstmt.executeUpdate();
+
     } catch (SQLException e) {
       throw new UpdateException(e.getMessage());
-    } catch (ParseException e) {
-      e.printStackTrace();
     } catch (Exception e) {
       e.printStackTrace();
     } finally {

@@ -3,7 +3,6 @@ package com.my.repository;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.text.ParseException;
 import com.my.dto.Route;
 import com.my.dto.Sight;
 import com.my.exception.DeleteException;
@@ -24,6 +23,7 @@ public class RouteOracleRepository implements RouteRepository {
     PreparedStatement pstmt = null;
     try {
       con = MyConnection.getConnection(envPath);
+      con.setAutoCommit(false);
       String insertSQL = "INSERT INTO ROUTES \r\n" + "     VALUES ( ? \r\n"
           + "           , (SELECT NVL(MAX(route_no), 0) + 1\r\n"
           + "          FROM routes WHERE diary_no = ? )\r\n" + "           , ? \r\n"
@@ -36,8 +36,6 @@ public class RouteOracleRepository implements RouteRepository {
       pstmt.executeUpdate();
     } catch (SQLException e) {
       throw new InsertException(e.getMessage());
-    } catch (ParseException e) {
-      e.printStackTrace();
     } catch (Exception e) {
       e.printStackTrace();
     } finally {
@@ -51,6 +49,7 @@ public class RouteOracleRepository implements RouteRepository {
     PreparedStatement pstmt = null;
     try {
       con = MyConnection.getConnection(envPath);
+      con.setAutoCommit(false);
       String updateSQL = "UPDATE routes \r\n" + "   SET sight_no = ? \r\n"
           + "     , route_content = ? \r\n" + " WHERE diary_no = ? \r\n" + "   AND route_no = ? ";
       pstmt = con.prepareStatement(updateSQL);
@@ -62,8 +61,6 @@ public class RouteOracleRepository implements RouteRepository {
       pstmt.executeUpdate();
     } catch (SQLException e) {
       throw new UpdateException(e.getMessage());
-    } catch (ParseException e) {
-      e.printStackTrace();
     } catch (Exception e) {
       e.printStackTrace();
     } finally {
@@ -77,8 +74,6 @@ public class RouteOracleRepository implements RouteRepository {
     PreparedStatement pstmt = null;
     try {
       con = MyConnection.getConnection(envPath);
-      System.out.println("envPath : " + envPath + "\nFrom DiaryOracleRepository");
-
       String updateSQL =
           "DELETE FROM routes \r\n" + "      WHERE diary_no = ? \r\n" + "        AND route_no = ? ";
       pstmt = con.prepareStatement(updateSQL);
@@ -87,8 +82,6 @@ public class RouteOracleRepository implements RouteRepository {
       pstmt.executeUpdate();
     } catch (SQLException e) {
       throw new DeleteException(e.getMessage());
-    } catch (ParseException e) {
-      e.printStackTrace();
     } catch (Exception e) {
       e.printStackTrace();
     } finally {

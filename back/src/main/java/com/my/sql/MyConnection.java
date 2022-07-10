@@ -12,7 +12,6 @@ public class MyConnection {
 
   public static Connection getConnection(String envPath) throws Exception {
     Connection con = null;
-    // Dotenv dotenv = Dotenv.load();
     Properties env = new Properties();
 
     env.load(new FileInputStream(envPath));
@@ -24,6 +23,7 @@ public class MyConnection {
     String password = env.getProperty("DB_PWD");
     Class.forName(driver);
     con = DriverManager.getConnection(url, user, password);
+    System.out.println("MyConnection.java : DB is connected");
     return con;
   }
 
@@ -50,7 +50,6 @@ public class MyConnection {
   }
 
   public static void close(Statement stat, Connection con) {
-    // TODO Auto-generated method stub
     close(null, stat, con);
   }
 }

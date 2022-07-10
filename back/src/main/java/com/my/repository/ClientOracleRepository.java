@@ -25,7 +25,7 @@ public class ClientOracleRepository implements ClientRepository {
     client.setClientPwd(rs.getString("client_pwd"));
     client.setClientCellphoneNo(rs.getString("client_cellphone_no"));
     client.setClientNickname(rs.getString("client_nickname"));
-    client.setClientStatusFlag(Integer.parseInt(rs.getString("client_status_flag")));
+    client.setClientStatusFlag(rs.getInt("client_status_flag"));
     return client;
   }
 

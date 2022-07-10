@@ -3,6 +3,7 @@ package com.my.repository;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import com.my.dto.Admin;
 import com.my.exception.SelectException;
 import com.my.sql.MyConnection;
@@ -27,12 +28,14 @@ public class AdminOracleRepository implements AdminRepository {
       pstmt.setString(1, adminId);
       pstmt.setString(2, adminPwd);
       rs = pstmt.executeQuery();
-      if (rs.next() == true) {
+      if (rs.next()) {
         admin.setAdminId(rs.getString("admin_id"));
         admin.setAdminPwd(rs.getString("admin_pwd"));
       } else {
         throw new SelectException("해당되는 관리자가 없습니다.");
       }
+    } catch (SQLException e) {
+      e.printStackTrace();
     } catch (Exception e) {
       e.printStackTrace();
     } finally {
