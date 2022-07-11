@@ -6,7 +6,6 @@
 ### Java ###
 # Compiled class file
 *.class
-back/.classpath
 
 # Log file
 *.log
@@ -33,3 +32,4 @@ replay_pid*
 project.properties
 
 # End of https://www.toptal.com/developers/gitignore/api/java
+back/.classpath
