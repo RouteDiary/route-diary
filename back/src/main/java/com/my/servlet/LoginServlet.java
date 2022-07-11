@@ -9,6 +9,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.my.dto.Client;
 import com.my.exception.SelectException;
@@ -34,6 +35,7 @@ public class LoginServlet extends HttpServlet {
     ObjectMapper mapper = new ObjectMapper();
     Client client = null;
     Map<String, Object> map = new HashMap<String, Object>();
+    HttpSession session = request.getSession();
 
     try {
       client = clientRepository.selectClientByIdAndPwd(clientId, clientPwd);
@@ -43,6 +45,10 @@ public class LoginServlet extends HttpServlet {
       } else {
         map.put("status", 1);
         map.put("message", "로그인 성공");
+        session.setAttribute("loginInfo", clientId);
+        // System.out.print(session.isNew() + "<br>");
+        // System.out.print(session.getId() + "<br>");
+        // System.out.print(session.getLastAccessedTime() + "<br>");
       }
     } catch (SelectException e) {
       map.put("status", 0);
