@@ -30,7 +30,7 @@ public class ClientOracleRepository implements ClientRepository {
   }
 
   @Override
-  public Client selectByIdAndPwd(String clientId, String clientPwd) throws SelectException {
+  public Client selectClientByIdAndPwd(String clientId, String clientPwd) throws SelectException {
     Connection con = null;
     PreparedStatement pstmt = null;
     ResultSet rs = null;
@@ -44,11 +44,65 @@ public class ClientOracleRepository implements ClientRepository {
       pstmt.setString(2, clientPwd);
       pstmt.executeQuery();
       rs = pstmt.executeQuery();
-      if (rs.next() == true) {
+      if (rs.next()) {
         client = setClientData(rs);
       } else {
         throw new SelectException("반환되는 열이 없습니다");
       }
+    } catch (SQLException e) {
+      throw new SelectException(e.getMessage());
+    } catch (Exception e) {
+      e.printStackTrace();
+    } finally {
+      MyConnection.close(rs, pstmt, con);
+    }
+    return client;
+  }
+
+  @Override
+  public Client selectClientById(String clientId) throws SelectException {
+    Connection con = null;
+    PreparedStatement pstmt = null;
+    ResultSet rs = null;
+    Client client = null;
+    try {
+      con = MyConnection.getConnection(envPath);
+      String selectByIdAndPwdSQL = "SELECT * FROM clients WHERE client_id= ? ";
+      pstmt = con.prepareStatement(selectByIdAndPwdSQL);
+      pstmt.setString(1, clientId);
+      pstmt.executeQuery();
+      rs = pstmt.executeQuery();
+      if (rs.next()) {
+        client = setClientData(rs);
+      }
+    } catch (SQLException e) {
+      throw new SelectException(e.getMessage());
+    } catch (Exception e) {
+      e.printStackTrace();
+    } finally {
+      MyConnection.close(rs, pstmt, con);
+    }
+    return client;
+  }
+
+  @Override
+  public Client selectClientByNickname(String clientNickname) throws SelectException {
+    Connection con = null;
+    PreparedStatement pstmt = null;
+    ResultSet rs = null;
+    Client client = null;
+    try {
+      con = MyConnection.getConnection(envPath);
+      String selectByIdAndPwdSQL = "SELECT * FROM clients WHERE client_nickname= ? ";
+      pstmt = con.prepareStatement(selectByIdAndPwdSQL);
+      pstmt.setString(1, clientNickname);
+      pstmt.executeQuery();
+      rs = pstmt.executeQuery();
+      if (rs.next()) {
+        client = setClientData(rs);
+      }
+    } catch (SQLException e) {
+      throw new SelectException(e.getMessage());
     } catch (Exception e) {
       e.printStackTrace();
     } finally {

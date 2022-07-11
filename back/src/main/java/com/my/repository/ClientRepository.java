@@ -7,7 +7,11 @@ import com.my.exception.UpdateException;
 
 public interface ClientRepository {
 
-  Client selectByIdAndPwd(String clientId, String clientPwd) throws SelectException;
+  Client selectClientByIdAndPwd(String clientId, String clientPwd) throws SelectException;
+
+  Client selectClientById(String clientId) throws SelectException;
+
+  Client selectClientByNickname(String clientNickname) throws SelectException;
 
   void insert(Client client) throws InsertException;
 

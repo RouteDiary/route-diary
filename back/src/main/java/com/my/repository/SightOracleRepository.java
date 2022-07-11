@@ -3,7 +3,6 @@ package com.my.repository;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.text.ParseException;
 import com.my.dto.Sight;
 import com.my.exception.InsertException;
 import com.my.sql.MyConnection;
@@ -32,8 +31,6 @@ public class SightOracleRepository implements SightRepository {
       pstmt.executeUpdate();
     } catch (SQLException e) {
       throw new InsertException(e.getMessage());
-    } catch (ParseException e) {
-      e.printStackTrace();
     } catch (Exception e) {
       e.printStackTrace();
     } finally {

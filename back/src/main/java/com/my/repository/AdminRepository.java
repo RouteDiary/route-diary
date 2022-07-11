@@ -4,6 +4,6 @@ import com.my.dto.Admin;
 import com.my.exception.SelectException;
 
 public interface AdminRepository {
-  Admin selectByIdAndPwd(String adminId, String adminPwd) throws SelectException;
+  Admin selectAdminByIdAndPwd(String adminId, String adminPwd) throws SelectException;
 
 }

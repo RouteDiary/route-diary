@@ -16,7 +16,7 @@ public class AdminOracleRepository implements AdminRepository {
   }
 
   @Override
-  public Admin selectByIdAndPwd(String adminId, String adminPwd) throws SelectException {
+  public Admin selectAdminByIdAndPwd(String adminId, String adminPwd) throws SelectException {
     Connection con = null;
     PreparedStatement pstmt = null;
     ResultSet rs = null;
@@ -35,7 +35,7 @@ public class AdminOracleRepository implements AdminRepository {
         throw new SelectException("해당되는 관리자가 없습니다.");
       }
     } catch (SQLException e) {
-      e.printStackTrace();
+      throw new SelectException(e.getMessage());
     } catch (Exception e) {
       e.printStackTrace();
     } finally {
