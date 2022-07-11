@@ -45,7 +45,7 @@ public class LoginServlet extends HttpServlet {
       } else {
         map.put("status", 1);
         map.put("message", "로그인 성공");
-        session.setAttribute("loginInfo", clientId);
+        session.setAttribute("login_info", clientId);
         // System.out.print(session.isNew() + "<br>");
         // System.out.print(session.getId() + "<br>");
         // System.out.print(session.getLastAccessedTime() + "<br>");
