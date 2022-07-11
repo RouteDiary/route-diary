@@ -6,7 +6,7 @@
 ### Java ###
 # Compiled class file
 *.class
-back/*.classpath
+.classpath
 
 # Log file
 *.log
