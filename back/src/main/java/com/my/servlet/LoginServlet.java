@@ -15,15 +15,17 @@ import com.my.exception.SelectException;
 import com.my.repository.ClientOracleRepository;
 import com.my.repository.ClientRepository;
 
-@WebServlet("/idduplicationcheck")
-public class IdDuplicationCheckServlet extends HttpServlet {
+@WebServlet("/login")
+public class LoginServlet extends HttpServlet {
   private static final long serialVersionUID = 1L;
 
-  public IdDuplicationCheckServlet() {}
+  public LoginServlet() {}
 
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
     String clientId = request.getParameter("client_id");
+    String clientPwd = request.getParameter("client_pwd");
+    int clientStatusFlag = Integer.parseInt(request.getParameter("client_status_flag"));
 
     String envPath = getServletContext().getRealPath("project.properties");
     response.setContentType("application/json;charset=UTF-8");
@@ -31,20 +33,25 @@ public class IdDuplicationCheckServlet extends HttpServlet {
     ClientRepository clientRepository = new ClientOracleRepository(envPath);
     ObjectMapper mapper = new ObjectMapper();
     Client client = null;
+    Map<String, Object> map = new HashMap<String, Object>();
+
     try {
-      client = clientRepository.selectClientById(clientId);
-      Map<String, Object> map = new HashMap<String, Object>();
-      if (client == null) {
+      client = clientRepository.selectClientByIdAndPwd(clientId, clientPwd);
+      if (clientStatusFlag == 0 || client == null) {
         map.put("status", 0);
-        map.put("message", "사용가능한 ID입니다.");
+        map.put("message", "로그인 실패 : ID와 패스워드를 다시 확인해 주세요.");
       } else {
         map.put("status", 1);
-        map.put("message", "이미 사용중인 ID입니다.");
+        map.put("message", "로그인 성공");
       }
-      String result = mapper.writeValueAsString(map);
-      out.print(result);
     } catch (SelectException e) {
+      map.put("status", 0);
+      map.put("message", "로그인 실패 : ID와 패스워드를 다시 확인해 주세요.");
       e.printStackTrace();
     }
+    String result = mapper.writeValueAsString(map);
+    out.print(result);
+
   }
+
 }
