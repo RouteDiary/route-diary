@@ -37,7 +37,7 @@ public class DiaryDeleteServlet extends HttpServlet {
     ObjectMapper mapper = new ObjectMapper();
     Map<String, Object> map = new HashMap<String, Object>();
     try {
-      Diary diary = diaryRepository.selectDiraryByDiaryNo(diaryNo);
+      Diary diary = diaryRepository.selectDiaryByDiaryNo(diaryNo);
       if (clientId.equals(diary.getClient().getClientId())) {
         map.put("status", 1);
         map.put("message", "다이어리가 삭제되었습니다.");
