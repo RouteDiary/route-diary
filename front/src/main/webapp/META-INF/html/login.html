@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>login</title>
+    <link rel="stylesheet" href="../css/login.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="../js/login.js"></script>
+  </head>
+  <body>
+    <div class="window">
+      <h1>로그인</h1>
+      <a href="signup.html">새로 오셨나요? 가입하기</a><br /><br />
+      <form class="login" action="/back/login" method="post">
+        <fieldset>
+          <label id="id">ID</label><br />
+          <input
+            type="text"
+            id="id"
+            name="id"
+            size="100%"
+            placeholder="이메일을 입력하세요"
+            required="required"
+          /><br /><br />
+          <label id="password">PASSWORD</label><br />
+          <input
+            type="password"
+            id="password"
+            name="pwd"
+            size="100%"
+            placeholder="비밀번호를 입력하세요"
+            required="required"
+          /><br /><br />
+          <input id="space" type="submit" value="login" />
+        </fieldset>
+      </form>
+    </div>
+  </body>
+</html>

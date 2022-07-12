@@ -129,16 +129,13 @@ public class DiaryOracleRepository implements DiaryRepository {
         diary.setClient(client);
         diaries.add(diary);
       }
-
-      if (diaries.size() == 0) {
-        throw new SelectException("선택된 다이어리가 없습니다.");
-      }
-    } catch (SQLException e) {
-      e.printStackTrace();
     } catch (Exception e) {
       e.printStackTrace();
     } finally {
       MyConnection.close(rs, pstmt, con);
+    }
+    if (diaries.size() == 0) {
+      throw new SelectException("선택된 다이어리가 없습니다.");
     }
     return diaries;
   }
@@ -173,16 +170,13 @@ public class DiaryOracleRepository implements DiaryRepository {
         diary.setClient(client);
         diaries.add(diary);
       }
-
-      if (diaries.size() == 0) {
-        throw new SelectException("선택된 다이어리가 없습니다.");
-      }
-    } catch (SQLException e) {
-      e.printStackTrace();
     } catch (Exception e) {
       e.printStackTrace();
     } finally {
       MyConnection.close(rs, pstmt, con);
+    }
+    if (diaries.size() == 0) {
+      throw new SelectException("선택된 다이어리가 없습니다.");
     }
     return diaries;
   }
@@ -217,16 +211,13 @@ public class DiaryOracleRepository implements DiaryRepository {
         diary.setClient(client);
         diaries.add(diary);
       }
-
-      if (diaries.size() == 0) {
-        throw new SelectException("선택된 다이어리가 없습니다.");
-      }
-    } catch (SQLException e) {
-      e.printStackTrace();
     } catch (Exception e) {
       e.printStackTrace();
     } finally {
       MyConnection.close(rs, pstmt, con);
+    }
+    if (diaries.size() == 0) {
+      throw new SelectException("선택된 다이어리가 없습니다.");
     }
     return diaries;
   }
@@ -261,16 +252,13 @@ public class DiaryOracleRepository implements DiaryRepository {
         diary.setClient(client);
         diaries.add(diary);
       }
-
-      if (diaries.size() == 0) {
-        throw new SelectException("선택된 다이어리가 없습니다.");
-      }
-    } catch (SQLException e) {
-      e.printStackTrace();
     } catch (Exception e) {
       e.printStackTrace();
     } finally {
       MyConnection.close(rs, pstmt, con);
+    }
+    if (diaries.size() == 0) {
+      throw new SelectException("선택된 다이어리가 없습니다.");
     }
     return diaries;
   }
@@ -345,16 +333,13 @@ public class DiaryOracleRepository implements DiaryRepository {
         diary.setClient(client);
         diaries.add(diary);
       }
-
-      if (diaries.size() == 0) {
-        throw new SelectException("선택된 다이어리가 없습니다.");
-      }
-    } catch (SQLException e) {
-      e.printStackTrace();
     } catch (Exception e) {
       e.printStackTrace();
     } finally {
       MyConnection.close(rs, pstmt, con);
+    }
+    if (diaries.size() == 0) {
+      throw new SelectException("선택된 다이어리가 없습니다.");
     }
     return diaries;
   }
@@ -396,9 +381,6 @@ public class DiaryOracleRepository implements DiaryRepository {
       route.setSight(sight);
       routes.add(route);
     }
-    if (routes.size() == 0) {
-      throw new SelectException("diaryNo에 해당하는 route가 없습니다.");
-    }
     return routes;
   }
 
@@ -418,9 +400,6 @@ public class DiaryOracleRepository implements DiaryRepository {
       client = setClientData(rs);
       comment.setClient(client);
       comments.add(comment);
-    }
-    if (comments.size() == 0) {
-      throw new SelectException("diaryNo에 해당하는 comment가 없습니다.");
     }
     return comments;
   }
@@ -472,6 +451,20 @@ public class DiaryOracleRepository implements DiaryRepository {
     }
   }
 
+  private int selectDiaryNoSeqNextval(Connection con, PreparedStatement pstmt, ResultSet rs)
+      throws SQLException {
+    String selectSQL = "SELECT diary_no_seq.NEXTVAL FROM dual";
+    pstmt = con.prepareStatement(selectSQL);
+    rs = pstmt.executeQuery(selectSQL);
+    Long diaryNo = 0L;
+    selectSQL = "SELECT diary_no_seq.CURRVAL FROM dual";
+    rs = pstmt.executeQuery(selectSQL);
+    if (rs.next()) {
+      diaryNo = rs.getLong("CURRVAL");
+    }
+    return diaryNo.intValue();
+  };
+
   @Override
   public void insert(Diary diary) throws InsertException {
     Connection con = null;
@@ -479,23 +472,21 @@ public class DiaryOracleRepository implements DiaryRepository {
     ResultSet rs = null;
     try {
       con = MyConnection.getConnection(envPath);
-      con.setAutoCommit(false);
-      String insertSQL = "INSERT INTO diaries \r\n" + "     VALUES (diary_no_seq.NEXTVAL\r\n"
-          + "           , ? \r\n" + "           , ? \r\n"
-          + "           , TO_DATE(SYSDATE, 'yyyy/mm/dd')\r\n" + "           , ? \r\n"
-          + "           , ? \r\n" + "           , 1\r\n" + "           , 0\r\n"
-          + "           , 0\r\n" + "           , 1\r\n" + ")";
-      pstmt = con.prepareStatement(insertSQL);
-      pstmt.setString(1, diary.getClient().getClientId());
-      pstmt.setString(2, diary.getDiaryTitle());
-      pstmt.setDate(3, new java.sql.Date(diary.getDiaryStartDate().getTime()));
-      pstmt.setDate(4, new java.sql.Date(diary.getDiaryEndDate().getTime()));
-      pstmt.executeUpdate();
 
-      String selectSQL = "SELECT diary_no_seq.CURRVAL FROM dual";
-      rs = pstmt.executeQuery(selectSQL);
-      int diaryNo = rs.getInt("diary_no_seq.CURRVAL");
+      int diaryNo = selectDiaryNoSeqNextval(con, pstmt, rs);
       diary.setDiaryNo(diaryNo);
+
+      String insertSQL = "INSERT INTO diaries \r\n" + "     VALUES ( ? \r\n" + "           , ? \r\n"
+          + "           , ? \r\n" + "           , TO_DATE(SYSDATE, 'yyyy/mm/dd')\r\n"
+          + "           , ? \r\n" + "           , ? \r\n" + "           , 1\r\n"
+          + "           , 0\r\n" + "           , 0\r\n" + "      , 1\r\n" + ")";
+      pstmt = con.prepareStatement(insertSQL);
+      pstmt.setInt(1, diary.getDiaryNo());
+      pstmt.setString(2, diary.getClient().getClientId());
+      pstmt.setString(3, diary.getDiaryTitle());
+      pstmt.setDate(4, new java.sql.Date(diary.getDiaryStartDate().getTime()));
+      pstmt.setDate(5, new java.sql.Date(diary.getDiaryEndDate().getTime()));
+      pstmt.executeUpdate();
     } catch (SQLException e) {
       throw new InsertException(e.getMessage());
     } catch (Exception e) {
@@ -511,7 +502,6 @@ public class DiaryOracleRepository implements DiaryRepository {
     PreparedStatement pstmt = null;
     try {
       con = MyConnection.getConnection(envPath);
-      con.setAutoCommit(false);
       String updateSQL = "UPDATE diaries \r\n" + "   SET diary_title = ? \r\n"
           + "     , diary_writing_time = TO_DATE(SYSDATE, 'yyyy/mm/dd')\r\n"
           + "     , diary_start_date = ? \r\n" + "     , diary_end_date = ? \r\n"
