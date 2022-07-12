@@ -30,7 +30,6 @@ public class AdminServlet extends HttpServlet {
     try {
       adminrepo.selectAdminByIdAndPwd(admin_id, admin_pwd);
     } catch (SelectException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     }
     response.setContentType("application/json;charset=UTF-8");

@@ -67,8 +67,8 @@ public class ClientOracleRepository implements ClientRepository {
     Client client = null;
     try {
       con = MyConnection.getConnection(envPath);
-      String selectByIdAndPwdSQL = "SELECT * FROM clients WHERE client_id= ? ";
-      pstmt = con.prepareStatement(selectByIdAndPwdSQL);
+      String selectByIdSQL = "SELECT * FROM clients WHERE client_id= ? ";
+      pstmt = con.prepareStatement(selectByIdSQL);
       pstmt.setString(1, clientId);
       pstmt.executeQuery();
       rs = pstmt.executeQuery();
