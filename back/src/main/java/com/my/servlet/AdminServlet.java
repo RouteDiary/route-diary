@@ -6,6 +6,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import com.my.dto.Admin;
 import com.my.exception.SelectException;
 import com.my.repository.AdminOracleRepository;
 import com.my.repository.AdminRepository;
@@ -28,7 +29,7 @@ public class AdminServlet extends HttpServlet {
     String admin_pwd = request.getParameter("admin_pwd");
     AdminRepository adminrepo = new AdminOracleRepository(envPath);
     try {
-      adminrepo.selectAdminByIdAndPwd(admin_id, admin_pwd);
+      Admin admin = adminrepo.selectAdminByIdAndPwd(admin_id, admin_pwd);
     } catch (SelectException e) {
       e.printStackTrace();
     }

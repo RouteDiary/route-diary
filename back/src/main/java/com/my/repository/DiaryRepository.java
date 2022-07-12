@@ -8,6 +8,8 @@ import com.my.exception.UpdateException;
 
 public interface DiaryRepository {
 
+  int selectDiariesSize() throws SelectException;
+
   List<Diary> selectDirariesByWritingDate(int diaryStartNo, int diaryEndNo) throws SelectException;
 
   List<Diary> selectDirariesByViewCnt(int diaryStartNo, int diaryEndNo) throws SelectException;

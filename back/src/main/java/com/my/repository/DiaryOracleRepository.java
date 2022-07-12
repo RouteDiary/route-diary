@@ -76,6 +76,24 @@ public class DiaryOracleRepository implements DiaryRepository {
   }
 
   @Override
+  public int selectDiariesSize() throws SelectException{
+      Connection con = null;
+      PreparedStatement pstmt = null;
+      ResultSet rs = null;
+      try{
+      con = MyConnection.getConnection(envPath);
+      String sizeSql = "SELECT COUNT(*) FROM diaries WHERE diary_delete_flag = 1 AND diary_disclosure_flag = 1";
+      pstmt = con.prepareStatement(sizeSql);
+      rs = pstmt.executeQuery();
+      }
+      if(! rs.next()){
+        throw new SelectException("다이어리가 없습니다.");
+      }
+      return rs.getInt("COUNT(*)");
+  }
+
+
+  @Override
   public List<Diary> selectDirariesByWritingDate(int diaryStartNo, int diaryEndNo)
       throws SelectException {
     List<Diary> diaries = new ArrayList<Diary>();
