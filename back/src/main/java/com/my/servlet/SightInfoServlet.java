@@ -7,11 +7,12 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import com.my.exception.SelectException;
+import com.my.dto.Sight;
+import com.my.exception.InsertException;
 import com.my.repository.SightOracleRepository;
 import com.my.repository.SightRepository;
 
-@WebServlet("/back/sightinfo")
+@WebServlet("/sightinfo")
 public class SightInfoServlet extends HttpServlet {
   private static final long serialVersionUID = 1L;
 
@@ -19,15 +20,20 @@ public class SightInfoServlet extends HttpServlet {
       throws ServletException, IOException {
 
     String envPath = getServletContext().getRealPath("project.properties");
-    SightRepository sightRepository = new SightOracleRepository(envPath);
     response.setContentType("application/json; charset=UTF-8");
     PrintWriter out = response.getWriter();
+    SightRepository sightRepository = new SightOracleRepository(envPath);
+    int sightNo = Integer.parseInt(request.getParameter("sight_no"));
+    String sightName = request.getParameter("sight_name");
+    String sightAddr = request.getParameter("sight_name");
+    int sightId = Integer.parseInt(request.getParameter("sight_id"));
+    String sightCategoryName = request.getParameter("sight_category_name");
 
-    String sight = request.getParameter(sight);
+    Sight sight = new Sight(sightNo, sightName, sightAddr, sightId, sightCategoryName);
 
     try {
-      sight = sightRepository.selectOneSightDetail(sight.getSightNo());
-    } catch (SelectException e) {
+      sightRepository.insert(sight);
+    } catch (InsertException e) {
       e.printStackTrace();
     }
     out.print(sight);

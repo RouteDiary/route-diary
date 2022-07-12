@@ -14,9 +14,6 @@ import com.my.exception.UpdateException;
 import com.my.repository.ClientOracleRepository;
 import com.my.repository.ClientRepository;
 
-/**
- * Servlet implementation class ClientDeleteServlet
- */
 @WebServlet("/clientdelete")
 public class ClientDeleteServlet extends HttpServlet {
   private static final long serialVersionUID = 1L;

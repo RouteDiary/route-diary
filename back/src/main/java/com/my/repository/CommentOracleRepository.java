@@ -72,6 +72,7 @@ public class CommentOracleRepository implements CommentRepository {
       pstmt = con.prepareStatement(deleteSQL);
       pstmt.setInt(1, comment.getDiaryNo());
       pstmt.setInt(2, comment.getCommentNo());
+      pstmt.executeUpdate();
     } catch (SQLException e) {
       throw new DeleteException(e.getMessage());
     } catch (Exception e) {
