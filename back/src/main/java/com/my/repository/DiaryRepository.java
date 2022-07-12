@@ -10,19 +10,19 @@ public interface DiaryRepository {
 
   int selectDiariesSize() throws SelectException;
 
-  List<Diary> selectDirariesByWritingDate(int diaryStartNo, int diaryEndNo) throws SelectException;
+  List<Diary> selectDiariesByWritingDate(int diaryStartNo, int diaryEndNo) throws SelectException;
 
-  List<Diary> selectDirariesByViewCnt(int diaryStartNo, int diaryEndNo) throws SelectException;
+  List<Diary> selectDiariesByViewCnt(int diaryStartNo, int diaryEndNo) throws SelectException;
 
-  List<Diary> selectDirariesByLikeCnt(int diaryStartNo, int diaryEndNo) throws SelectException;
+  List<Diary> selectDiariesByLikeCnt(int diaryStartNo, int diaryEndNo) throws SelectException;
 
-  List<Diary> selectDirariesById(String clientId, int diaryStartNo, int diaryEndNo)
+  List<Diary> selectDiariesById(String clientId, int diaryStartNo, int diaryEndNo)
       throws SelectException;
 
-  List<Diary> selectDirariesByKeyword(String keyword, int diaryStartNo, int diaryEndNo)
+  List<Diary> selectDiariesByKeyword(String keyword, int diaryStartNo, int diaryEndNo)
       throws SelectException;
 
-  Diary selectDiraryByDiaryNo(int diaryNo) throws SelectException;
+  Diary selectDiaryByDiaryNo(int diaryNo) throws SelectException;
 
   void updateViewCnt(Diary diary) throws UpdateException;
 

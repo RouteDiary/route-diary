@@ -76,25 +76,31 @@ public class DiaryOracleRepository implements DiaryRepository {
   }
 
   @Override
-  public int selectDiariesSize() throws SelectException{
-      Connection con = null;
-      PreparedStatement pstmt = null;
-      ResultSet rs = null;
-      try{
+  public int selectDiariesSize() throws SelectException {
+    Connection con = null;
+    PreparedStatement pstmt = null;
+    ResultSet rs = null;
+    int diariesSize = 0;
+    try {
       con = MyConnection.getConnection(envPath);
-      String sizeSql = "SELECT COUNT(*) FROM diaries WHERE diary_delete_flag = 1 AND diary_disclosure_flag = 1";
+      String sizeSql =
+          "SELECT COUNT(*) FROM diaries WHERE diary_delete_flag = 1 AND diary_disclosure_flag = 1";
       pstmt = con.prepareStatement(sizeSql);
       rs = pstmt.executeQuery();
+      if (rs.next()) {
+        diariesSize = rs.getInt("COUNT(*)");
       }
-      if(! rs.next()){
-        throw new SelectException("다이어리가 없습니다.");
-      }
-      return rs.getInt("COUNT(*)");
+    } catch (SQLException e) {
+      throw new SelectException(e.getMessage());
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return diariesSize;
   }
 
 
   @Override
-  public List<Diary> selectDirariesByWritingDate(int diaryStartNo, int diaryEndNo)
+  public List<Diary> selectDiariesByWritingDate(int diaryStartNo, int diaryEndNo)
       throws SelectException {
     List<Diary> diaries = new ArrayList<Diary>();
     Connection con = null;
@@ -138,7 +144,7 @@ public class DiaryOracleRepository implements DiaryRepository {
   }
 
   @Override
-  public List<Diary> selectDirariesByViewCnt(int diaryStartNo, int diaryEndNo)
+  public List<Diary> selectDiariesByViewCnt(int diaryStartNo, int diaryEndNo)
       throws SelectException {
     List<Diary> diaries = new ArrayList<Diary>();
     Connection con = null;
@@ -182,7 +188,7 @@ public class DiaryOracleRepository implements DiaryRepository {
   }
 
   @Override
-  public List<Diary> selectDirariesByLikeCnt(int diaryStartNo, int diaryEndNo)
+  public List<Diary> selectDiariesByLikeCnt(int diaryStartNo, int diaryEndNo)
       throws SelectException {
     List<Diary> diaries = new ArrayList<Diary>();
     Connection con = null;
@@ -226,7 +232,7 @@ public class DiaryOracleRepository implements DiaryRepository {
   }
 
   @Override
-  public List<Diary> selectDirariesById(String clientId, int diaryStartNo, int diaryEndNo)
+  public List<Diary> selectDiariesById(String clientId, int diaryStartNo, int diaryEndNo)
       throws SelectException {
     List<Diary> diaries = new ArrayList<Diary>();
     Connection con = null;
@@ -270,7 +276,7 @@ public class DiaryOracleRepository implements DiaryRepository {
   }
 
   @Override
-  public List<Diary> selectDirariesByKeyword(String keyword, int diaryStartNo, int diaryEndNo)
+  public List<Diary> selectDiariesByKeyword(String keyword, int diaryStartNo, int diaryEndNo)
       throws SelectException {
     List<Diary> diaries = new ArrayList<Diary>();
     Connection con = null;
@@ -420,7 +426,7 @@ public class DiaryOracleRepository implements DiaryRepository {
   }
 
   @Override
-  public Diary selectDiraryByDiaryNo(int diaryNo) throws SelectException {
+  public Diary selectDiaryByDiaryNo(int diaryNo) throws SelectException {
     Diary diary = new Diary();
     List<Route> routes = new ArrayList<Route>();
     List<Comment> comments = new ArrayList<Comment>();
@@ -470,6 +476,7 @@ public class DiaryOracleRepository implements DiaryRepository {
   public void insert(Diary diary) throws InsertException {
     Connection con = null;
     PreparedStatement pstmt = null;
+    ResultSet rs = null;
     try {
       con = MyConnection.getConnection(envPath);
       con.setAutoCommit(false);
@@ -484,12 +491,17 @@ public class DiaryOracleRepository implements DiaryRepository {
       pstmt.setDate(3, new java.sql.Date(diary.getDiaryStartDate().getTime()));
       pstmt.setDate(4, new java.sql.Date(diary.getDiaryEndDate().getTime()));
       pstmt.executeUpdate();
+
+      String selectSQL = "SELECT diary_no_seq.CURRVAL FROM dual";
+      rs = pstmt.executeQuery(selectSQL);
+      int diaryNo = rs.getInt("diary_no_seq.CURRVAL");
+      diary.setDiaryNo(diaryNo);
     } catch (SQLException e) {
       throw new InsertException(e.getMessage());
     } catch (Exception e) {
       e.printStackTrace();
     } finally {
-      MyConnection.close(pstmt, con);
+      MyConnection.close(rs, pstmt, con);
     }
   }
 
