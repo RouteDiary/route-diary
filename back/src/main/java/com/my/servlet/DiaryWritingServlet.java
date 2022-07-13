@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.my.dto.Client;
 import com.my.dto.Diary;
 import com.my.exception.InsertException;
 import com.my.repository.DiaryOracleRepository;
@@ -41,13 +42,17 @@ public class DiaryWritingServlet extends HttpServlet {
     try {
       DateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
       String diaryTitle = request.getParameter("diary_title");
-      Date diaryStartDate = formatter.parse("diary_start_date");
-      Date diaryEndDate = formatter.parse("diary_end_date");
+      Date diaryStartDate = formatter.parse(request.getParameter("diary_start_date"));
+      Date diaryEndDate = formatter.parse(request.getParameter("diary_start_date"));
+      int diaryDisClosureFlag = Integer.parseInt(request.getParameter("diary_disclosure_flag"));
       Diary diary = new Diary();
+      Client client = new Client();
+      client.setClientId(clientId);
+      diary.setClient(client);
       diary.setDiaryTitle(diaryTitle);
       diary.setDiaryStartDate(diaryStartDate);
       diary.setDiaryEndDate(diaryEndDate);
-
+      diary.setDiaryDisclosureFlag(diaryDisClosureFlag);
       diaryRepository.insert(diary);
       session.setAttribute("diary", diary);
 

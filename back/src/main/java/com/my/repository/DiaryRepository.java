@@ -8,18 +8,19 @@ import com.my.exception.UpdateException;
 
 public interface DiaryRepository {
 
-  int selectDiariesSize() throws SelectException;
+  int selectDiariesRowSize(int diaryDisclosureFlag) throws SelectException;
 
-  List<Diary> selectDiariesByWritingDate(int diaryStartNo, int diaryEndNo) throws SelectException;
-
-  List<Diary> selectDiariesByViewCnt(int diaryStartNo, int diaryEndNo) throws SelectException;
-
-  List<Diary> selectDiariesByLikeCnt(int diaryStartNo, int diaryEndNo) throws SelectException;
-
-  List<Diary> selectDiariesById(String clientId, int diaryStartNo, int diaryEndNo)
+  List<Diary> selectDiariesByWritingDate(int diaryStartRowNo, int diaryEndRowNo)
       throws SelectException;
 
-  List<Diary> selectDiariesByKeyword(String keyword, int diaryStartNo, int diaryEndNo)
+  List<Diary> selectDiariesByViewCnt(int diaryStartRowNo, int diaryEndRowNo) throws SelectException;
+
+  List<Diary> selectDiariesByLikeCnt(int diaryStartRowNo, int diaryEndRowNo) throws SelectException;
+
+  List<Diary> selectDiariesById(String clientId, int diaryStartRowNo, int diaryEndRowNo)
+      throws SelectException;
+
+  List<Diary> selectDiariesByKeyword(String keyword, int diaryStartRowNo, int diaryEndRowNo)
       throws SelectException;
 
   Diary selectDiaryByDiaryNo(int diaryNo) throws SelectException;

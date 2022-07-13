@@ -22,7 +22,7 @@ import com.my.repository.DiaryRepository;
 public class MyDiariesServlet extends HttpServlet {
   private static final long serialVersionUID = 1L;
 
-  protected void doGet(HttpServletRequest request, HttpServletResponse response)
+  protected void doPost(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
     String envPath = getServletContext().getRealPath("project.properties");
     response.setContentType("application/json;charset=UTF-8");

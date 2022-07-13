@@ -13,7 +13,7 @@
     <div class="window">
       <h1>로그인</h1>
       <a href="signup.html">새로 오셨나요? 가입하기</a><br /><br />
-      <form class="login" action="/back/login" method="post">
+      <form class="general_login" action="/back/login" method="post">
         <fieldset>
           <label id="id">ID</label><br />
           <input
@@ -34,6 +34,26 @@
             required="required"
           /><br /><br />
           <input id="space" type="submit" value="login" />
+        </fieldset>
+      </form>
+      <form class="kakao_login" action="/back/login" method="post">
+        <fieldset>
+          <img
+            src="../resource/kakao_login.png"
+            alt="kakao_login"
+            width="200px"
+            height="40px"
+          /><br />
+        </fieldset>
+      </form>
+      <form class="naver_login" action="/back/login" method="post">
+        <fieldset>
+          <img
+            src="../resource/naver_login.png"
+            alt="kakao_login"
+            width="200px"
+            height="40px"
+          /><br />
         </fieldset>
       </form>
     </div>

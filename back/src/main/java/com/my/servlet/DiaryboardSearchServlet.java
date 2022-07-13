@@ -45,7 +45,8 @@ public class DiaryboardSearchServlet extends HttpServlet {
     DiaryRepository diaryRepository = new DiaryOracleRepository(envPath);
     int totalRows = 0;
     try {
-      totalRows = diaryRepository.selectDiariesSize();
+      int diaryDisClosureFlag = 1;
+      totalRows = diaryRepository.selectDiariesRowSize(diaryDisClosureFlag);
       System.out.println("현재 페이지 : " + currentPage + " / " + startRow + " : " + endRow
           + " / 전체다이어리 갯수 : " + totalRows);
       // 전체 다이어리 : 96개 / endRow : 100 -> 아지막 argument를 totalRows로 함

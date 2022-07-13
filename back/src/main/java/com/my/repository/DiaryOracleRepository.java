@@ -76,7 +76,7 @@ public class DiaryOracleRepository implements DiaryRepository {
   }
 
   @Override
-  public int selectDiariesSize() throws SelectException {
+  public int selectDiariesRowSize(int diaryDisclosureFlag) throws SelectException {
     Connection con = null;
     PreparedStatement pstmt = null;
     ResultSet rs = null;
@@ -84,8 +84,9 @@ public class DiaryOracleRepository implements DiaryRepository {
     try {
       con = MyConnection.getConnection(envPath);
       String sizeSql =
-          "SELECT COUNT(*) FROM diaries WHERE diary_delete_flag = 1 AND diary_disclosure_flag = 1";
+          "SELECT COUNT(*) FROM diaries WHERE diary_delete_flag = 1 AND diary_disclosure_flag = ? ";
       pstmt = con.prepareStatement(sizeSql);
+      pstmt.setInt(1, diaryDisclosureFlag);
       rs = pstmt.executeQuery();
       if (rs.next()) {
         diariesSize = rs.getInt("COUNT(*)");
@@ -100,7 +101,7 @@ public class DiaryOracleRepository implements DiaryRepository {
 
 
   @Override
-  public List<Diary> selectDiariesByWritingDate(int diaryStartNo, int diaryEndNo)
+  public List<Diary> selectDiariesByWritingDate(int diaryStartRowNo, int diaryEndRowNo)
       throws SelectException {
     List<Diary> diaries = new ArrayList<Diary>();
     Connection con = null;
@@ -119,8 +120,8 @@ public class DiaryOracleRepository implements DiaryRepository {
           + "            AND diary_delete_flag = 1\r\n"
           + "       ORDER BY diary_writing_time DESC)\r\n" + "WHERE rnum BETWEEN ? AND ? ";
       pstmt = con.prepareStatement(selectSQL);
-      pstmt.setInt(1, diaryStartNo);
-      pstmt.setInt(2, diaryEndNo);
+      pstmt.setInt(1, diaryStartRowNo);
+      pstmt.setInt(2, diaryEndRowNo);
       rs = pstmt.executeQuery();
 
       while (rs.next()) {
@@ -141,7 +142,7 @@ public class DiaryOracleRepository implements DiaryRepository {
   }
 
   @Override
-  public List<Diary> selectDiariesByViewCnt(int diaryStartNo, int diaryEndNo)
+  public List<Diary> selectDiariesByViewCnt(int diaryStartRowNo, int diaryEndRowNo)
       throws SelectException {
     List<Diary> diaries = new ArrayList<Diary>();
     Connection con = null;
@@ -160,8 +161,8 @@ public class DiaryOracleRepository implements DiaryRepository {
           + "            AND diary_delete_flag = 1\r\n" + "       ORDER BY diary_view_cnt DESC,\r\n"
           + "                diary_writing_time DESC)\r\n" + "WHERE rnum BETWEEN ? AND ? ";
       pstmt = con.prepareStatement(selectSQL);
-      pstmt.setInt(1, diaryStartNo);
-      pstmt.setInt(2, diaryEndNo);
+      pstmt.setInt(1, diaryStartRowNo);
+      pstmt.setInt(2, diaryEndRowNo);
       rs = pstmt.executeQuery();
 
       while (rs.next()) {
@@ -182,7 +183,7 @@ public class DiaryOracleRepository implements DiaryRepository {
   }
 
   @Override
-  public List<Diary> selectDiariesByLikeCnt(int diaryStartNo, int diaryEndNo)
+  public List<Diary> selectDiariesByLikeCnt(int diaryStartRowNo, int diaryEndRowNo)
       throws SelectException {
     List<Diary> diaries = new ArrayList<Diary>();
     Connection con = null;
@@ -201,8 +202,8 @@ public class DiaryOracleRepository implements DiaryRepository {
           + "            AND diary_delete_flag = 1\r\n" + "       ORDER BY diary_like_cnt DESC,\r\n"
           + "                diary_writing_time DESC)\r\n" + "WHERE rnum BETWEEN ? AND ? ";
       pstmt = con.prepareStatement(selectSQL);
-      pstmt.setInt(1, diaryStartNo);
-      pstmt.setInt(2, diaryEndNo);
+      pstmt.setInt(1, diaryStartRowNo);
+      pstmt.setInt(2, diaryEndRowNo);
       rs = pstmt.executeQuery();
 
       while (rs.next()) {
@@ -223,7 +224,7 @@ public class DiaryOracleRepository implements DiaryRepository {
   }
 
   @Override
-  public List<Diary> selectDiariesById(String clientId, int diaryStartNo, int diaryEndNo)
+  public List<Diary> selectDiariesById(String clientId, int diaryStartRowNo, int diaryEndRowNo)
       throws SelectException {
     List<Diary> diaries = new ArrayList<Diary>();
     Connection con = null;
@@ -242,8 +243,8 @@ public class DiaryOracleRepository implements DiaryRepository {
           + "       ORDER BY diary_writing_time DESC)\r\n" + " WHERE rnum BETWEEN ? AND ? ";
       pstmt = con.prepareStatement(selectSQL);
       pstmt.setString(1, clientId);
-      pstmt.setInt(2, diaryStartNo);
-      pstmt.setInt(3, diaryEndNo);
+      pstmt.setInt(2, diaryStartRowNo);
+      pstmt.setInt(3, diaryEndRowNo);
       rs = pstmt.executeQuery();
 
       while (rs.next()) {
@@ -264,7 +265,7 @@ public class DiaryOracleRepository implements DiaryRepository {
   }
 
   @Override
-  public List<Diary> selectDiariesByKeyword(String keyword, int diaryStartNo, int diaryEndNo)
+  public List<Diary> selectDiariesByKeyword(String keyword, int diaryStartRowNo, int diaryEndRowNo)
       throws SelectException {
     List<Diary> diaries = new ArrayList<Diary>();
     Connection con = null;
@@ -323,8 +324,8 @@ public class DiaryOracleRepository implements DiaryRepository {
       pstmt.setString(1, keyword);
       pstmt.setString(2, keyword);
       pstmt.setString(3, keyword);
-      pstmt.setInt(4, diaryStartNo);
-      pstmt.setInt(5, diaryEndNo);
+      pstmt.setInt(4, diaryStartRowNo);
+      pstmt.setInt(5, diaryEndRowNo);
       rs = pstmt.executeQuery();
 
       while (rs.next()) {
@@ -472,13 +473,12 @@ public class DiaryOracleRepository implements DiaryRepository {
     ResultSet rs = null;
     try {
       con = MyConnection.getConnection(envPath);
-
       int diaryNo = selectDiaryNoSeqNextval(con, pstmt, rs);
       diary.setDiaryNo(diaryNo);
 
       String insertSQL = "INSERT INTO diaries \r\n" + "     VALUES ( ? \r\n" + "           , ? \r\n"
           + "           , ? \r\n" + "           , TO_DATE(SYSDATE, 'yyyy/mm/dd')\r\n"
-          + "           , ? \r\n" + "           , ? \r\n" + "           , 1\r\n"
+          + "           , ? \r\n" + "           , ? \r\n" + "           , ? \r\n"
           + "           , 0\r\n" + "           , 0\r\n" + "      , 1\r\n" + ")";
       pstmt = con.prepareStatement(insertSQL);
       pstmt.setInt(1, diary.getDiaryNo());
@@ -486,6 +486,7 @@ public class DiaryOracleRepository implements DiaryRepository {
       pstmt.setString(3, diary.getDiaryTitle());
       pstmt.setDate(4, new java.sql.Date(diary.getDiaryStartDate().getTime()));
       pstmt.setDate(5, new java.sql.Date(diary.getDiaryEndDate().getTime()));
+      pstmt.setInt(6, diary.getDiaryDisclosureFlag());
       pstmt.executeUpdate();
     } catch (SQLException e) {
       throw new InsertException(e.getMessage());

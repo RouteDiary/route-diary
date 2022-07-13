@@ -23,7 +23,6 @@ public class RouteOracleRepository implements RouteRepository {
     PreparedStatement pstmt = null;
     try {
       con = MyConnection.getConnection(envPath);
-      con.setAutoCommit(false);
       String insertSQL = "INSERT INTO ROUTES \r\n" + "     VALUES ( ? \r\n"
           + "           , (SELECT NVL(MAX(route_no), 0) + 1\r\n"
           + "          FROM routes WHERE diary_no = ? )\r\n" + "           , ? \r\n"
@@ -49,7 +48,6 @@ public class RouteOracleRepository implements RouteRepository {
     PreparedStatement pstmt = null;
     try {
       con = MyConnection.getConnection(envPath);
-      con.setAutoCommit(false);
       String updateSQL = "UPDATE routes \r\n" + "   SET sight_no = ? \r\n"
           + "     , route_content = ? \r\n" + " WHERE diary_no = ? \r\n" + "   AND route_no = ? ";
       pstmt = con.prepareStatement(updateSQL);

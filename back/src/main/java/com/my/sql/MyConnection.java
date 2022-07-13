@@ -23,7 +23,8 @@ public class MyConnection {
     String password = env.getProperty("DB_PWD");
     Class.forName(driver);
     con = DriverManager.getConnection(url, user, password);
-    System.out.println("MyConnection.java : DB is connected");
+    System.out
+        .println("MyConnection.java : DB is connected / object's hashcode : " + con.hashCode());
     return con;
   }
 
