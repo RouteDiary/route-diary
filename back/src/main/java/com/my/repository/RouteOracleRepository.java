@@ -47,16 +47,18 @@ public class RouteOracleRepository implements RouteRepository {
     PreparedStatement pstmt = null;
     try {
       con = MyConnection.getConnection(envPath);
-      String insertSQL = "INSERT INTO ROUTES \r\n" + "     VALUES (? \r\n"
-          + "           , (SELECT NVL(MAX(route_no), 0) + 1\r\n"
-          + "          FROM routes WHERE diary_no = ? )\r\n" + "           , ? \r\n"
-          + "           , ? ) ";
+      String insertSQL = "INSERT INTO ROUTES \r\n" + "     VALUES ( ? \r\n" + "           , ? \r\n"
+          + "           , ? \r\n" + "           , ? )";
       pstmt = con.prepareStatement(insertSQL);
-      pstmt.setInt(1, route.getDiaryNo());
-      pstmt.setInt(2, route.getDiaryNo());
-      pstmt.setString(3, route.getRouteContent());
-      pstmt.setString(4, route.getKakaoMapId());
-      pstmt.executeUpdate();
+      int routesSize = routes.size();
+      for (int i = 0; i < routesSize; i++) {
+        pstmt.setInt(1, routes.get(i).getDiaryNo());
+        pstmt.setInt(2, i + 1);
+        pstmt.setString(3, routes.get(i).getRouteContent());
+        pstmt.setString(4, routes.get(i).getKakaoMapId());
+        pstmt.addBatch();
+      }
+      pstmt.executeBatch();
     } catch (SQLException e) {
       throw new InsertException(e.getMessage());
     } catch (Exception e) {
@@ -67,7 +69,7 @@ public class RouteOracleRepository implements RouteRepository {
   }
 
   @Override
-  public void delete(List<Route> routes) throws DeleteException {
+  public void delete(int diaryNo, int routesRowSizeByDiaryNo) throws DeleteException {
     Connection con = null;
     PreparedStatement pstmt = null;
     try {
@@ -75,9 +77,13 @@ public class RouteOracleRepository implements RouteRepository {
       String deleteSQL =
           "DELETE FROM routes \r\n" + "      WHERE diary_no = ? \r\n" + "        AND route_no = ? ";
       pstmt = con.prepareStatement(deleteSQL);
-      pstmt.setInt(1, route.getDiaryNo());
-      pstmt.setInt(2, route.getRouteNo());
-      pstmt.executeUpdate();
+      for (int i = 0; i < routesRowSizeByDiaryNo; i++) {
+        pstmt.setInt(1, diaryNo);
+        pstmt.setInt(2, i + 1);
+        pstmt.addBatch();
+      }
+      pstmt.executeBatch();
+
     } catch (SQLException e) {
       throw new DeleteException(e.getMessage());
     } catch (Exception e) {

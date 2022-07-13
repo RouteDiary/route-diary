@@ -91,7 +91,7 @@ public class DiaryOracleRepository implements DiaryRepository {
 
 
   @Override
-  public List<Diary> selectDiariesByWritingDate(int diaryStartRowNo, int diaryEndRowNo)
+  public List<Diary> selectDiariesByWritingTime(int diaryStartRowNo, int diaryEndRowNo)
       throws SelectException {
     List<Diary> diaries = new ArrayList<Diary>();
     Connection con = null;
@@ -438,11 +438,8 @@ public class DiaryOracleRepository implements DiaryRepository {
 
   private int selectDiaryNoSeqNextval(Connection con, PreparedStatement pstmt, ResultSet rs)
       throws SQLException {
-    String selectSQL = "SELECT diary_no_seq.NEXTVAL FROM dual";
-    pstmt = con.prepareStatement(selectSQL);
-    rs = pstmt.executeQuery(selectSQL);
     Long diaryNo = 0L;
-    selectSQL = "SELECT diary_no_seq.CURRVAL FROM dual";
+    String selectSQL = "SELECT diary_no_seq.CURRVAL FROM dual";
     rs = pstmt.executeQuery(selectSQL);
     if (rs.next()) {
       diaryNo = rs.getLong("CURRVAL");
@@ -457,21 +454,22 @@ public class DiaryOracleRepository implements DiaryRepository {
     ResultSet rs = null;
     try {
       con = MyConnection.getConnection(envPath);
+
+      String insertSQL = "INSERT INTO diaries \r\n" + "     VALUES ( diary_no_seq.NEXTVAL \r\n"
+          + "           , ? \r\n" + "           , ? \r\n"
+          + "           , TO_DATE(SYSDATE, 'yyyy/mm/dd')\r\n" + "           , ? \r\n"
+          + "           , ? \r\n" + "           , ? \r\n" + "           , 0\r\n"
+          + "           , 0\r\n" + "      , 1\r\n" + ")";
+      pstmt = con.prepareStatement(insertSQL);
+      pstmt.setString(1, diary.getClient().getClientId());
+      pstmt.setString(2, diary.getDiaryTitle());
+      pstmt.setDate(3, new java.sql.Date(diary.getDiaryStartDate().getTime()));
+      pstmt.setDate(4, new java.sql.Date(diary.getDiaryEndDate().getTime()));
+      pstmt.setInt(5, diary.getDiaryDisclosureFlag());
+      pstmt.executeUpdate();
+
       int diaryNo = selectDiaryNoSeqNextval(con, pstmt, rs);
       diary.setDiaryNo(diaryNo);
-
-      String insertSQL = "INSERT INTO diaries \r\n" + "     VALUES ( ? \r\n" + "           , ? \r\n"
-          + "           , ? \r\n" + "           , TO_DATE(SYSDATE, 'yyyy/mm/dd')\r\n"
-          + "           , ? \r\n" + "           , ? \r\n" + "           , ? \r\n"
-          + "           , 0\r\n" + "           , 0\r\n" + "      , 1\r\n" + ")";
-      pstmt = con.prepareStatement(insertSQL);
-      pstmt.setInt(1, diary.getDiaryNo());
-      pstmt.setString(2, diary.getClient().getClientId());
-      pstmt.setString(3, diary.getDiaryTitle());
-      pstmt.setDate(4, new java.sql.Date(diary.getDiaryStartDate().getTime()));
-      pstmt.setDate(5, new java.sql.Date(diary.getDiaryEndDate().getTime()));
-      pstmt.setInt(6, diary.getDiaryDisclosureFlag());
-      pstmt.executeUpdate();
     } catch (SQLException e) {
       throw new InsertException(e.getMessage());
     } catch (Exception e) {

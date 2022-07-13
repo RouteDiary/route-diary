@@ -11,5 +11,5 @@ public interface RouteRepository {
 
   void insert(List<Route> routes) throws InsertException;
 
-  void delete(List<Route> routes) throws DeleteException;
+  void delete(int diaryNo, int routesRowSizeByDiaryNo) throws DeleteException;
 }

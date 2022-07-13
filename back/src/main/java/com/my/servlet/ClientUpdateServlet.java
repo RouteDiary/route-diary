@@ -27,9 +27,10 @@ public class ClientUpdateServlet extends HttpServlet {
     PrintWriter out = response.getWriter();
     ClientRepository clientRepository = new ClientOracleRepository(envPath);
     ObjectMapper mapper = new ObjectMapper();
-    Map<String, Object> map = new HashMap<>();
+    Map<String, Object> map = new HashMap<String, Object>();
     HttpSession session = request.getSession();
-    String clientId = request.getParameter("client_id");
+
+    String clientId = (String) session.getAttribute("login_info");
     String clientPwd = request.getParameter("client_pwd");
     String clientCellphoneNo = request.getParameter("client_cellphone_no");
     String clientNickname = request.getParameter("client_nickname");
@@ -44,11 +45,19 @@ public class ClientUpdateServlet extends HttpServlet {
     try {
       clientRepository.update(client);
       map.put("status", 1);
+      map.put("message", "회원정보 수정 성공");
+      map.put("client", client);
     } catch (UpdateException e) {
-      e.printStackTrace();
       map.put("status", 0);
+      map.put("message", e.getMessage());
+      e.printStackTrace();
+    } catch (Exception e) {
+      map.put("status", 0);
+      map.put("message", e.getMessage());
+      e.printStackTrace();
     }
-    out.print(mapper.writeValueAsString(map));
+    String result = mapper.writeValueAsString(map);
+    out.print(result);
   }
 
 }

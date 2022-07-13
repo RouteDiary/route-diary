@@ -24,31 +24,34 @@ public class NicknameDuplicationCheckServlet extends HttpServlet {
 
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
-    String client_nickname = request.getParameter("client_nickname");
+    String clientNickname = request.getParameter("client_nickname");
 
     String envPath = getServletContext().getRealPath("project.properties");
-    response.setContentType("text/html;charset=UTF-8");
+    response.setContentType("application/json;charset=UTF-8");
     PrintWriter out = response.getWriter();
     ClientRepository clientRepository = new ClientOracleRepository(envPath);
     ObjectMapper mapper = new ObjectMapper();
+    Map<String, Object> map = new HashMap<String, Object>();
     Client client = null;
     try {
-      client = clientRepository.selectClientByNickname(client_nickname);
-      Map<String, Object> map = new HashMap<String, Object>();
+      client = clientRepository.selectClientByNickname(clientNickname);
       if (client == null) {
-        map.put("status", 0);
-        map.put("message", "사용가능한 닉네임 입니다");
-      } else {
         map.put("status", 1);
-        map.put("message", "중복된 닉네임 입니다");
+        map.put("message", "사용가능한 닉네임입니다.");
+      } else {
+        map.put("status", 0);
+        map.put("message", "이미 사용중인 닉네임입니다.");
       }
-      String result = mapper.writeValueAsString(map);
-      out.print(result);
     } catch (SelectException e) {
+      map.put("status", 0);
+      map.put("message", e.getMessage());
+      e.printStackTrace();
+    } catch (Exception e) {
+      map.put("status", 0);
+      map.put("message", e.getMessage());
       e.printStackTrace();
     }
-
-
+    String result = mapper.writeValueAsString(map);
+    out.print(result);
   }
-
 }

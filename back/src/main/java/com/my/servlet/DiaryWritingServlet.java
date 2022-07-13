@@ -52,18 +52,23 @@ public class DiaryWritingServlet extends HttpServlet {
       diaryRepository.insert(diary);
       int diaryNo = diary.getDiaryNo();
       // 실험용 코드 start (시험 끝나고 지워도 됨)
-      System.out.println(diaryNo);
+      System.out.println("diaryNo = " + diaryNo);
       // 실험용 코드 end (시험 끝나고 지워도 됨)
-      for (int i = 0; i < routes.size(); i++) {
+      int routesRowSize = routes.size();
+      for (int i = 0; i < routesRowSize; i++) {
         routes.get(i).setDiaryNo(diaryNo);
-        routeRepository.insert(routes.get(i));
       }
+      routeRepository.insert(routes);
       map.put("status", 1);
-      map.put("message", "DiaryOracleRepository.insert() 성공");
+      map.put("message", "DiaryOracleRepository/RouteOracleRepository.insert() 성공");
 
     } catch (InsertException e) {
       map.put("status", 0);
-      map.put("message", "DiaryOracleRepository.insert() 실패");
+      map.put("message", e.getMessage());
+      e.printStackTrace();
+    } catch (Exception e) {
+      map.put("status", 0);
+      map.put("message", e.getMessage());
       e.printStackTrace();
     }
     String result = mapper.writeValueAsString(map);

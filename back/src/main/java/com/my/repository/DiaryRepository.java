@@ -10,7 +10,7 @@ public interface DiaryRepository {
 
   int selectDiariesRowSize(int diaryDisclosureFlag) throws SelectException;
 
-  List<Diary> selectDiariesByWritingDate(int diaryStartRowNo, int diaryEndRowNo)
+  List<Diary> selectDiariesByWritingTime(int diaryStartRowNo, int diaryEndRowNo)
       throws SelectException;
 
   List<Diary> selectDiariesByViewCnt(int diaryStartRowNo, int diaryEndRowNo) throws SelectException;

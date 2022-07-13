@@ -28,13 +28,13 @@ public class CommentInsertServlet extends HttpServlet {
     PrintWriter out = response.getWriter();
     CommentRepository commentRepository = new CommentOracleRepository(envPath);
     ObjectMapper mapper = new ObjectMapper();
-    Map<String, Object> map = new HashMap<>();
+    Map<String, Object> map = new HashMap<String, Object>();
     HttpSession session = request.getSession();
+    String clientId = (String) session.getAttribute("login_info");
     int diaryNo = Integer.parseInt(request.getParameter("diary_no"));
-    Client client = new Client();
-    String clientId = request.getParameter("client_id");
-    client.setClientId(clientId);
     String commentContent = request.getParameter("comment_content");
+    Client client = new Client();
+    client.setClientId(clientId);
     Comment comment = new Comment();
     comment.setDiaryNo(diaryNo);
     comment.setClient(client);
@@ -43,9 +43,15 @@ public class CommentInsertServlet extends HttpServlet {
     try {
       commentRepository.insert(comment);
       map.put("status", 1);
+      map.put("message", "댓글 입력 성공");
     } catch (InsertException e) {
       e.printStackTrace();
       map.put("status", 0);
+      map.put("message", e.getMessage());
+    } catch (Exception e) {
+      e.printStackTrace();
+      map.put("status", 0);
+      map.put("message", e.getMessage());
     }
     out.print(mapper.writeValueAsString(map));
   }

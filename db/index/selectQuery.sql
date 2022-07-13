@@ -157,8 +157,7 @@ LEFT OUTER JOIN clients c ON (d.client_id = c.client_id)
 --루트 추가 SQL 
 INSERT INTO ROUTES 
      VALUES (1
-           , (SELECT NVL(MAX(route_no), 0) + 1
-          FROM routes WHERE diary_no = 1)
+           , 1
            , '루트내용'
            , kakao_id);
 --루트 수정 SQL 

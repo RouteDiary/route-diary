@@ -34,11 +34,10 @@ public class LikeServlet extends HttpServlet {
     ObjectMapper mapper = new ObjectMapper();
     Map<String, Object> map = new HashMap<String, Object>();
 
-
-    // clientId는 세션으로 받아오기
     HttpSession session = request.getSession();
     String clientId = (String) session.getAttribute("login_info");
     // 프론트에서 받는 파라미터 (like = 1 - 좋아요증가 / 0 = 좋아요감소)
+    int diaryNo = Integer.parseInt(request.getParameter("diary_no"));
     int likeFlag = Integer.parseInt(request.getParameter("like_flag"));
 
 
@@ -59,11 +58,15 @@ public class LikeServlet extends HttpServlet {
       }
     } catch (InsertException e) {
       map.put("status", -1); // like 증가, 감소 자체가 안되는 경우
-      map.put("message", "좋아요/좋아요취소 작업 실패");
+      map.put("message", "좋아요/좋아요취소 작업 실패. " + e.getMessage());
       e.printStackTrace();
     } catch (DeleteException e) {
       map.put("status", -1); // like 증가, 감소 자체가 안되는 경우
-      map.put("message", "좋아요/좋아요취소 작업 실패");
+      map.put("message", "좋아요/좋아요취소 작업 실패. " + e.getMessage());
+      e.printStackTrace();
+    } catch (Exception e) {
+      map.put("status", -1); // like 증가, 감소 자체가 안되는 경우
+      map.put("message", e.getMessage());
       e.printStackTrace();
     }
 

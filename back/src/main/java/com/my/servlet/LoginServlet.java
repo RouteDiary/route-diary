@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.my.dto.Client;
+import com.my.exception.SelectException;
 import com.my.repository.ClientOracleRepository;
 import com.my.repository.ClientRepository;
 
@@ -49,14 +50,16 @@ public class LoginServlet extends HttpServlet {
         // System.out.print(session.getId() + "<br>");
         // System.out.print(session.getLastAccessedTime() + "<br>");
       }
+    } catch (SelectException e) {
+      map.put("status", 0);
+      map.put("message", e.getMessage());
+      e.printStackTrace();
     } catch (Exception e) {
       map.put("status", 0);
-      map.put("message", "로그인 실패 : ID와 패스워드를 다시 확인해 주세요.");
+      map.put("message", e.getMessage());
       e.printStackTrace();
     }
     String result = mapper.writeValueAsString(map);
     out.print(result);
-
   }
-
 }

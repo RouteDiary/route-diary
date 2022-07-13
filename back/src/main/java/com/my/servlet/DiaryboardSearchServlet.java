@@ -69,9 +69,12 @@ public class DiaryboardSearchServlet extends HttpServlet {
       map.put("status", 0);
       map.put("message", e.getMessage());
       e.printStackTrace();
+    } catch (Exception e) {
+      map.put("status", 0);
+      map.put("message", e.getMessage());
+      e.printStackTrace();
     }
     String result = mapper.writeValueAsString(map);
     out.print(result);
   }
-
 }

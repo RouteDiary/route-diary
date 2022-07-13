@@ -48,8 +48,16 @@ public class DiaryDeleteServlet extends HttpServlet {
         map.put("message", "다른 유저의 다이어리는 삭제할 수 없습니다.");
       }
     } catch (SelectException e) {
+      map.put("status", 0);
+      map.put("message", e.getMessage());
       e.printStackTrace();
     } catch (UpdateException e) {
+      map.put("status", 0);
+      map.put("message", e.getMessage());
+      e.printStackTrace();
+    } catch (Exception e) {
+      map.put("status", 0);
+      map.put("message", e.getMessage());
       e.printStackTrace();
     }
     String result = mapper.writeValueAsString(map);

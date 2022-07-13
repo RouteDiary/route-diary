@@ -57,12 +57,12 @@ public class DiaryboardServlet extends HttpServlet {
       switch (viewStatus) {
         case 1: // 최신순
           if (totalRows < endRow) {
-            diaries = diaryRepository.selectDiariesByWritingDate(startRow, totalRows);
+            diaries = diaryRepository.selectDiariesByWritingTime(startRow, totalRows);
           } else {
-            diaries = diaryRepository.selectDiariesByWritingDate(startRow, endRow);
+            diaries = diaryRepository.selectDiariesByWritingTime(startRow, endRow);
           }
           map.put("status", 1);
-          map.put("message", "최신순으로 가져");
+          map.put("message", "최신순으로 다이어리를 가져옴");
           break;
         case 2: // 조회수
           if (totalRows < endRow) {
@@ -71,6 +71,7 @@ public class DiaryboardServlet extends HttpServlet {
             diaries = diaryRepository.selectDiariesByViewCnt(startRow, endRow);
           }
           map.put("status", 2);
+          map.put("message", "조회수순으로 다이어리를 가져옴");
           break;
         case 3: // 좋아요
           if (totalRows < endRow) {
@@ -79,6 +80,7 @@ public class DiaryboardServlet extends HttpServlet {
             diaries = diaryRepository.selectDiariesByLikeCnt(startRow, endRow);
           }
           map.put("status", 3);
+          map.put("message", "좋아요순으로 다이어리를 가져옴");
           break;
         default:
           map.put("status", 0);
@@ -92,6 +94,10 @@ public class DiaryboardServlet extends HttpServlet {
       }
 
     } catch (SelectException e) {
+      map.put("status", 0);
+      map.put("message", e.getMessage());
+      e.printStackTrace();
+    } catch (Exception e) {
       map.put("status", 0);
       map.put("message", e.getMessage());
       e.printStackTrace();
