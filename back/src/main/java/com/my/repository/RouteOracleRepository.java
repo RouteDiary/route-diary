@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import com.my.dto.Route;
-import com.my.dto.Sight;
 import com.my.exception.DeleteException;
 import com.my.exception.InsertException;
 import com.my.exception.UpdateException;
@@ -23,15 +22,15 @@ public class RouteOracleRepository implements RouteRepository {
     PreparedStatement pstmt = null;
     try {
       con = MyConnection.getConnection(envPath);
-      String insertSQL = "INSERT INTO ROUTES \r\n" + "     VALUES ( ? \r\n"
+      String insertSQL = "INSERT INTO ROUTES \r\n" + "     VALUES (? \r\n"
           + "           , (SELECT NVL(MAX(route_no), 0) + 1\r\n"
           + "          FROM routes WHERE diary_no = ? )\r\n" + "           , ? \r\n"
-          + "           , ? )";
+          + "           , ? ) ";
       pstmt = con.prepareStatement(insertSQL);
       pstmt.setInt(1, route.getDiaryNo());
       pstmt.setInt(2, route.getDiaryNo());
-      pstmt.setInt(3, route.getSight().getSightNo());
-      pstmt.setString(4, route.getRouteContent());
+      pstmt.setString(3, route.getRouteContent());
+      pstmt.setString(4, route.getKakaoMapId());
       pstmt.executeUpdate();
     } catch (SQLException e) {
       throw new InsertException(e.getMessage());
@@ -48,12 +47,11 @@ public class RouteOracleRepository implements RouteRepository {
     PreparedStatement pstmt = null;
     try {
       con = MyConnection.getConnection(envPath);
-      String updateSQL = "UPDATE routes \r\n" + "   SET sight_no = ? \r\n"
-          + "     , route_content = ? \r\n" + " WHERE diary_no = ? \r\n" + "   AND route_no = ? ";
+      String updateSQL = "UPDATE routes \r\n" + "   SET route_content = ? \r\n"
+          + "     , kakao_map_id = ? \r\n" + " WHERE diary_no = ? \r\n" + "   AND route_no = ? ";
       pstmt = con.prepareStatement(updateSQL);
-      Sight sight = route.getSight();
-      pstmt.setInt(1, sight.getSightNo());
-      pstmt.setString(2, route.getRouteContent());
+      pstmt.setString(1, route.getRouteContent());
+      pstmt.setString(2, route.getKakaoMapId());
       pstmt.setInt(3, route.getDiaryNo());
       pstmt.setInt(4, route.getRouteNo());
       pstmt.executeUpdate();

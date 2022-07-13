@@ -129,8 +129,8 @@ SELECT DISTINCT diary_no
                 LEFT OUTER JOIN clients c ON (d.client_id = c.client_id)
                           WHERE diary_disclosure_flag = 1
                             AND diary_delete_flag = 1                        
-                            AND (r.route_content LIKE '%경복궁%'
-                                 OR d.diary_title LIKE '%경복궁%'
+                            AND (r.route_content LIKE '%' || ? || '%' 
+                                 OR d.diary_title LIKE '%' || ? || '%' 
                                 )
                         ORDER BY diary_writing_time DESC)
      )            
@@ -159,12 +159,12 @@ INSERT INTO ROUTES
      VALUES (1
            , (SELECT NVL(MAX(route_no), 0) + 1
           FROM routes WHERE diary_no = 1)
-           , kakao_id
-           , '루트내용');
+           , '루트내용'
+           , kakao_id);
 --루트 수정 SQL 
 UPDATE routes 
-   SET kakao_id = 16
-     , route_content = '새로운내용' 
+   SET route_content = '새로운내용' 
+     , kakao_id = 16
  WHERE diary_no = 46
    AND route_no = 4;          
 --루트 삭제 SQL       
@@ -222,7 +222,7 @@ UPDATE comments
 DELETE FROM comments 
       WHERE client_id='koreaman@gmail.com';
            
---다이어리 조회 4개 SQL 이용
+--다이어리 조회 2개 SQL 이용
 		   SELECT *
              FROM diaries d
   LEFT OUTER JOIN clients c ON (d.client_id = c.client_id)

@@ -36,19 +36,14 @@ public class Diary {
     this.comments = comments;
   }
 
-  public Diary(int diaryNo, String diaryTitle, Date diaryWritingTime, Date diaryStartDate,
-      Date diaryEndDate, int diaryDisclosureFlag, int diaryViewCnt, int diaryLikeCnt,
-      int diaryDeleteFlag, Client client) {
-    this.diaryNo = diaryNo;
+  public Diary(String diaryTitle, Date diaryStartDate, Date diaryEndDate, int diaryDisclosureFlag,
+      List<Route> routes) {
+    super();
     this.diaryTitle = diaryTitle;
-    this.diaryWritingTime = diaryWritingTime;
     this.diaryStartDate = diaryStartDate;
     this.diaryEndDate = diaryEndDate;
     this.diaryDisclosureFlag = diaryDisclosureFlag;
-    this.diaryViewCnt = diaryViewCnt;
-    this.diaryLikeCnt = diaryLikeCnt;
-    this.diaryDeleteFlag = diaryDeleteFlag;
-    this.client = client;
+    this.routes = routes;
   }
 
   public int getDiaryNo() {

@@ -10,7 +10,6 @@ import com.my.dto.Client;
 import com.my.dto.Comment;
 import com.my.dto.Diary;
 import com.my.dto.Route;
-import com.my.dto.Sight;
 import com.my.exception.InsertException;
 import com.my.exception.SelectException;
 import com.my.exception.UpdateException;
@@ -53,17 +52,8 @@ public class DiaryOracleRepository implements DiaryRepository {
     route.setDiaryNo(rs.getInt("diary_no"));
     route.setRouteNo(rs.getInt("route_no"));
     route.setRouteContent(rs.getString("route_content"));
+    route.setKakaoMapId(rs.getString("kakao_map_id"));
     return route;
-  }
-
-  private Sight setSightData(ResultSet rs) throws SQLException {
-    Sight sight = new Sight();
-    sight.setSightNo(rs.getInt("sight_no"));
-    sight.setSightName(rs.getString("sight_name"));
-    sight.setSightAddr(rs.getString("sight_addr"));
-    sight.setSightId(rs.getInt("sight_id"));
-    sight.setSightCategoryName(rs.getString("sight_category_name"));
-    return sight;
   }
 
   private Comment setCommentData(ResultSet rs) throws SQLException {
@@ -311,21 +301,19 @@ public class DiaryOracleRepository implements DiaryRepository {
           + "                              , c.client_status_flag\r\n"
           + "                           FROM diaries d\r\n"
           + "                LEFT OUTER JOIN routes r ON (d.diary_no = r.diary_no)\r\n"
-          + "                LEFT OUTER JOIN sights s ON (r.sight_no = s.sight_no)\r\n"
           + "                LEFT OUTER JOIN clients c ON (d.client_id = c.client_id)\r\n"
           + "                          WHERE diary_disclosure_flag = 1\r\n"
           + "                            AND diary_delete_flag = 1                        \r\n"
           + "                            AND (r.route_content LIKE '%' || ? || '%' \r\n"
           + "                                 OR d.diary_title LIKE '%' || ? || '%' \r\n"
-          + "                                 OR s.sight_name LIKE '%' || ? || '%' )\r\n"
+          + "                                )\r\n"
           + "                        ORDER BY diary_writing_time DESC)\r\n"
           + "     )            \r\n" + " WHERE rnum BETWEEN ? AND ?";
       pstmt = con.prepareStatement(selectSQL);
       pstmt.setString(1, keyword);
       pstmt.setString(2, keyword);
-      pstmt.setString(3, keyword);
-      pstmt.setInt(4, diaryStartRowNo);
-      pstmt.setInt(5, diaryEndRowNo);
+      pstmt.setInt(3, diaryStartRowNo);
+      pstmt.setInt(4, diaryEndRowNo);
       rs = pstmt.executeQuery();
 
       while (rs.next()) {
@@ -368,18 +356,14 @@ public class DiaryOracleRepository implements DiaryRepository {
   private List<Route> BringRouteDataByDiaryNo(Connection con, ResultSet rs, PreparedStatement pstmt,
       int diaryNo) throws SelectException, SQLException {
     List<Route> routes = new ArrayList<Route>();
-    String selectSQL = "SELECT *\r\n" + "           FROM routes r\r\n"
-        + "LEFT OUTER JOIN sights s ON (r.sight_no = s.sight_no)\r\n"
-        + "          WHERE diary_no = ? ";
+    String selectSQL =
+        "SELECT *\r\n" + "           FROM routes r\r\n" + "          WHERE diary_no = ? ";
     pstmt = con.prepareStatement(selectSQL);
     pstmt.setInt(1, diaryNo);
     rs = pstmt.executeQuery();
     Route route = null;
-    Sight sight = null;
     while (rs.next()) {
       route = setRouteData(rs);
-      sight = setSightData(rs);
-      route.setSight(sight);
       routes.add(route);
     }
     return routes;

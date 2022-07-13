@@ -2,11 +2,8 @@ package com.my.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,9 +14,12 @@ import javax.servlet.http.HttpSession;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.my.dto.Client;
 import com.my.dto.Diary;
+import com.my.dto.Route;
 import com.my.exception.InsertException;
 import com.my.repository.DiaryOracleRepository;
 import com.my.repository.DiaryRepository;
+import com.my.repository.RouteOracleRepository;
+import com.my.repository.RouteRepository;
 
 @WebServlet("/diarywriting")
 public class DiaryWritingServlet extends HttpServlet {
@@ -33,39 +33,34 @@ public class DiaryWritingServlet extends HttpServlet {
     PrintWriter out = response.getWriter();
     ObjectMapper mapper = new ObjectMapper();
     Map<String, Object> map = new HashMap<String, Object>();
+    String sample =
+        "{\"diaryTitle\" : \"title1\" , \"diaryStartDate\" : \"2021-07-01\",\"diaryEndDate\": \"2021-07-03\" , \"diaryDisclosureFlag\" : 1,\n"
+            + "\"routes\" : [ {\"routeContent\" : \"경복궁\" , \"kakaoMapId\" : \"1\"},{\"routeContent\" : \"남산\" , \"kakaoMapId\" : \"2\"}]}";
+    Diary diary = mapper.readValue(sample, Diary.class);
+    List<Route> routes = diary.getRoutes();
 
     HttpSession session = request.getSession();
     String clientId = (String) session.getAttribute("login_info");
     String envPath = getServletContext().getRealPath("project.properties");
     DiaryRepository diaryRepository = new DiaryOracleRepository(envPath);
+    RouteRepository routeRepository = new RouteOracleRepository(envPath);
 
     try {
-      DateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
-      String diaryTitle = request.getParameter("diary_title");
-      Date diaryStartDate = formatter.parse(request.getParameter("diary_start_date"));
-      Date diaryEndDate = formatter.parse(request.getParameter("diary_start_date"));
-      int diaryDisClosureFlag = Integer.parseInt(request.getParameter("diary_disclosure_flag"));
-      Diary diary = new Diary();
       Client client = new Client();
-      client.setClientId(clientId);
+      client.setClientId("a11");
       diary.setClient(client);
-      diary.setDiaryTitle(diaryTitle);
-      diary.setDiaryStartDate(diaryStartDate);
-      diary.setDiaryEndDate(diaryEndDate);
-      diary.setDiaryDisclosureFlag(diaryDisClosureFlag);
       diaryRepository.insert(diary);
-      session.setAttribute("diary", diary);
-
-      map.put("status", 1);
-      map.put("message", "DiaryOracleRepository.insert() 성공");
-      // 실험용 코드 start (시험 끝나고 지워도 됨)
       int diaryNo = diary.getDiaryNo();
+      // 실험용 코드 start (시험 끝나고 지워도 됨)
       System.out.println(diaryNo);
       // 실험용 코드 end (시험 끝나고 지워도 됨)
-    } catch (ParseException e) {
-      map.put("status", 0);
-      map.put("message", "DiaryOracleRepository.insert() 실패");
-      e.printStackTrace();
+      for (int i = 0; i < routes.size(); i++) {
+        routes.get(i).setDiaryNo(diaryNo);
+        routeRepository.insert(routes.get(i));
+      }
+      map.put("status", 1);
+      map.put("message", "DiaryOracleRepository.insert() 성공");
+
     } catch (InsertException e) {
       map.put("status", 0);
       map.put("message", "DiaryOracleRepository.insert() 실패");

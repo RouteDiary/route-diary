@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.my.dto.Client;
-import com.my.exception.SelectException;
 import com.my.repository.ClientOracleRepository;
 import com.my.repository.ClientRepository;
 
@@ -26,20 +25,20 @@ public class LoginServlet extends HttpServlet {
       throws ServletException, IOException {
     String clientId = request.getParameter("client_id");
     String clientPwd = request.getParameter("client_pwd");
-    int clientStatusFlag = Integer.parseInt(request.getParameter("client_status_flag"));
 
     String envPath = getServletContext().getRealPath("project.properties");
     response.setContentType("application/json;charset=UTF-8");
     PrintWriter out = response.getWriter();
     ClientRepository clientRepository = new ClientOracleRepository(envPath);
     ObjectMapper mapper = new ObjectMapper();
-    Client client = null;
     Map<String, Object> map = new HashMap<String, Object>();
     HttpSession session = request.getSession();
 
     try {
-      client = clientRepository.selectClientByIdAndPwd(clientId, clientPwd);
-      if (clientStatusFlag == 0 || client == null) {
+      Client client = clientRepository.selectClientByIdAndPwd(clientId, clientPwd);
+      int clientStatusFlag = client.getClientStatusFlag();
+      System.out.println(clientStatusFlag);
+      if (clientStatusFlag == 0) {
         map.put("status", 0);
         map.put("message", "로그인 실패 : ID와 패스워드를 다시 확인해 주세요.");
       } else {
@@ -50,7 +49,7 @@ public class LoginServlet extends HttpServlet {
         // System.out.print(session.getId() + "<br>");
         // System.out.print(session.getLastAccessedTime() + "<br>");
       }
-    } catch (SelectException e) {
+    } catch (Exception e) {
       map.put("status", 0);
       map.put("message", "로그인 실패 : ID와 패스워드를 다시 확인해 주세요.");
       e.printStackTrace();

@@ -48,25 +48,14 @@ CREATE TABLE likes(
     CONSTRAINT likes_diaries_fk FOREIGN KEY(diary_no) REFERENCES diaries(diary_no)
 );
 
--- sights table
-CREATE TABLE sights(
-    sight_no NUMBER NOT NULL,
-    sight_name VARCHAR2(20 CHAR) NOT NULL,
-    sight_addr VARCHAR2(30 CHAR),
-    sight_id NUMBER NOT NULL,
-    sight_category_name VARCHAR2(8 CHAR),
-    CONSTRAINT sights_pk PRIMARY KEY(sight_no),
-    CONSTRAINT sights_uk UNIQUE(sight_id)
-);
 
 -- routes rable
 CREATE TABLE routes(
     diary_no NUMBER NOT NULL,
     route_no NUMBER NOT NULL,
-    sight_no NUMBER NOT NULL,
-    route_content VARCHAR2(500 CHAR),
-    CONSTRAINT routes_pk PRIMARY KEY(diary_no, route_no),
-    CONSTRAINT routes_sights_fk FOREIGN KEY(sight_no) REFERENCES sights(sight_no)
+    route_content VARCHAR2(500 CHAR) NOT NULL,
+    kakao_map_id VARCHAR2(100 CHAR) NOT NULL,
+    CONSTRAINT routes_pk PRIMARY KEY(diary_no, route_no)
 );
 
 -- admins rable
