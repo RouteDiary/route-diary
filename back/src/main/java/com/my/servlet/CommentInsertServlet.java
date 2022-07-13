@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.my.dto.Client;
 import com.my.dto.Comment;
 import com.my.exception.InsertException;
 import com.my.repository.CommentOracleRepository;
@@ -30,11 +31,13 @@ public class CommentInsertServlet extends HttpServlet {
     Map<String, Object> map = new HashMap<>();
     HttpSession session = request.getSession();
     int diaryNo = Integer.parseInt(request.getParameter("diary_no"));
+    Client client = new Client();
     String clientId = request.getParameter("client_id");
+    client.setClientId(clientId);
     String commentContent = request.getParameter("comment_content");
     Comment comment = new Comment();
     comment.setDiaryNo(diaryNo);
-    comment.getClient().setClientId(clientId);
+    comment.setClient(client);
     comment.setCommentContent(commentContent);
 
     try {
