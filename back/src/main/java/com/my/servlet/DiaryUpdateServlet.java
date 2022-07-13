@@ -2,10 +2,8 @@ package com.my.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,55 +12,57 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.my.dto.Client;
 import com.my.dto.Diary;
-import com.my.exception.UpdateException;
+import com.my.dto.Route;
 import com.my.repository.DiaryOracleRepository;
 import com.my.repository.DiaryRepository;
+import com.my.repository.RouteOracleRepository;
+import com.my.repository.RouteRepository;
 
 @WebServlet("/diaryupdate")
 public class DiaryUpdateServlet extends HttpServlet {
   private static final long serialVersionUID = 1L;
 
-  protected void doPost(HttpServletRequest request, HttpServletResponse response)
+  protected void doGet(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
-    String envPath = getServletContext().getRealPath("project.properties");
     response.setContentType("application/json;charset=UTF-8");
     PrintWriter out = response.getWriter();
-    DiaryRepository diaryRepository = new DiaryOracleRepository(envPath);
     ObjectMapper mapper = new ObjectMapper();
-    Map<String, Object> map = new HashMap<>();
+    Map<String, Object> map = new HashMap<String, Object>();
+    String sample =
+        "{\"diaryNo\" : 104, \"diaryTitle\" : \"titleupdate1\" , \"diaryStartDate\" : \"2021-07-01\",\"diaryEndDate\": \"2021-07-03\" , \"diaryDisclosureFlag\" : 1,\n"
+            + "\"routes\" : [ {\"routeContent\" : \"코스타\" , \"kakaoMapId\" : \"3\"},{\"routeContent\" : \"오리역화장실\" , \"kakaoMapId\" : \"10\"}]}";
+    Diary diary = mapper.readValue(sample, Diary.class);
+    List<Route> routes = diary.getRoutes();
+    int routeRows = routes.size();
+
     HttpSession session = request.getSession();
-    int diaryNo = Integer.parseInt(request.getParameter("diary_no"));
-
-    String diaryTitle = request.getParameter("diary_title");
-    String diaryStartDate = request.getParameter("diary_start_date");
-    String diaryEndDate = request.getParameter("diary_end_date");
-    int diaryDisclosureFlag = Integer.parseInt(request.getParameter("diary_disclosure_flag"));
-    Diary diary = new Diary();
-    diary.setDiaryNo(diaryNo);
-    diary.setDiaryTitle(diaryTitle);
-    SimpleDateFormat sdf = new SimpleDateFormat("yy/MM/dd");
-    Date startDate;
-    Date endDate;
-    try {
-      startDate = sdf.parse(diaryStartDate);
-      endDate = sdf.parse(diaryEndDate);
-      diary.setDiaryStartDate(startDate);
-      diary.setDiaryEndDate(endDate);
-    } catch (ParseException e) {
-      e.printStackTrace();
-    }
-
-    diary.setDiaryDisclosureFlag(diaryDisclosureFlag);
+    String clientId = (String) session.getAttribute("login_info");
+    String envPath = getServletContext().getRealPath("project.properties");
+    DiaryRepository diaryRepository = new DiaryOracleRepository(envPath);
+    RouteRepository routeRepository = new RouteOracleRepository(envPath);
 
     try {
+      Client client = new Client();
+      client.setClientId("a11");
+      diary.setClient(client);
+      int diaryNo = diary.getDiaryNo();
+      int originalRouteRows = routeRepository.selectRoutesRowSizeBydiaryNo(diary.getDiaryNo());
       diaryRepository.update(diary);
+
+
+
       map.put("status", 1);
-    } catch (UpdateException e) {
-      e.printStackTrace();
+      map.put("message", "DiaryOracleRepository.update() 성공");
+
+    } catch (Exception e) {
       map.put("status", 0);
+      map.put("message", "DiaryOracleRepository.update() 실패");
+      e.printStackTrace();
     }
-    out.print(mapper.writeValueAsString(map));
+    String result = mapper.writeValueAsString(map);
+    out.print(result);
   }
 
 }

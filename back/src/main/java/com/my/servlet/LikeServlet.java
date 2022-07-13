@@ -18,18 +18,11 @@ import com.my.exception.InsertException;
 import com.my.repository.LikeOracleRepository;
 import com.my.repository.LikeRepository;
 
-/**
- * Servlet implementation class LikeServlet
- */
 @WebServlet("/like")
 public class LikeServlet extends HttpServlet {
   private static final long serialVersionUID = 1L;
 
-
-  public LikeServlet() {
-    super();
-
-  }
+  public LikeServlet() {}
 
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {

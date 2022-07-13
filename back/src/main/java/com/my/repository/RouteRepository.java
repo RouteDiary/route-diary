@@ -1,14 +1,15 @@
 package com.my.repository;
 
+import java.util.List;
 import com.my.dto.Route;
 import com.my.exception.DeleteException;
 import com.my.exception.InsertException;
-import com.my.exception.UpdateException;
+import com.my.exception.SelectException;
 
 public interface RouteRepository {
-  void insert(Route route) throws InsertException;
+  int selectRoutesRowSizeBydiaryNo(int diaryNo) throws SelectException;
 
-  void update(Route route) throws UpdateException;
+  void insert(List<Route> routes) throws InsertException;
 
-  void delete(Route route) throws DeleteException;
+  void delete(List<Route> routes) throws DeleteException;
 }

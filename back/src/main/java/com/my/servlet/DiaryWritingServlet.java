@@ -47,7 +47,7 @@ public class DiaryWritingServlet extends HttpServlet {
 
     try {
       Client client = new Client();
-      client.setClientId("a11");
+      client.setClientId(clientId);
       diary.setClient(client);
       diaryRepository.insert(diary);
       int diaryNo = diary.getDiaryNo();

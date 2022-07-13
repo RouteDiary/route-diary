@@ -2,11 +2,13 @@ package com.my.repository;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import com.my.dto.Route;
 import com.my.exception.DeleteException;
 import com.my.exception.InsertException;
-import com.my.exception.UpdateException;
+import com.my.exception.SelectException;
 import com.my.sql.MyConnection;
 
 public class RouteOracleRepository implements RouteRepository {
@@ -17,7 +19,30 @@ public class RouteOracleRepository implements RouteRepository {
   }
 
   @Override
-  public void insert(Route route) throws InsertException {
+  public int selectRoutesRowSizeBydiaryNo(int diaryNo) throws SelectException {
+    Connection con = null;
+    PreparedStatement pstmt = null;
+    ResultSet rs = null;
+    int routesSize = 0;
+    try {
+      con = MyConnection.getConnection(envPath);
+      String sizeSql = "SELECT COUNT(*) FROM routes WHERE diary_no = ? ";
+      pstmt = con.prepareStatement(sizeSql);
+      pstmt.setInt(1, diaryNo);
+      rs = pstmt.executeQuery();
+      if (rs.next()) {
+        routesSize = rs.getInt("COUNT(*)");
+      }
+    } catch (SQLException e) {
+      throw new SelectException(e.getMessage());
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return routesSize;
+  }
+
+  @Override
+  public void insert(List<Route> routes) throws InsertException {
     Connection con = null;
     PreparedStatement pstmt = null;
     try {
@@ -42,37 +67,14 @@ public class RouteOracleRepository implements RouteRepository {
   }
 
   @Override
-  public void update(Route route) throws UpdateException {
+  public void delete(List<Route> routes) throws DeleteException {
     Connection con = null;
     PreparedStatement pstmt = null;
     try {
       con = MyConnection.getConnection(envPath);
-      String updateSQL = "UPDATE routes \r\n" + "   SET route_content = ? \r\n"
-          + "     , kakao_map_id = ? \r\n" + " WHERE diary_no = ? \r\n" + "   AND route_no = ? ";
-      pstmt = con.prepareStatement(updateSQL);
-      pstmt.setString(1, route.getRouteContent());
-      pstmt.setString(2, route.getKakaoMapId());
-      pstmt.setInt(3, route.getDiaryNo());
-      pstmt.setInt(4, route.getRouteNo());
-      pstmt.executeUpdate();
-    } catch (SQLException e) {
-      throw new UpdateException(e.getMessage());
-    } catch (Exception e) {
-      e.printStackTrace();
-    } finally {
-      MyConnection.close(pstmt, con);
-    }
-  }
-
-  @Override
-  public void delete(Route route) throws DeleteException {
-    Connection con = null;
-    PreparedStatement pstmt = null;
-    try {
-      con = MyConnection.getConnection(envPath);
-      String updateSQL =
+      String deleteSQL =
           "DELETE FROM routes \r\n" + "      WHERE diary_no = ? \r\n" + "        AND route_no = ? ";
-      pstmt = con.prepareStatement(updateSQL);
+      pstmt = con.prepareStatement(deleteSQL);
       pstmt.setInt(1, route.getDiaryNo());
       pstmt.setInt(2, route.getRouteNo());
       pstmt.executeUpdate();
