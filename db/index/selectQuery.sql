@@ -126,13 +126,12 @@ SELECT DISTINCT diary_no
                               , c.client_status_flag
                            FROM diaries d
                 LEFT OUTER JOIN routes r ON (d.diary_no = r.diary_no)
-                LEFT OUTER JOIN sights s ON (r.sight_no = s.sight_no)
                 LEFT OUTER JOIN clients c ON (d.client_id = c.client_id)
                           WHERE diary_disclosure_flag = 1
                             AND diary_delete_flag = 1                        
                             AND (r.route_content LIKE '%경복궁%'
                                  OR d.diary_title LIKE '%경복궁%'
-                                 OR s.sight_name LIKE '%경복궁%')
+                                )
                         ORDER BY diary_writing_time DESC)
      )            
  WHERE rnum BETWEEN ? AND ?;
@@ -155,25 +154,16 @@ LEFT OUTER JOIN clients c ON (d.client_id = c.client_id)
  WHERE rnum BETWEEN ? AND ?;
  
 -- 게시글 작성 
- --관광지 추가 SQL
-INSERT INTO sights 
-     VALUES (sight_no_seq.NEXTVAL
-           , '관광지 이름'
-           , '관광지 주소'
-           , 20000
-           , '관광지 카테고리'
-);
-
 --루트 추가 SQL 
 INSERT INTO ROUTES 
      VALUES (1
            , (SELECT NVL(MAX(route_no), 0) + 1
           FROM routes WHERE diary_no = 1)
-           , 1
+           , kakao_id
            , '루트내용');
 --루트 수정 SQL 
 UPDATE routes 
-   SET sight_no = 16
+   SET kakao_id = 16
      , route_content = '새로운내용' 
  WHERE diary_no = 46
    AND route_no = 4;          
@@ -237,10 +227,7 @@ DELETE FROM comments
              FROM diaries d
   LEFT OUTER JOIN clients c ON (d.client_id = c.client_id)
             WHERE diary_no = 45;
-	         SELECT *
-           FROM routes r
-LEFT OUTER JOIN sights s ON (r.sight_no = s.sight_no)
-          WHERE diary_no = 46;
+	\
 	         SELECT *
            FROM comments co
 LEFT OUTER JOIN clients cl ON (co.client_id = cl.client_id)
