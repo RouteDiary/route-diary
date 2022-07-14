@@ -36,24 +36,28 @@ public class MyDiariesServlet extends HttpServlet {
       currentPage = Integer.parseInt(strCurrentPage);
     }
 
-    int countPerPage = 10; // 한페이지당 보여줄 목록수
-    int endRow = currentPage * countPerPage; // 한페이지에 보여줄 마지막 행번호
-    int startRow = endRow - countPerPage + 1; // 한페이지에 보여줄 첫 행번호
-
     String envPath = getServletContext().getRealPath("project.properties");
     DiaryRepository diaryRepository = new DiaryOracleRepository(envPath);
     try {
       int totalRows =
           diaryRepository.selectDiariesRowSize(1) + diaryRepository.selectDiariesRowSize(0);
-      System.out.println("현재 페이지 : " + currentPage + " / " + startRow + " : " + endRow
-          + " / 전체다이어리 갯수 : " + totalRows);
+      if ((currentPage + 1) * 10 > totalRows && totalRows != 0) {
+        currentPage = (totalRows / 10) + 1;
+      }
+      int countPerPage = 10; // 한페이지당 보여줄 목록수
+      int endRow = currentPage * countPerPage; // 한페이지에 보여줄 마지막 행번호
+      int startRow = endRow - countPerPage + 1; // 한페이지에 보여줄 첫 행번호
+      // 전체 다이어리 : 96개 / endRow : 100 -> 아지막 argument를 totalRows로 함
+      // 전체 다이어리 : 197개 / endRow : 190 -> 마지막 argument를 endRow로 함
+      System.out.println("현재 페이지 : " + currentPage + " / 보여줄 diary row -  " + startRow + " : "
+          + endRow + " / 전체다이어리 갯수 : " + totalRows);
       // 전체 다이어리 : 96개 / endRow : 100 -> 아지막 argument를 totalRows로 함
       // 전체 다이어리 : 197개 / endRow : 190 -> 마지막 argument를 endRow로 함
       List<Diary> diaries = null;
       if (totalRows < endRow) {
-        diaries = diaryRepository.selectDiariesById(clientId, startRow, totalRows);
+        diaries = diaryRepository.selectDiariesByClientId(clientId, startRow, totalRows);
       } else {
-        diaries = diaryRepository.selectDiariesById(clientId, startRow, endRow);
+        diaries = diaryRepository.selectDiariesByClientId(clientId, startRow, endRow);
       }
       if (diaries.size() == 0 || diaries == null) {
         map.put("status", 0);

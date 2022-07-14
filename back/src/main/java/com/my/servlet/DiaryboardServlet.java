@@ -16,9 +16,6 @@ import com.my.exception.SelectException;
 import com.my.repository.DiaryOracleRepository;
 import com.my.repository.DiaryRepository;
 
-/**
- * Servlet implementation class DiaryboardServlet
- */
 @WebServlet("/diaryboard")
 public class DiaryboardServlet extends HttpServlet {
   private static final long serialVersionUID = 1L;
@@ -30,17 +27,16 @@ public class DiaryboardServlet extends HttpServlet {
     ObjectMapper mapper = new ObjectMapper();
     Map<String, Object> map = new HashMap<String, Object>();
 
+    // view_status : 1 - 최신순 / 2 - 조회순 / 3 - 좋아요순
     int viewStatus = Integer.parseInt(request.getParameter("view_status"));
-    // 1 - 최신순 / 2 - 조회순 / 3 - 좋아요순
+    String keyword = request.getParameter("keyword");
     int currentPage = 1;
     String strCurrentPage = request.getParameter("current_page");
     if (strCurrentPage != null && !strCurrentPage.equals("")) {
       currentPage = Integer.parseInt(strCurrentPage);
     }
 
-    int countPerPage = 10; // 한페이지당 보여줄 목록수
-    int endRow = currentPage * countPerPage; // 한페이지에 보여줄 마지막 행번호
-    int startRow = endRow - countPerPage + 1; // 한페이지에 보여줄 첫 행번호
+
 
     String envPath = getServletContext().getRealPath("project.properties");
     DiaryRepository diaryRepository = new DiaryOracleRepository(envPath);
@@ -48,51 +44,59 @@ public class DiaryboardServlet extends HttpServlet {
     try {
       int diaryDisClosureFlag = 1;
       totalRows = diaryRepository.selectDiariesRowSize(diaryDisClosureFlag);
-      System.out.println("현재 페이지 : " + currentPage + " / " + startRow + " : " + endRow
-          + " / 전체다이어리 갯수 : " + totalRows);
+
+      if ((currentPage + 1) * 10 > totalRows && totalRows != 0) {
+        currentPage = (totalRows / 10) + 1;
+      }
+      int countPerPage = 10; // 한페이지당 보여줄 목록수
+      int endRow = currentPage * countPerPage; // 한페이지에 보여줄 마지막 행번호
+      int startRow = endRow - countPerPage + 1; // 한페이지에 보여줄 첫 행번호
       // 전체 다이어리 : 96개 / endRow : 100 -> 아지막 argument를 totalRows로 함
       // 전체 다이어리 : 197개 / endRow : 190 -> 마지막 argument를 endRow로 함
+      System.out.println("현재 페이지 : " + currentPage + " / 보여줄 diary row -  " + startRow + " : "
+          + endRow + " / 전체다이어리 갯수 : " + totalRows);
       List<Diary> diaries = null;
-
-      switch (viewStatus) {
-        case 1: // 최신순
-          if (totalRows < endRow) {
-            diaries = diaryRepository.selectDiariesByWritingTime(startRow, totalRows);
-          } else {
-            diaries = diaryRepository.selectDiariesByWritingTime(startRow, endRow);
-          }
-          map.put("status", 1);
-          map.put("message", "최신순으로 다이어리를 가져옴");
-          break;
-        case 2: // 조회수
-          if (totalRows < endRow) {
-            diaries = diaryRepository.selectDiariesByViewCnt(startRow, totalRows);
-          } else {
-            diaries = diaryRepository.selectDiariesByViewCnt(startRow, endRow);
-          }
-          map.put("status", 2);
-          map.put("message", "조회수순으로 다이어리를 가져옴");
-          break;
-        case 3: // 좋아요
-          if (totalRows < endRow) {
-            diaries = diaryRepository.selectDiariesByLikeCnt(startRow, totalRows);
-          } else {
-            diaries = diaryRepository.selectDiariesByLikeCnt(startRow, endRow);
-          }
-          map.put("status", 3);
-          map.put("message", "좋아요순으로 다이어리를 가져옴");
-          break;
-        default:
-          map.put("status", 0);
-          map.put("message", "가져온 다이어리가 없습니다.");
+      if (viewStatus == 1) { // 최신순
+        if (totalRows < endRow) {
+          diaries = diaryRepository.selectDiariesByKeywordOrderedByColumnNameInDiariesTable(keyword,
+              "diary_writing_time", startRow, totalRows);
+        } else {
+          diaries = diaryRepository.selectDiariesByKeywordOrderedByColumnNameInDiariesTable(keyword,
+              "diary_writing_time", startRow, endRow);
+        }
+        map.put("status", 1);
+        map.put("message", "최신순으로 다이어리를 가져옴 (" + diaries.size() + "개)");
+      } else if (viewStatus == 2) { // 조회수순
+        if (totalRows < endRow) {
+          diaries = diaryRepository.selectDiariesByKeywordOrderedByColumnNameInDiariesTable(keyword,
+              "diary_view_cnt", startRow, totalRows);
+        } else {
+          diaries = diaryRepository.selectDiariesByKeywordOrderedByColumnNameInDiariesTable(keyword,
+              "diary_view_cnt", startRow, endRow);
+        }
+        map.put("status", 1);
+        map.put("message", "조회수순으로 다이어리를 가져옴 (" + diaries.size() + "개)");
+      } else if (viewStatus == 3) { // 좋아요순
+        if (totalRows < endRow) {
+          diaries = diaryRepository.selectDiariesByKeywordOrderedByColumnNameInDiariesTable(keyword,
+              "diary_like_cnt", startRow, totalRows);
+        } else {
+          diaries = diaryRepository.selectDiariesByKeywordOrderedByColumnNameInDiariesTable(keyword,
+              "diary_like_cnt", startRow, endRow);
+        }
+        map.put("status", 1);
+        map.put("message", "좋아요수순으로 다이어리를 가져옴 (" + diaries.size() + "개)");
+      } else {
+        map.put("status", 0);
+        map.put("message", "가져온 다이어리가 없습니다.");
       }
+
       if (diaries.size() == 0 || diaries == null) {
         map.put("status", 0);
         map.put("message", "가져온 다이어리가 없습니다.");
       } else {
         map.put("diaries", diaries);
       }
-
     } catch (SelectException e) {
       map.put("status", 0);
       map.put("message", e.getMessage());
@@ -105,5 +109,4 @@ public class DiaryboardServlet extends HttpServlet {
     String result = mapper.writeValueAsString(map);
     out.print(result);
   }
-
 }

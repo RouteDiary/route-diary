@@ -28,42 +28,9 @@ SELECT *
   FROM admins
  WHERE admin_id=?
    AND admin_pwd=?;
-   
--- 다이어리 게시판 SQL 구문
--- * diary_delete_flag = 삭제안된 상태 : 1 / 삭제된 상태 : 0
--- 다이어리 게시판에 들어갔을때 ?번째부터 ?번째 다이어리 반환 (최신글 순)
--- Return diaries, clients' columns 
-SELECT * 
-  FROM  (SELECT d.*
-              , client_pwd
-              , client_cellphone_no
-              , client_nickname
-              , client_status_flag
-              , row_number() OVER (PARTITION BY 1 ORDER BY 1) AS rnum
-           FROM diaries d
-LEFT OUTER JOIN clients c ON (d.client_id = c.client_id)
-          WHERE diary_disclosure_flag = 1
-            AND diary_delete_flag = 1
-       ORDER BY diary_writing_time DESC)
-WHERE rnum BETWEEN ? AND ?;
 
--- 다이어리 게시판에서 ?번째부터 ?번째 다이어리 반환 (조회수 순)
-SELECT * 
-  FROM  (SELECT d.*
-              , client_pwd
-              , client_cellphone_no
-              , client_nickname
-              , client_status_flag
-              , row_number() OVER (PARTITION BY 1 ORDER BY 1) AS rnum
-           FROM diaries d
-LEFT OUTER JOIN clients c ON (d.client_id = c.client_id)
-          WHERE diary_disclosure_flag = 1
-            AND diary_delete_flag = 1
-       ORDER BY diary_view_cnt DESC,
-                diary_writing_time DESC)
-WHERE rnum BETWEEN ? AND ?;
  
--- 다이어리 게시판에서 ?번째부터 ?번째 다이어리 반환 (좋아요수 순) 
+-- 다이어리 게시판에 들어갔을때 ?번째부터 ?번째 다이어리 반환 (검색어가 없을 경우) 
 SELECT * 
   FROM  (SELECT d.*
               , client_pwd
@@ -75,7 +42,7 @@ SELECT *
 LEFT OUTER JOIN clients c ON (d.client_id = c.client_id)
           WHERE diary_disclosure_flag = 1
             AND diary_delete_flag = 1
-       ORDER BY diary_like_cnt DESC,
+       ORDER BY ? DESC,
                 diary_writing_time DESC)
 WHERE rnum BETWEEN ? AND ?;
 
@@ -129,12 +96,14 @@ SELECT DISTINCT diary_no
                 LEFT OUTER JOIN clients c ON (d.client_id = c.client_id)
                           WHERE diary_disclosure_flag = 1
                             AND diary_delete_flag = 1                        
-                            AND (r.route_content LIKE '%' || ? || '%' 
+                            AND (r.route_content LIKE '%' || ? || '%'  
                                  OR d.diary_title LIKE '%' || ? || '%' 
                                 )
-                        ORDER BY diary_writing_time DESC)
+                )
      )            
- WHERE rnum BETWEEN ? AND ?;
+ WHERE rnum BETWEEN ? AND ? 
+ ORDER BY ? DESC,
+          diary_writing_time DESC;
 
 -- 내 전체 다이어리 보기 SQL 구문
 
@@ -159,13 +128,7 @@ INSERT INTO ROUTES
      VALUES (1
            , 1
            , '루트내용'
-           , kakao_id);
---루트 수정 SQL 
-UPDATE routes 
-   SET route_content = '새로운내용' 
-     , kakao_id = 16
- WHERE diary_no = 46
-   AND route_no = 4;          
+           , kakao_id);        
 --루트 삭제 SQL       
 DELETE FROM routes 
       WHERE diary_no = 46
@@ -225,11 +188,11 @@ DELETE FROM comments
 		   SELECT *
              FROM diaries d
   LEFT OUTER JOIN clients c ON (d.client_id = c.client_id)
-            WHERE diary_no = 45;
-	\
+            WHERE diary_no = ?;
+SELECT *
+  FROM routes
+ WHERE diary_no = ?;
 	         SELECT *
            FROM comments co
 LEFT OUTER JOIN clients cl ON (co.client_id = cl.client_id)
-          WHERE diary_no = 46; 
- 					
- 
+          WHERE diary_no = ?; 

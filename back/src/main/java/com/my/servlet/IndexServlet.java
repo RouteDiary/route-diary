@@ -37,11 +37,18 @@ public class IndexServlet extends HttpServlet {
       int diaryDisClosureFlag = 1;
       totalRows = diaryRepository.selectDiariesRowSize(diaryDisClosureFlag);
       if (totalRows >= 5) {
-        diariesOrderedByLikeCnt = diaryRepository.selectDiariesByLikeCnt(1, 5);
-        diariesOrderedByWritingTime = diaryRepository.selectDiariesByWritingTime(1, 5);
+        diariesOrderedByLikeCnt = diaryRepository
+            .selectDiariesByKeywordOrderedByColumnNameInDiariesTable(null, "diary_like_cnt", 1, 5);
+        diariesOrderedByWritingTime =
+            diaryRepository.selectDiariesByKeywordOrderedByColumnNameInDiariesTable(null,
+                "diary_writing_time", 1, 5);
       } else {
-        diariesOrderedByLikeCnt = diaryRepository.selectDiariesByLikeCnt(1, totalRows);
-        diariesOrderedByWritingTime = diaryRepository.selectDiariesByWritingTime(1, totalRows);
+        diariesOrderedByLikeCnt =
+            diaryRepository.selectDiariesByKeywordOrderedByColumnNameInDiariesTable(null,
+                "diary_like_cnt", 1, totalRows);
+        diariesOrderedByWritingTime =
+            diaryRepository.selectDiariesByKeywordOrderedByColumnNameInDiariesTable(null,
+                "diary_writing_time", 1, totalRows);
       }
       map.put("status", 1);
       map.put("diaries_ordered_by_like_cnt", diariesOrderedByLikeCnt);
