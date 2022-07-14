@@ -1,106 +1,90 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <style>
-      div {
-        text-align: center;
-        border: 1px solid black;
-        margin-top: 100px;
-        margin-bottom: 100px;
-        margin-right: 600px;
-        margin-left: 80px;
-        background-color: whitesmoke;
-      }
-    </style>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../css/signup.css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="../jq/signup.js"></script>
+    <script src="../js/signup.js"></script>
   </head>
 
   <body>
-    <div class="signup">
+    <div class="layout">
       <h1>회원가입</h1>
-      <form
-        name="signup"
-        method="post"
-        action="http://localhost:8888/back/signup"
-        autocomplete="off"
-      >
-        <p>
-          <label for="id">아이디:</label>
-          <input
-            type="text"
-            name="id"
-            id="id"
-            placeholder="아이디를 입력해 주세요."
-          />
-          <button
-            type="button"
-            class="iddupchk"
-            placeholder="아이디를 입력해 주세요."
-          >
-            아이디중복확인
-          </button>
-        </p>
-        <p>
-          <label for="name">닉네임:</label>
-          <input
-            type="text"
-            name="name"
-            id="nickname"
-            placeholder="닉네임을 입력해 주세요."
-          />
-          <button type="button" class="Nicknamedupchk">닉네임중복확인</button>
-        </p>
-        <label for="pwd">비밀번호:</label>
+      <form class="signup" action="/back/signup" method="post">
+        <label id="client_id">아이디:</label>
+        <input
+          type="email"
+          name="client_id"
+          id="client_id"
+          placeholder="Email주소를 입력해 주세요."
+          required="required"
+        />
+        <button
+          id="idduplicationcheck"
+          name="idduplicationcheck"
+          type="submit"
+          required
+        >
+          아이디중복확인
+        </button>
+        <br />
+        <label id="pwd">비밀번호:</label>
         <input
           type="password"
-          name="pwd"
+          name="client_pwd"
           id="pwd"
           placeholder="비밀번호를 입력해 주세요."
+          required="required"
         />
         <br />
-        <label for="pwd1">비밀번호확인:</label>
+        <label id="pwd_check">비밀번호확인:</label>
         <input
           type="password"
-          id="pwd1"
+          id="pwd_check"
+          class="client_pwd_check"
           placeholder="비밀번호를 확인해 주세요."
+          required="required"
         />
         <br />
-        <label for="email">이메일:</label>
+        <label id="client_nickname">닉네임:</label>
         <input
           type="text"
-          name="email"
-          id="email"
-          placeholder="이메일을 입력해 주세요."
+          name="client_nickname"
+          id="client_nickname"
+          placeholder="닉네임을 입력해 주세요."
+          required="required"
         />
+        <button
+          id="nicknameduplicationcheck"
+          name="nicknameduplicationcheck"
+          type="submit"
+          required
+        >
+          닉네임중복확인
+        </button>
         <br />
-        <label for="client_cellphone_no">HP</label>
+        <label id="client_cellphone_no">휴대전화번호</label>
         <input
           type="text"
           name="client_cellphone_no"
           id="client_cellphone_no"
           placeholder="전화번호를 입력해 주세요."
+          required="required"
         />
         <br />
-        <input type="text" class="zipcode" readonly />
-        <button type="button" class="searchzip">우편번호찾기</button>
-        <br />
-        <label for="sigungu">시/군/구:</label>
-        <input
-          type="text"
-          name="sigungu"
-          id="sigungu"
-          placeholder="어디사노?."
-        />
-        <br />
-        <label for="addr">상세주소</label>
-        <input type="text" class="addr1" readonly />
-        <br />
-        <button type="submit">가입</button>
-        <button type="reset">CLEAR</button>
+        <input type="submit" value="SIGNUP" />
+        <input type="reset" value="CLEAR" />
       </form>
+    </div>
+    <div class="layout">
+      <a id="kakao_login_botton" href="">
+        <img
+          src="../resource/kakao_login.png"
+          width="200px"
+          height="40px"
+          alt="카카오 로그인 버튼"
+        />
+      </a>
     </div>
   </body>
 </html>

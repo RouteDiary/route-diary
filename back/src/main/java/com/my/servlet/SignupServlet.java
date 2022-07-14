@@ -32,22 +32,20 @@ public class SignupServlet extends HttpServlet {
     String clientPwd = request.getParameter("client_pwd");
     String clientCellphoneNo = request.getParameter("client_cellphone_no");
     String clientNickname = request.getParameter("client_nickname");
-    int clientStatusFlag = Integer.parseInt(request.getParameter("client_status_flag"));
-    Client client =
-        new Client(clientId, clientPwd, clientCellphoneNo, clientNickname, clientStatusFlag);
+    Client client = new Client(clientId, clientPwd, clientCellphoneNo, clientNickname, 1);
     try {
       clientRepository.insert(client);
       map.put("status", 1);
-      map.put("messgage", "가입성공");
+      map.put("message", "가입성공");
 
     } catch (InsertException e) {
       e.printStackTrace();
       map.put("status", 0);
-      map.put("messgage", "가입실패 : " + e.getMessage());
+      map.put("message", "가입실패 : " + e.getMessage());
     } catch (Exception e) {
       e.printStackTrace();
       map.put("status", 0);
-      map.put("messgage", "가입실패 : " + e.getMessage());
+      map.put("message", "가입실패 : " + e.getMessage());
     }
     String result = mapper.writeValueAsString(map);
     out.print(result);

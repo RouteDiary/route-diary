@@ -15,14 +15,11 @@ import com.my.exception.SelectException;
 import com.my.repository.ClientOracleRepository;
 import com.my.repository.ClientRepository;
 
-/**
- * Servlet implementation class NicknameDuplicationCheckServlet
- */
 @WebServlet("/nicknameduplicationcheck")
 public class NicknameDuplicationCheckServlet extends HttpServlet {
   private static final long serialVersionUID = 1L;
 
-  protected void doPost(HttpServletRequest request, HttpServletResponse response)
+  protected void doGet(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
     String clientNickname = request.getParameter("client_nickname");
 
@@ -35,12 +32,12 @@ public class NicknameDuplicationCheckServlet extends HttpServlet {
     Client client = null;
     try {
       client = clientRepository.selectClientByNickname(clientNickname);
-      if (client == null) {
+      if (client == null && !clientNickname.equals("")) {
         map.put("status", 1);
         map.put("message", "사용가능한 닉네임입니다.");
       } else {
         map.put("status", 0);
-        map.put("message", "이미 사용중인 닉네임입니다.");
+        map.put("message", "사용할 수 없는 닉네임입니다.");
       }
     } catch (SelectException e) {
       map.put("status", 0);

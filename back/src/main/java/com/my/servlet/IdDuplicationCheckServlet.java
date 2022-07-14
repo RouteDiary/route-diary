@@ -21,7 +21,7 @@ public class IdDuplicationCheckServlet extends HttpServlet {
 
   public IdDuplicationCheckServlet() {}
 
-  protected void doPost(HttpServletRequest request, HttpServletResponse response)
+  protected void doGet(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
     String clientId = request.getParameter("client_id");
 
@@ -34,12 +34,13 @@ public class IdDuplicationCheckServlet extends HttpServlet {
     Client client = null;
     try {
       client = clientRepository.selectClientById(clientId);
-      if (client == null) {
+      if (client == null && !clientId.equals("")) {
         map.put("status", 1);
         map.put("message", "사용가능한 ID입니다.");
+        System.out.println("client객체 : " + client);
       } else {
         map.put("status", 0);
-        map.put("message", "이미 사용중인 ID입니다.");
+        map.put("message", "사용할 수 없는 ID입니다.");
       }
     } catch (SelectException e) {
       map.put("status", 0);

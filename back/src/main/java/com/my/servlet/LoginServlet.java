@@ -52,11 +52,11 @@ public class LoginServlet extends HttpServlet {
       }
     } catch (SelectException e) {
       map.put("status", 0);
-      map.put("message", e.getMessage());
+      map.put("message", "로그인 실패 : ID와 패스워드를 다시 확인해 주세요.");
       e.printStackTrace();
     } catch (Exception e) {
       map.put("status", 0);
-      map.put("message", e.getMessage());
+      map.put("message", "로그인 실패 : ID와 패스워드를 다시 확인해 주세요.");
       e.printStackTrace();
     }
     String result = mapper.writeValueAsString(map);
