@@ -9,6 +9,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.my.dto.Diary;
 import com.my.exception.SelectException;
@@ -24,6 +25,10 @@ public class ViewDiaryServlet extends HttpServlet {
     String envPath = getServletContext().getRealPath("project.properties");
     response.setContentType("application/json; charset=UTF-8");
     PrintWriter out = response.getWriter();
+
+    HttpSession session = request.getSession();
+    String loginInfo = (String) session.getAttribute("login_info");
+    // String loginInfo = "a11";
     DiaryRepository diaryRepository = new DiaryOracleRepository(envPath);
     Map<String, Object> map = new HashMap<String, Object>();
     ObjectMapper mapper = new ObjectMapper();
@@ -36,6 +41,7 @@ public class ViewDiaryServlet extends HttpServlet {
       map.put("status", 1);
       map.put("message", "diary를 가져오는데 성공했습니다.");
       map.put("diary", diary);
+      map.put("loginInfo", loginInfo);
     } catch (SelectException e) {
       map.put("status", 0);
       map.put("message", e.getMessage());

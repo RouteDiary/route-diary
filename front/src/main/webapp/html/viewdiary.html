@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../css/viewdiary.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="../js/viewdiary.js"></script>
+    <title>다이어리 보기</title>
+  </head>
+
+  <body>
+      <div class="diary">
+        <div class="title">다이어리 제목 :<span class=diary_title></span></div>
+
+        <div class="info">
+          <dl>
+            <dt>다이어리 번호 :<span class="diary_no"></span></dt>
+          </dl>
+          <dl>
+            <dt>작성자 :<span class="client"></span></dt>
+          </dl>
+          <dl>
+            <dt>작성날짜 :<span class ="diary_writing_time"></span></dt>
+          </dl>
+          <dl>
+            <dt>조회수 :<span class="diary_view_cnt"></span></dt>
+          </dl>
+          <dl>
+            <dt>좋아요 :<span class="diary_like_cnt"></span></dt>
+          </dl>
+        </div>
+      </div>
+    </div>
+    
+    <div class="diary_start_date">여행시작날짜:<span class="diary_start_date"></span>
+    </div>
+    <!--route start-->
+    <div class="routes">
+      <div class="route">
+        <fieldset>
+          <legend>다이어리 사진</legend>
+        <p><img src="" alt="" width="600" height="300" /></p>
+        </fieldset>
+
+        <fieldset>
+          <legend>다이어리 기록</legend>
+          <form>
+            <p>*양식은 자유롭게 작성해 주세요*</p>
+            <textarea style="resize: none" name="text1" id="text" cols="85" rows="15">
+          </textarea>
+          </form>
+        </fieldset>
+      </div>
+    </div> 
+    <!--routes end-->    
+
+    <!-- <script src="viewdiary.js" charset="utf-8"></script> -->
+    <fieldset >
+      <legend>댓글</legend>
+      <div class="comments">
+        <div class="comment">
+          <span class="clientNickname"></span><!--닉네임-->
+          <span class="commentWritingTime"></span><!--작성시간-->
+          <input type="text" name="commentContent" placeholder="댓글을 입력해 주세요!" />
+          <button type="button" name="button" class="insert" >등록</button>
+          <button type="button" name="button" class="update" style="display:none;">수정</button>
+          <button type="button" name="button" class="delete" style="display:none;">삭제</button>
+        </div>
+      </div>
+    </fieldset>
+  <a href="diaryboard.html">다이어리 게시판으로 돌아가기</a>
+  </body>
+</html>

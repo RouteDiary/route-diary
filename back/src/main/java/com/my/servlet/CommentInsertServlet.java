@@ -30,7 +30,9 @@ public class CommentInsertServlet extends HttpServlet {
     ObjectMapper mapper = new ObjectMapper();
     Map<String, Object> map = new HashMap<String, Object>();
     HttpSession session = request.getSession();
+
     String clientId = (String) session.getAttribute("login_info");
+    // String clientId = "awerqaa"; // session없을 때 test용
     int diaryNo = Integer.parseInt(request.getParameter("diary_no"));
     String commentContent = request.getParameter("comment_content");
     Client client = new Client();
