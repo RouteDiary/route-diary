@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>clientupdate.html</title>
+  <link rel="stylesheet" href="../css/clientupdate.css">   
+
+ <!--  
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+ -->
+  <script src="../js/"></script>
+</head>
+
+<body>
+  <div class="clientupdate">
+    <form method="post">
+    	<h1 >내 정보 수정</h1>
+        <hr>
+        
+     	 <div class="row">
+        	<div class="col-50">
+         	<label for="id">아이디</label>
+        </div>
+        <div class="col-50">
+          <input type="text" id="client_id" name="client_id" readonly="readonly" >
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-50">
+          <label for="client_pwd">비밀번호변경</label>
+        </div>
+        <div class="col-50">
+          <input type="password" id="client_pwd" name="client_pwd" >
+        </div>
+        </div>
+	 <div class="row">
+        <div class="col-50">
+          <label for="client_cellphone_no">연락처</label>
+        </div>
+        <div class="col-50">
+          <input type="text" id="client_cellphone_no" name="client_cellphone_no" >
+        </div>
+      </div>
+        <div class="row">
+        <div class="col-50">
+          <label for="client_nickname">닉네임</label>
+        </div>
+        <div class="col-50">
+          <input type="text" id="client_nickname" name="client_nickname" >
+        </div>
+        
+      </div>
+      <br>
+      <div class="update">
+        <button type="submit" class="ok">수정하기</button>
+        <button type="button" class="cancel">취소</button>
+        <button type="submit" class="clientdelete">회원탈퇴</button>
+      </div>
+    </form>
+  </div>
+</body>
+</html>

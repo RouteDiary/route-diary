@@ -1,0 +1,76 @@
+* {
+    box-sizing: border-box;
+  }
+
+  div.clientupdate>form input[type=text],
+  div.clientupdate>form input[type=password]{
+    width: 100%;
+    padding: 12px;
+    border: 1px solid ;
+    border-radius: 4px;
+    resize: vertical;
+    font-size: large;
+  }
+   
+
+  div.clientupdate>form label {
+    padding: 12px 12px 12px 0;
+    font-size: x-large;
+    letter-spacing: 5px;
+    font-weight: bolder;
+  }
+
+  div.clientupdate {
+    border-radius: 5px;
+    background-color: #ffd633;
+    padding: 20px;
+  }
+
+ 
+div.clientupdate .col-50 {
+    
+    width: 50%;
+    margin-top: 6px;
+  }
+  
+
+  div.clientupdate>form button[type=submit] {
+    background-color: #3399ff;
+    color: white;
+    padding: 12px 20px;
+    border: 3px solid ;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: x-large;
+    letter-spacing: 5px;
+    font-weight: bold;
+  }
+  div.clientupdate>form button[type=button]{
+    background-color: white;
+    color: black;
+    padding: 12px 20px;
+    border: 3px solid ;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: x-large;
+    letter-spacing: 5px;
+    font-weight: bold;
+  }
+
+
+  /* Clear floats after the columns */
+  div.clientupdate .row:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+
+
+  @media screen and (max-width: 600px) {
+
+    div.clientupdate .col-50,
+    div.clientupdate>form button {
+      width: 100%;
+      margin-top: 0;
+    }
+  }
