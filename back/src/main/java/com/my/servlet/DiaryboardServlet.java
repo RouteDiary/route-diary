@@ -31,6 +31,7 @@ public class DiaryboardServlet extends HttpServlet {
     int viewStatus = Integer.parseInt(request.getParameter("view_status"));
     String keyword = request.getParameter("keyword");
     int currentPage = 1;
+    int strartPage = ((currentPage - 1) * 10) * 10 + 1;
     String strCurrentPage = request.getParameter("current_page");
     if (strCurrentPage != null && !strCurrentPage.equals("")) {
       currentPage = Integer.parseInt(strCurrentPage);
@@ -74,7 +75,7 @@ public class DiaryboardServlet extends HttpServlet {
           diaries = diaryRepository.selectDiariesByKeywordOrderedByColumnNameInDiariesTable(keyword,
               "diary_view_cnt", startRow, endRow);
         }
-        map.put("status", 1);
+        map.put("status", 2);
         map.put("message", "조회수순으로 다이어리를 가져옴 (" + diaries.size() + "개)");
       } else if (viewStatus == 3) { // 좋아요순
         if (totalRows < endRow) {
@@ -84,7 +85,7 @@ public class DiaryboardServlet extends HttpServlet {
           diaries = diaryRepository.selectDiariesByKeywordOrderedByColumnNameInDiariesTable(keyword,
               "diary_like_cnt", startRow, endRow);
         }
-        map.put("status", 1);
+        map.put("status", 3);
         map.put("message", "좋아요수순으로 다이어리를 가져옴 (" + diaries.size() + "개)");
       } else {
         map.put("status", 0);
@@ -96,6 +97,9 @@ public class DiaryboardServlet extends HttpServlet {
         map.put("message", "가져온 다이어리가 없습니다.");
       } else {
         map.put("diaries", diaries);
+        map.put("totalRows", totalRows);
+        map.put("currentPage", currentPage);
+        map.put(envPath, diaries);
       }
     } catch (SelectException e) {
       map.put("status", 0);
