@@ -1,7 +1,7 @@
 $(function () {
   //---화면 로딩---
   let queryString = location.search.substring(1); //diary_no=104
-  // console.log(queryString);
+  console.log("querystring =" + queryString);
 
   $.ajax({
     url: "/back/viewdiary",
