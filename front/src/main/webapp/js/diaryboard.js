@@ -1,4 +1,4 @@
-$(function () {
+$(() => {
   let url = "http://localhost:8888/back/diaryboard";
   let currenturl = window.location.search;
 

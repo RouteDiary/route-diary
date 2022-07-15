@@ -5,7 +5,7 @@
     <link rel="stylesheet" href="../css/viewdiary.css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="../js/viewdiary.js"></script>
-    <title>다이어리 보기</title>
+    <title>viewdiary.html</title>
   </head>
 
   <body>
@@ -45,7 +45,6 @@
         <fieldset>
           <legend>다이어리 기록</legend>
           <form>
-            <p>*양식은 자유롭게 작성해 주세요*</p>
             <textarea style="resize: none" name="text1" id="text" cols="85" rows="15">
           </textarea>
           </form>
@@ -63,6 +62,7 @@
           <span class="commentWritingTime"></span><!--작성시간-->
           <input type="text" name="commentContent" placeholder="댓글을 입력해 주세요!" />
           <button type="button" name="button" class="insert" >등록</button>
+          <hr>
           <button type="button" name="button" class="update" style="display:none;">수정</button>
           <button type="button" name="button" class="delete" style="display:none;">삭제</button>
         </div>

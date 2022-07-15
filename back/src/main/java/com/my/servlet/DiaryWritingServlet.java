@@ -35,7 +35,7 @@ public class DiaryWritingServlet extends HttpServlet {
     Map<String, Object> map = new HashMap<String, Object>();
     String sample =
         "{\"diaryTitle\" : \"title1\" , \"diaryStartDate\" : \"2021-07-01\",\"diaryEndDate\": \"2021-07-03\" , \"diaryDisclosureFlag\" : 1,\n"
-            + "\"routes\" : [ {\"routeContent\" : \"경복궁\" , \"kakaoMapId\" : \"1\"},{\"routeContent\" : \"남산\" , \"kakaoMapId\" : \"2\"}]}";
+            + "\"routes\" : [ {\"routeContent\" : \"김민성씨 페이징처리 좀 잘해주세요\" , \"kakaoMapId\" : \"151\"},{\"routeContent\" : \"강의장\" , \"kakaoMapId\" : \"290\"}]}";
     Diary diary = mapper.readValue(sample, Diary.class);
     List<Route> routes = diary.getRoutes();
 
@@ -47,7 +47,7 @@ public class DiaryWritingServlet extends HttpServlet {
 
     try {
       Client client = new Client();
-      client.setClientId(clientId);
+      client.setClientId("a@ad.sdasd");
       diary.setClient(client);
       diaryRepository.insert(diary);
       int diaryNo = diary.getDiaryNo();

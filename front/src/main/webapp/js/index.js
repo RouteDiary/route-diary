@@ -6,53 +6,48 @@ routes.on("dragstart", dragStart);
 routes.on("dragend", dragEnd);
 
 function dragStart() {
-    draggableRoute = this;
-    setTimeout(() => {
-      this.style.display = "none";
-    }, 0);
-  }
-  
-  function dragEnd() {
-    draggableRoute = null;
-    setTimeout(() => {
-      this.style.display = "block";
-    }, 0);
-  }
+  draggableRoute = this;
+  setTimeout(() => {
+    this.style.display = "none";
+  }, 0);
+}
 
-  all_dates.on("dragover", dragOver);
-  all_dates.on("dragenter", dragEnter);
-  all_dates.on("dragleave", dragLeave);
-  all_dates.on("drop", dragDrop);
+function dragEnd() {
+  draggableRoute = null;
+  setTimeout(() => {
+    this.style.display = "block";
+  }, 0);
+}
 
-
+all_dates.on("dragover", dragOver);
+all_dates.on("dragenter", dragEnter);
+all_dates.on("dragleave", dragLeave);
+all_dates.on("drop", dragDrop);
 
 function dragOver(e) {
-    // console.log("dragOver");
-    e.preventDefault();
+  // console.log("dragOver");
+  e.preventDefault();
 }
-function dragEnter(){
-    this.style.border = "1px dashed #ccc"
-    console.log("dragEnter");
+function dragEnter() {
+  this.style.border = "1px dashed #ccc";
+  console.log("dragEnter");
 }
-function dragLeave(){
-    this.style.border = "none"
-    console.log("dragLeave");
-}
-
-function dragDrop(){
-    this.style.border = "none"
-    this.appendChild(draggableRoute);
-    console.log("dragDrop");
+function dragLeave() {
+  this.style.border = "none";
+  console.log("dragLeave");
 }
 
+function dragDrop() {
+  this.style.border = "none";
+  this.appendChild(draggableRoute);
+  console.log("dragDrop");
+}
 
 /* modal */
-
 
 // const btns = document.querySelectorAll("[data-target-modal]");
 // const close_modals = document.querySelectorAll(".close-modal");
 // const overlay = document.querySelector("overlay");
-
 
 // btns.forEach((btn) => {
 //   btn.addEventListener("click", () => {
@@ -69,22 +64,19 @@ function dragDrop(){
 //   });
 // });
 
-
-
 const btns = $("[data-target-modal]");
-const modals =$('.modal');
+const modals = $(".modal");
 const overlay = $("overlay");
 const close_modals = $(".close-modal");
 
-
-btns.on('click',function(){
-  modals.toggleClass("active")
+btns.on("click", () => {
+  modals.toggleClass("active");
   overlay.toggleClass("active");
 });
-close_modals.on('click', function(){
+close_modals.on("click", () => {
   $(this).closest(".modal").removeClass("active");
   overlay.toggleClass("active");
-})
+});
 
 window.onclick = (event) => {
   if (event.target == overlay) {
@@ -98,35 +90,34 @@ window.onclick = (event) => {
   }
 };
 /* create image preview */
-var inputJS = document.querySelector('#route_pic');
+var inputJS = document.querySelector("#route_pic");
 var input = $(inputJS);
-var preview = $('.preview');
-preview.css({'height': '200px', 'line-height': '100px'});
+var preview = $(".preview");
+preview.css({ height: "200px", "line-height": "100px" });
 input.change(updateImageDisplay);
 function updateImageDisplay() {
   preview.empty();
   const curFiles = inputJS.files;
-  if(curFiles.length === 0) {
-    const para = $('<p>');
-    para.textContent = 'No files currently selected for upload';
+  if (curFiles.length === 0) {
+    const para = $("<p>");
+    para.textContent = "No files currently selected for upload";
     preview.append(para);
   } else {
     // const list = $('<ol>');
     // preview.append(list);
 
-
-    for(const file of curFiles) {
-      const para = document.createElement('span');
-      if(validFileType(file)) {
-        const wrapper = $('<div>');
-        wrapper.addClass('.thumbnail-wrappper');
-        wrapper.css({'width':'193.5px' , 'float':'left'});
-        const thumbnail = $('<div>');
-        thumbnail.addClass('thumbnail');
-        thumbnail.css({'height' : '100%','border': '1px solid'});
-        const image = $('<img>');
-        image.attr("src",URL.createObjectURL(file));
-        image.css({'width':'100%','height':'177px'});
+    for (const file of curFiles) {
+      const para = document.createElement("span");
+      if (validFileType(file)) {
+        const wrapper = $("<div>");
+        wrapper.addClass(".thumbnail-wrappper");
+        wrapper.css({ width: "193.5px", float: "left" });
+        const thumbnail = $("<div>");
+        thumbnail.addClass("thumbnail");
+        thumbnail.css({ height: "100%", border: "1px solid" });
+        const image = $("<img>");
+        image.attr("src", URL.createObjectURL(file));
+        image.css({ width: "100%", height: "177px" });
         thumbnail.append(image);
         wrapper.append(thumbnail);
         wrapper.append(para);
@@ -142,15 +133,11 @@ function updateImageDisplay() {
   }
 }
 
-const fileTypes = [
-  "image/jpeg",
-  "image/png",
-];
+const fileTypes = ["image/jpeg", "image/png"];
 // file type check
 function validFileType(file) {
   return fileTypes.includes(file.type);
 }
-
 
 /* create route  */
 const route_submit = document.getElementById("route_submit");
