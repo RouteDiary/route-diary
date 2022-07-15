@@ -127,16 +127,24 @@ public class DiaryOracleRepository implements DiaryRepository {
     return diaries;
   }
 
-  private String BringQueryOfselectDiariesOrderedByColumnNameInDiariesTable() {
-    String selectSQL = "SELECT * \r\n" + "  FROM  (SELECT d.*\r\n"
-        + "              , client_pwd\r\n" + "              , client_cellphone_no\r\n"
-        + "              , client_nickname\r\n" + "              , client_status_flag\r\n"
-        + "              , row_number() OVER (PARTITION BY 1 ORDER BY 1) AS rnum\r\n"
-        + "           FROM diaries d\r\n"
-        + "LEFT OUTER JOIN clients c ON (d.client_id = c.client_id)\r\n"
-        + "          WHERE diary_disclosure_flag = 1\r\n"
-        + "            AND diary_delete_flag = 1\r\n" + "       ORDER BY ? DESC,\r\n"
-        + "                diary_writing_time DESC)\r\n" + "WHERE rnum BETWEEN ? AND ? ";
+  private String BringQueryOfselectDiariesOrderedByColumnNameInDiariesTable(String desc) {
+    // String selectSQL = "SELECT * \r\n" + " FROM (SELECT d.*\r\n"
+    // + " , client_pwd\r\n" + " , client_cellphone_no\r\n"
+    // + " , client_nickname\r\n" + " , client_status_flag\r\n"
+    // + " , row_number() OVER (PARTITION BY 1 ORDER BY 1) AS rnum\r\n"
+    // + " FROM diaries d\r\n"
+    // + "LEFT OUTER JOIN clients c ON (d.client_id = c.client_id)\r\n"
+    // + " WHERE diary_disclosure_flag = 1\r\n"
+    // + " AND diary_delete_flag = 1\r\n" + " ORDER BY ? DESC\r\n"
+    // + " )\r\n" + "WHERE rnum BETWEEN ? AND ? ";
+    String selectSQL = "SELECT *     \n"
+        + "    FROM  (SELECT d.*, client_pwd, client_cellphone_no, client_nickname, client_status_flag, row_number()OVER (PARTITION BY 1 ORDER BY 1) AS rnum\n"
+        + "                          FROM diaries d\n"
+        + "               LEFT OUTER JOIN clients c ON (d.client_id = c.client_id)\n"
+        + "                         WHERE diary_disclosure_flag = 1\n"
+        + "                           AND diary_delete_flag = 1\n"
+        + "                      ORDER BY " + desc + " DESC) \n"
+        + "                      WHERE rnum BETWEEN ? AND ?";
     return selectSQL;
   }
 
@@ -195,14 +203,22 @@ public class DiaryOracleRepository implements DiaryRepository {
     Connection con = null;
     PreparedStatement pstmt = null;
     ResultSet rs = null;
+
     try {
+      System.out.println(columnName + ":" + diaryStartRowNo + ":" + diaryEndRowNo + keyword);
       con = MyConnection.getConnection(envPath);
       if (keyword.equals("") || keyword == null) {
-        String selectSQL = BringQueryOfselectDiariesOrderedByColumnNameInDiariesTable();
+        String selectSQL = BringQueryOfselectDiariesOrderedByColumnNameInDiariesTable(columnName);
+        System.out.println("in select repository -1");
         pstmt = con.prepareStatement(selectSQL);
-        pstmt.setString(1, columnName);
-        pstmt.setInt(2, diaryStartRowNo);
-        pstmt.setInt(3, diaryEndRowNo);
+        System.out.println("in select repository -2");
+        // pstmt.setString(1, columnName);
+
+        pstmt.setInt(1, diaryStartRowNo);
+        System.out.println("in select repository 2");
+        pstmt.setInt(2, diaryEndRowNo);
+        System.out.println("in select repository -4");
+        System.out.println("in sekect repository keyword없음 ");
       } else {
         String selectSQL = BringQueryOfselectDiariesByKeywordOrderedByColumnNameInDiariesTable();
         pstmt = con.prepareStatement(selectSQL);
@@ -221,6 +237,7 @@ public class DiaryOracleRepository implements DiaryRepository {
         diaries.add(diary);
       }
     } catch (Exception e) {
+      e.printStackTrace();
       throw new SelectException(e.getMessage());
     } finally {
       MyConnection.close(rs, pstmt, con);

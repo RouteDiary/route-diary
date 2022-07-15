@@ -20,7 +20,7 @@ import com.my.repository.DiaryRepository;
 public class DiaryboardServlet extends HttpServlet {
   private static final long serialVersionUID = 1L;
 
-  protected void doPost(HttpServletRequest request, HttpServletResponse response)
+  protected void doGet(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
     response.setContentType("application/json;charset=UTF-8");
     PrintWriter out = response.getWriter();
@@ -57,6 +57,8 @@ public class DiaryboardServlet extends HttpServlet {
       System.out.println("현재 페이지 : " + currentPage + " / 보여줄 diary row -  " + startRow + " : "
           + endRow + " / 전체다이어리 갯수 : " + totalRows);
       List<Diary> diaries = null;
+
+      System.out.println("viewStatus=" + viewStatus);
       if (viewStatus == 1) { // 최신순
         if (totalRows < endRow) {
           diaries = diaryRepository.selectDiariesByKeywordOrderedByColumnNameInDiariesTable(keyword,
@@ -68,10 +70,14 @@ public class DiaryboardServlet extends HttpServlet {
         map.put("status", 1);
         map.put("message", "최신순으로 다이어리를 가져옴 (" + diaries.size() + "개)");
       } else if (viewStatus == 2) { // 조회수순
+        System.out.println("in viewstatus 2 keyword=" + keyword + ", totalRows=" + totalRows
+            + ", endRow:" + endRow);
         if (totalRows < endRow) {
+          System.out.println("in totalRows<endRows");
           diaries = diaryRepository.selectDiariesByKeywordOrderedByColumnNameInDiariesTable(keyword,
               "diary_view_cnt", startRow, totalRows);
         } else {
+          System.out.println("in totalRows>=ndRows");
           diaries = diaryRepository.selectDiariesByKeywordOrderedByColumnNameInDiariesTable(keyword,
               "diary_view_cnt", startRow, endRow);
         }
@@ -79,6 +85,7 @@ public class DiaryboardServlet extends HttpServlet {
         map.put("message", "조회수순으로 다이어리를 가져옴 (" + diaries.size() + "개)");
       } else if (viewStatus == 3) { // 좋아요순
         if (totalRows < endRow) {
+
           diaries = diaryRepository.selectDiariesByKeywordOrderedByColumnNameInDiariesTable(keyword,
               "diary_like_cnt", startRow, totalRows);
         } else {
@@ -93,6 +100,7 @@ public class DiaryboardServlet extends HttpServlet {
       }
 
       if (diaries.size() == 0 || diaries == null) {
+        System.out.println("in size");
         map.put("status", 0);
         map.put("message", "가져온 다이어리가 없습니다.");
       } else {
