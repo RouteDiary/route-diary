@@ -21,7 +21,7 @@
             <input type="text" id="route_name" maxlength="20" placeholder="여행지를 입력하세요"/> 
             <div class="route_div"> 내용: </div> 
             <textarea cols="40" rows="30" wrap="hard" id="route_content" placeholder="내용을 입력하세요"> </textarea>
-            <div class="route_pic">사진: </div>
+            <div class="route_div">사진: </div>
             <input type="file" id="route_pic" accept="image/png, image/jpeg" multiple>
             <div class="preview">
                 <p>No files currently selected for upload</p>
@@ -35,7 +35,16 @@
             <h1>no status</h1>
             <button id="add_route" data-target-modal="#route_form">+ Add route</button>
             <div class="tour-route" draggable="true">
-                경복궁 감
+                <!-- 경복궁 감 -->
+                <span class="name_txt">경복궁 감</span>
+            
+                <div class="tour-content" visibility = "hidden">
+
+                </div>
+
+                <div class="tour-image" visbility = "hidden">
+
+                </div>
                 <span class="close">&times;</span>
             </div>
         </div>

@@ -1,21 +1,25 @@
 const routes = $(".tour-route");
+
 const all_dates = $(".tour-date");
 let draggableRoute = null;
 
-routes.on("dragstart", dragStart);
-routes.on("dragend", dragEnd);
+// routes.on("dragstart", dragStart);
+all_dates.on("dragstart", ".tour-route", dragStart);
+all_dates.on("dragend", ".tour-route", dragEnd);
+
+// routes.on("dragend", dragEnd);
 
 function dragStart() {
-  draggableRoute = this;
+  draggableRoute = $(this);
   setTimeout(() => {
-    this.style.display = "none";
+    $(this).css("display", "none");
   }, 0);
 }
 
 function dragEnd() {
   draggableRoute = null;
   setTimeout(() => {
-    this.style.display = "block";
+    $(this).css("display", "flex");
   }, 0);
 }
 
@@ -25,56 +29,39 @@ all_dates.on("dragleave", dragLeave);
 all_dates.on("drop", dragDrop);
 
 function dragOver(e) {
-  // console.log("dragOver");
+  console.log("dragOver");
   e.preventDefault();
 }
 function dragEnter() {
-  this.style.border = "1px dashed #ccc";
+  $(this).css("border", "1px dashed #ccc");
   console.log("dragEnter");
 }
 function dragLeave() {
-  this.style.border = "none";
+  $(this).css("border", "none");
   console.log("dragLeave");
 }
 
 function dragDrop() {
-  this.style.border = "none";
-  this.appendChild(draggableRoute);
+  $(this).css("border", "none");
+  $(this).append(draggableRoute);
   console.log("dragDrop");
 }
 
-/* modal */
-
-// const btns = document.querySelectorAll("[data-target-modal]");
-// const close_modals = document.querySelectorAll(".close-modal");
-// const overlay = document.querySelector("overlay");
-
-// btns.forEach((btn) => {
-//   btn.addEventListener("click", () => {
-//     document.querySelector(btn.dataset.targetModal).classList.add("active");
-//     overlay.classList.add("active");
-//   });
-// });
-
-// close_modals.forEach((btn) => {
-//   btn.addEventListener("click", () => {
-//     const modal = btn.closest(".modal");
-//     modal.classList.remove("active");
-//     overlay.classList.remove("active");
-//   });
-// });
-
 const btns = $("[data-target-modal]");
 const modals = $(".modal");
-const overlay = $("overlay");
+const overlay = $("#overlay");
 const close_modals = $(".close-modal");
-
+//route insert start
 btns.on("click", () => {
   modals.toggleClass("active");
   overlay.toggleClass("active");
+  modals.find("#route_name").val("");
+  modals.find("#route_content").val("");
+  modals.find("#route_pic").val("");
 });
-close_modals.on("click", () => {
-  $(this).closest(".modal").removeClass("active");
+close_modals.on("click", (event) => {
+  var $btn = $(event.currentTarget);
+  $btn.closest(".modal").removeClass("active");
   overlay.toggleClass("active");
 });
 
@@ -107,7 +94,7 @@ function updateImageDisplay() {
     // preview.append(list);
 
     for (const file of curFiles) {
-      const para = document.createElement("span");
+      const para = $("<span>");
       if (validFileType(file)) {
         const wrapper = $("<div>");
         wrapper.addClass(".thumbnail-wrappper");
@@ -140,45 +127,68 @@ function validFileType(file) {
 }
 
 /* create route  */
-const route_submit = document.getElementById("route_submit");
+const $route_submit = $("#route_submit");
 
-route_submit.addEventListener("click", createRoute);
+$route_submit.on("click", createRoute);
 
 function createRoute() {
-  const route_div = document.createElement("div");
-  const input_val = document.getElementById("route_name").value;
-  const txt = document.createTextNode(input_val);
+  $tour_name_input = $("#route_name");
+  name_val = $tour_name_input.val();
+  $tour_content_input = $("#route_content");
+  content_val = $tour_content_input.val();
+  //// if문으로 val들이 다 비어있으면 입력 아니면 수정으로 짜야할듯?
+  $tour_pic = $("#route_pic");
+  pic_val = $tour_pic.val();
 
-  route_div.appendChild(txt);
-  route_div.classList.add("tour-route");
-  route_div.setAttribute("draggable", "true");
+  const routeString = `<div class="tour-route" draggable="true">
+  <span class="name_txt" autocomplete="off">${name_val} </span>
+  <span class="tour-content" style="visibility : hidden" autocomplete="off">${content_val}</span>
+  <span class="tour-image" style="visibility : hidden"></span>
+  <span class="close">&times;</span>
+</div>`;
 
-  /* create span */
-  const span = document.createElement("span");
-  const span_txt = document.createTextNode("\u00D7");
-  span.classList.add("close");
-  span.appendChild(span_txt);
-
-  route_div.appendChild(span);
-
-  tour_first.appendChild(route_div);
-
-  span.addEventListener("click", () => {
-    span.parentElement.style.display = "none";
+  $route = $($.parseHTML(routeString));
+  console.log($route);
+  $route.find(".close").on("click", () => {
+    $route.remove();
+    console.log("close");
   });
 
-  route_div.addEventListener("dragstart", dragStart);
-  route_div.addEventListener("dragend", dragEnd);
+  const $tour_first = $("#tour_first");
+  $tour_first.append($route);
 
-  document.getElementById("route_name").value = "";
-  route_form.classList.remove("active");
-  overlay.classList.remove("active");
+  $route.find("div").on("dragstart", dragStart);
+  $route.find("div").on("dragend", dragEnd);
+
+  let $route_form = $("#route_form");
+
+  $route_form.removeClass("active");
+  overlay.removeClass("active");
 }
 
-const close_btns = document.querySelectorAll(".close");
-
-close_btns.forEach((btn) => {
-  btn.addEventListener("click", () => {
-    btn.parentElement.style.display = "none";
-  });
+$close_btns = $(".close");
+$close_btns.on("click", (event) => {
+  var $btn_close = $(event.currentTarget);
+  $btn_close.parent(".tour-route").remove();
 });
+
+all_dates.on("click", ".tour-route", function (event) {
+  // appear modal
+  modals.toggleClass("active");
+  overlay.toggleClass("active");
+  // input into modal this data
+  // console.log($(this).find(".name_txt").text());
+  console.log($(event.target));
+  console.log($(this));
+  modals.find("#route_name").val($(event.target).find(".name_txt").text());
+  // console.log($(event.target).find(".name_txt").text());
+  console.log(modals.find("#route_name"));
+  modals
+    .find("#route_content")
+    .val($(event.target).find(".tour-content").text());
+});
+
+// function showTourInfo(event) {
+
+//   // modals.children("#route_name").text($(this).children(".tour-route").text());
+// }
