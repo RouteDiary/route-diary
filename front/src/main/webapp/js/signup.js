@@ -116,4 +116,53 @@ $(() => {
     });
     return false;
   });
+
+  //카카오 회원가입
+  $kakaoSignupButton = $("a.kakao_signup_botton");
+  Kakao.init("0779ea6d9f42a70e98491db350719d86"); //발급받은 javascript키를 사용
+  console.log("sdk초기화여부판단 - " + Kakao.isInitialized()); // sdk초기화여부판단
+  isGottenKakaoIdFromAPI = false;
+  $kakaoSignupButton.click(() => {
+    Kakao.Auth.login({
+      success: (response) => {
+        Kakao.API.request({
+          url: "/v2/user/me",
+          success: (response) => {
+            kakaoId = response.id;
+            isGottenKakaoIdFromAPI = true;
+            console.log(kakaoId);
+          },
+          fail: (response) => {
+            console.log(error);
+          },
+        });
+      },
+      fail: (response) => {
+        console.log(error);
+      },
+    });
+
+    if (isGottenKakaoIdFromAPI == true) {
+      console.log(kakaoId + " in Ajax");
+      let url = "/back/kakaosignup";
+      let data = "client_id=" + kakaoId;
+      $.ajax({
+        url: url,
+        method: "post",
+        data: data,
+        success: (jsonObj) => {
+          if (jsonObj.status == 1) {
+            location.href = "/front/html/index.html";
+          } else {
+            alert(jsonObj.message);
+          }
+        },
+        error: (jqXHR, textStatus, errorThrown) => {
+          errorThrown = "회원가입에 실패하였습니다.";
+          alert(errorThrown + " 사유 : " + jqXHR.status);
+        },
+      });
+      return false;
+    }
+  });
 });
