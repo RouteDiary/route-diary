@@ -5,37 +5,35 @@
     <link rel="stylesheet" href="../css/login.css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="../js/diaryboard.js"></script>
-    <title>다이어리 게시판</title>
-    <div>위에는그대로받아오고</div>
+    <link rel="stylesheet" href="../css/diaryboard.css" />
+
+
+    <title>루트 다이어리</title>
   </head>
   <body>
-    <div>
-      <h1>다이어리 게시판</h1>
+    <div class="index">위에는그대로받아오고</div>
+    <div class="title">
+      <h2>다이어리 게시판</h2>
     </div>
-    <div>
+    <div class="btr">
         <button class='btn-primary' value='1'>최신순으로 볼랭</button>
         <button class='btn-primary' value='2'>조회수순으로 볼랭</button>
         <button class='btn-primary' value='3'>좋아요순으로 볼랭</button>
     </div>
-    <div class="a">
-      <table class="b">
-        
-          <tr>
-            <th class="text-center">
-              이미지넣는곳:<span class="prod_no"></span>
-            </th>
-            <th class="text-center">조회수</th>
-            <th class="text-center">닉네임</th>
-            <th class="text-center">제목</th>
-            <th class="text-center">여행기간</th>
-            <th class="text-center">좋아요수</th>
-          </tr>
-        
-        <tbody id="diary_list"></tbody>
-        
-      </table>
-
+    <div class="cl">
+    <div class="diary_board">
+        <div class="one_diary">
+          <div class="grid-container">
+          <div class="image"></div>
+          <div class="nickname"></div>
+          <div class="diary_title"></div>
+          <div class="travel_date"></div>
+          <div class="view_cnt"></div>
+          <div class="like_cnt"></div>
+        </div>
+      </div>
     </div>
+</div>
     <!-- 페이징 시작 -->
     <ul class="paging">
 

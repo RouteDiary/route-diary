@@ -13,7 +13,7 @@ $(() => {
       data: data,
       success: (jsonObj) => {
         if (jsonObj.status == 1) {
-          location.href = "/front/html/index.html";
+          location.href = "/front/html/index1.html";
         } else {
           alert(jsonObj.message);
         }

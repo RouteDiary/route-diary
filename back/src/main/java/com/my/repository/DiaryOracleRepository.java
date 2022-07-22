@@ -205,20 +205,15 @@ public class DiaryOracleRepository implements DiaryRepository {
     ResultSet rs = null;
 
     try {
-      System.out.println(columnName + ":" + diaryStartRowNo + ":" + diaryEndRowNo + keyword);
       con = MyConnection.getConnection(envPath);
       if (keyword.equals("") || keyword == null) {
         String selectSQL = BringQueryOfselectDiariesOrderedByColumnNameInDiariesTable(columnName);
-        System.out.println("in select repository -1");
         pstmt = con.prepareStatement(selectSQL);
-        System.out.println("in select repository -2");
         // pstmt.setString(1, columnName);
 
         pstmt.setInt(1, diaryStartRowNo);
-        System.out.println("in select repository 2");
+        // System.out.println("in select repository 2");
         pstmt.setInt(2, diaryEndRowNo);
-        System.out.println("in select repository -4");
-        System.out.println("in select repository keyword없음 ");
       } else {
         String selectSQL = BringQueryOfselectDiariesByKeywordOrderedByColumnNameInDiariesTable();
         pstmt = con.prepareStatement(selectSQL);

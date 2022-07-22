@@ -1,27 +1,14 @@
 $(function () {
   let url = "http://localhost:8888/back/diaryboard";
   let currenturl = window.location.search;
-  let viewStatus = 1;
-  // $(document).ready(function () {
   $(".btn-primary").on("click", function () {
     //버튼 클릭시 호출되는 함수
     $(this).addClass("active"); //클릭된 버튼에 속성(class 추가)
-    console.log($(this).val()); //클릭된 버튼의 value 값  alert 띄우기
+    // console.log($(this).val()); //클릭된 버튼의 value 값  alert 띄우기
     viewStatus = $(this).val(); //클릭된 버튼의 value 값  alert 띄우기
-    // console.log(viewStatus);
-    test(viewStatus);
+    viewDiaryBoard(viewStatus);
   });
-  // });
-
-  // $(".btn-primary").click(function () {
-  //   var value = $(arg0).val();
-  //   console.log(value);
-  // });
-
-  // let viewStatus = 1;
-
-  // console.log(viewStatus);
-
+  $(".grid-container").on("click", function () {});
   function dateTimeStrartFormat(dateTimeValue) {
     //시작날짜형식 바꿔주기
     var dt = new Date(dateTimeValue);
@@ -40,18 +27,19 @@ $(function () {
     var dateTimeEndFormat = dt.getDate() + "일";
     return dateTimeEndFormat;
   }
-  function test(viewStatus) {
+  function viewDiaryBoard(viewStatus) {
+    // 변수선언
     let currentPage = currenturl.split("=")[1];
     let keyword = "";
     let totalRows;
-    let countPerPage = 10;
-    let pageCount = 2;
     let startPageNo;
     let endPageNo;
     let totalPage;
     let viewPage = 3;
-    let startPageListMath = Math.floor(currentPage / (viewPage + 0.1)) + 1;
-    alert(viewStatus);
+    let startPageListMath;
+    let $oneDiary = $("div.one_diary");
+    let $diaryBoard = $("div.diary_board");
+    // 변수선언끝
     $.ajax({
       url: url,
       method: "get",
@@ -64,33 +52,27 @@ $(function () {
         console.log(jsonObj);
         // 페이징 시작
         totalRows = jsonObj.totalRows;
-        console.log("totalRows = " + totalRows);
+        // console.log("totalRows = " + totalRows);
         totalPage = Math.floor(totalRows / 10);
         if (totalRows % 10 > 0) {
           totalPage++;
         }
-        console.log("totalPage = " + totalPage);
+        // console.log("totalPage = " + totalPage);
         currentPage = jsonObj.currentPage;
-        console.log("currentPage = " + currentPage);
+        // console.log("currentPage = " + currentPage);
         let startPageListMath = Math.floor(currentPage / (viewPage + 0.1)) + 1;
-        console.log("startPageListMath = " + startPageListMath);
+        // console.log("startPageListMath = " + startPageListMath);
         startPageNo = (startPageListMath - 1) * viewPage + 1;
-        console.log("startPageNo = " + startPageNo);
+        // console.log("startPageNo = " + startPageNo);
         let endPageNo = startPageNo + viewPage - 1;
-        console.log("endPage = " + endPageNo);
+        // console.log("endPage = " + endPageNo);
         let totalPageListMath = Math.floor(totalPage / (viewPage + 0.1)) + 1;
-        console.log("totalPageMath = " + totalPageListMath);
+        // console.log("totalPageMath = " + totalPageListMath);
 
-        // 아래의 로직을 보고 다시 코드를 구상해보세요
-        // Totalpage수 = 8
-        // 경우1: 1<=currentpage<=3 : 맨앞으로(1) /1~3까지 보여주기 / 다음3개(4~6)로 / 맨뒤로(8)
-        // 경우2: 4<=currentpage<=6 : 맨앞으로 (1) / 이전3개(1~3)로 / 4~6까지 보여주기 / 다음3개(7~9)로 / 맨뒤로(8)
-        // 경우3: 7<=currentpage<=8 : 맨앞으로 (1) / 이전3개(4~6)로 / 7~8까지 보여주기 / 맨뒤로(8)
         let $paging = $(".paging");
         $paging.empty();
 
         if (currentPage != 1) {
-          // console.log(currentPage);
           let a = "";
           a +=
             "<a href=" + "diaryboard.html" + " >" + "<<(맨처음으로)" + "</a> ";
@@ -146,34 +128,80 @@ $(function () {
         }
 
         // 페이징 끝
-        $("#diary_list").empty();
+        //다이어리 불러오기
+        $diaryBoard.empty();
         $.each(jsonObj.diaries, (key, value) => {
-          result = "<tr>";
-          result += "<td>" + "이미지" + "</td>";
-          result += "<td>" + value.diaryViewCnt + "</td>";
-          result += "<td>" + value.client.clientNickname + "</td>";
-          result += "<td>" + value.diaryTitle + "</td>";
+          console.log(value.diaryNo);
+          result = '<div class="one_diary">';
+          // onclick = "location.href='목적지 링크주소(URL)';";
+          result += "<a href=viewdiary.html?diary_no=" + value.diaryNo + ">";
+          result += '<div class="grid-container">';
           result +=
-            "<td>" +
+            '<div class="image">' +
+            "<img src=" +
+            "../images/" +
+            value.diaryNo +
+            "/1_1.png" +
+            " " +
+            "width=300px" +
+            " " +
+            "height=300px>" +
+            "</div>";
+          result +=
+            '<div class="view_cnt">' +
+            "조회수 :" +
+            value.diaryViewCnt +
+            "</div>";
+          result +=
+            '<div class="nickname">' +
+            "닉네임 :" +
+            value.client.clientNickname +
+            "</div>";
+          result +=
+            '<div class="diary_title">' +
+            "다이어리 제목 :" +
+            value.diaryTitle +
+            "</div>";
+          result +=
+            '<div class= "travel_date">' +
+            "여행기간 :" +
             dateTimeStrartFormat(value.diaryStartDate) +
             "~" +
             dateTimeEndFormat(value.diaryEndDate) +
-            "</td>";
-          result += "<td>" + value.diaryLikeCnt + "개" + "</td>";
-          result += "</tr>";
-          // console.log("[main] : [value] : " + value.diaryViewCnt);
-          // console.log("[main] : [value] : " + value.client.clientNickname);
-          // console.log("[main] : [value] : " + value.diaryTitle);
-          // console.log("[main] : [value] : " + value.diaryStartDate);
-          // console.log("[main] : [value] : " + value.diaryEndDate);
-          // console.log("[main] : [value] : " + value.diaryLikeCnt);
-          $("#diary_list").append(result);
+            "</div>";
+          result +=
+            '<div class="like_cnt">' +
+            "좋아요 :" +
+            value.diaryLikeCnt +
+            "개" +
+            "</div>";
+          // result += "</a>";
+          result += "</div>";
+          result += "</a>";
+          result += "</div>";
+          $diaryBoard.append(result);
         });
       },
       error: (jqXHR) => {
         alert("에러 : " + jqXHR.status);
       },
     });
+
+    //다이어리 불러오기끝
   }
-  test(1);
+  viewDiaryBoard(1);
+  // $oneDiary.
+  // let $a = $("div.image");
+  // let b = $a.find("img").attr("src");
+  // let arr = b.split("/");
+  // console.log("arr", arr);
+  // console.log(b);
+  // console.log(jsonObj);
+  // $oneDiary.on("click", "div.image", function () {
+  //   let src = $(this).find("img").attr("src");
+  //   console.log("src", src);
+  //   let arr = src.split("/");
+  //   let prod_no = arr[arr.length - 1].split(".")[0];
+  //   console.log(prod_no);
+  // });
 });

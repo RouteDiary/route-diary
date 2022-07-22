@@ -61,5 +61,6 @@ public class LoginServlet extends HttpServlet {
     }
     String result = mapper.writeValueAsString(map);
     out.print(result);
+    System.out.println("session:" + session);
   }
 }

@@ -10,6 +10,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.my.dto.Diary;
 import com.my.exception.SelectException;
@@ -27,6 +28,9 @@ public class DiaryboardServlet extends HttpServlet {
     ObjectMapper mapper = new ObjectMapper();
     Map<String, Object> map = new HashMap<String, Object>();
 
+    HttpSession session = request.getSession();
+    System.out.println(session);
+
     // view_status : 1 - 최신순 / 2 - 조회순 / 3 - 좋아요순
     int viewStatus = Integer.parseInt(request.getParameter("view_status"));
     String keyword = request.getParameter("keyword");
@@ -40,6 +44,7 @@ public class DiaryboardServlet extends HttpServlet {
 
 
     String envPath = getServletContext().getRealPath("project.properties");
+    Diary diary = new Diary();
     DiaryRepository diaryRepository = new DiaryOracleRepository(envPath);
     int totalRows = 0;
     try {
@@ -70,14 +75,10 @@ public class DiaryboardServlet extends HttpServlet {
         map.put("status", 1);
         map.put("message", "최신순으로 다이어리를 가져옴 (" + diaries.size() + "개)");
       } else if (viewStatus == 2) { // 조회수순
-        System.out.println("in viewstatus 2 keyword=" + keyword + ", totalRows=" + totalRows
-            + ", endRow:" + endRow);
         if (totalRows < endRow) {
-          System.out.println("in totalRows<endRows");
           diaries = diaryRepository.selectDiariesByKeywordOrderedByColumnNameInDiariesTable(keyword,
               "diary_view_cnt", startRow, totalRows);
         } else {
-          System.out.println("in totalRows>=ndRows");
           diaries = diaryRepository.selectDiariesByKeywordOrderedByColumnNameInDiariesTable(keyword,
               "diary_view_cnt", startRow, endRow);
         }

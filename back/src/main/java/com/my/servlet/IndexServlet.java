@@ -38,16 +38,16 @@ public class IndexServlet extends HttpServlet {
       totalRows = diaryRepository.selectDiariesRowSize(diaryDisClosureFlag);
       if (totalRows >= 5) {
         diariesOrderedByLikeCnt = diaryRepository
-            .selectDiariesByKeywordOrderedByColumnNameInDiariesTable(null, "diary_like_cnt", 1, 5);
+            .selectDiariesByKeywordOrderedByColumnNameInDiariesTable("", "diary_like_cnt", 1, 5);
         diariesOrderedByWritingTime =
-            diaryRepository.selectDiariesByKeywordOrderedByColumnNameInDiariesTable(null,
+            diaryRepository.selectDiariesByKeywordOrderedByColumnNameInDiariesTable("",
                 "diary_writing_time", 1, 5);
       } else {
         diariesOrderedByLikeCnt =
-            diaryRepository.selectDiariesByKeywordOrderedByColumnNameInDiariesTable(null,
+            diaryRepository.selectDiariesByKeywordOrderedByColumnNameInDiariesTable("",
                 "diary_like_cnt", 1, totalRows);
         diariesOrderedByWritingTime =
-            diaryRepository.selectDiariesByKeywordOrderedByColumnNameInDiariesTable(null,
+            diaryRepository.selectDiariesByKeywordOrderedByColumnNameInDiariesTable("",
                 "diary_writing_time", 1, totalRows);
       }
       map.put("status", 1);
