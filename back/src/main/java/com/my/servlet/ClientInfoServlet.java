@@ -9,39 +9,34 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.my.dto.Diary;
+import com.my.dto.Client;
 import com.my.exception.SelectException;
-import com.my.repository.DiaryOracleRepository;
-import com.my.repository.DiaryRepository;
+import com.my.repository.ClientOracleRepository;
+import com.my.repository.ClientRepository;
 
-@WebServlet("/viewdiary")
-public class ViewDiaryServlet extends HttpServlet {
+@WebServlet("/clientinfo")
+public class ClientInfoServlet extends HttpServlet {
   private static final long serialVersionUID = 1L;
 
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
     String envPath = getServletContext().getRealPath("project.properties");
-    response.setContentType("application/json; charset=UTF-8");
+    response.setContentType("application/json;charset=UTF-8");
     PrintWriter out = response.getWriter();
-
-    // HttpSession session = request.getSession();
-    // String loginInfo = (String) session.getAttribute("login_info");
-    String loginInfo = "a11";
-    System.out.println("id :" + loginInfo);
-
-    DiaryRepository diaryRepository = new DiaryOracleRepository(envPath);
-    Map<String, Object> map = new HashMap<String, Object>();
+    ClientRepository clientRepository = new ClientOracleRepository(envPath);
     ObjectMapper mapper = new ObjectMapper();
+    Map<String, Object> map = new HashMap<String, Object>();
+    HttpSession session = request.getSession();
 
-    Diary diary = new Diary();
-    int diaryNo = Integer.parseInt(request.getParameter("diary_no"));
+    String clientId = (String) session.getAttribute("login_info");
 
     try {
-      diary = diaryRepository.selectDiaryByDiaryNo(diaryNo);
+      Client client = clientRepository.selectClientById("a11");
       map.put("status", 1);
-      map.put("message", "diary를 가져오는데 성공했습니다.");
-      map.put("diary", diary);
+      map.put("message", "회원정보 가져오기 성공");
+      map.put("client", client);
     } catch (SelectException e) {
       map.put("status", 0);
       map.put("message", e.getMessage());
@@ -54,4 +49,5 @@ public class ViewDiaryServlet extends HttpServlet {
     String result = mapper.writeValueAsString(map);
     out.print(result);
   }
+
 }

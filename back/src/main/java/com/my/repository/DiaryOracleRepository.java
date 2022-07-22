@@ -218,7 +218,7 @@ public class DiaryOracleRepository implements DiaryRepository {
         System.out.println("in select repository 2");
         pstmt.setInt(2, diaryEndRowNo);
         System.out.println("in select repository -4");
-        System.out.println("in sekect repository keyword없음 ");
+        System.out.println("in select repository keyword없음 ");
       } else {
         String selectSQL = BringQueryOfselectDiariesByKeywordOrderedByColumnNameInDiariesTable();
         pstmt = con.prepareStatement(selectSQL);
@@ -286,7 +286,7 @@ public class DiaryOracleRepository implements DiaryRepository {
     List<Comment> comments = new ArrayList<Comment>();
     String selectSQL = "SELECT *\r\n" + "           FROM comments co\r\n"
         + "LEFT OUTER JOIN clients cl ON (co.client_id = cl.client_id)\r\n"
-        + "          WHERE diary_no = ? ";
+        + "          WHERE diary_no = ? ORDER BY comment_no DESC";
     pstmt = con.prepareStatement(selectSQL);
     pstmt.setInt(1, diaryNo);
     rs = pstmt.executeQuery();

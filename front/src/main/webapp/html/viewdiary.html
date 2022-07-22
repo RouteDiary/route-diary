@@ -34,6 +34,13 @@
     
     <div class="diary_start_date">여행시작날짜:<span class="diary_start_date"></span>
     </div>
+
+    <div class="like_view">
+      <button type="button" name="button" class="like">
+      <img src="../resource/like.png" width="40px" height="40px"
+           alt="좋아요 버튼">좋아요</button>
+    </div>
+
     <!--route start-->
     <div class="routes">
       <div class="route">
@@ -44,8 +51,8 @@
 
         <fieldset>
           <legend>다이어리 기록</legend>
-          <form>
-            <textarea style="resize: none" name="text1" id="text" cols="85" rows="15">
+          <form method="post" action="http://localhost:8888/back/viewdiary">
+            <textarea style="resize: none" name="text" id="text" cols="85" rows="15">
           </textarea>
           </form>
         </fieldset>
@@ -59,13 +66,19 @@
       <div class="comments">
         <div class="comment">
           <span class="clientNickname"></span><!--닉네임-->
-          <span class="commentWritingTime"></span><!--작성시간-->
+          <span class="commentWritingTime"></span><!--댓글작성시간-->
           <input type="text" name="commentContent" placeholder="댓글을 입력해 주세요!" />
           <button type="button" name="button" class="insert" >등록</button>
-          <hr>
-          <button type="button" name="button" class="update" style="display:none;">수정</button>
-          <button type="button" name="button" class="delete" style="display:none;">삭제</button>
         </div>
+        <hr/>
+
+        <div class="comment_view">
+          <span class="clientNickname"></span><!--닉네임-->
+          <span class="commentWritingTime"></span><!--댓글작성시간-->
+          <span class="commentContent"></span><!--댓글-->
+          <button type="button" name="button" class="update" style="display:inline;">수정</button>
+          <button type="button" name="button" class="delete" style="display:inline;">삭제</button>
+        </div>    
       </div>
     </fieldset>
   <a href="diaryboard.html">다이어리 게시판으로 돌아가기</a>

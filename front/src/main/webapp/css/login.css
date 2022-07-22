@@ -3,10 +3,12 @@
   padding: 2%;
   text-align: center;
 }
+body {
+  text-decoration-line: none;
+  text-align: center;
+}
 .login {
   margin: 2%;
   padding: 2%;
 }
-a {
-  text-decoration-line: none;
-}
+

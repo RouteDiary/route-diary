@@ -1,6 +1,6 @@
 $(() => {
   let $clientId = $("input[name=client_id]");
-  let $cliendPwd = $("input[name=client_pwd]");
+  let $clientPwd = $("input[name=client_pwd]");
   let $clientNickname = $("input[name=client_nickname]");
   let $clientCellPhoneNo = $("input[name=client_cellphone_no]");
   let $buttonIdDuplicationCheck = $("button[name=idduplicationcheck]");
@@ -15,6 +15,7 @@ $(() => {
   //id중복체크
   $buttonIdDuplicationCheck.click(() => {
     $.ajax({
+      contentType: "application/x-www-form-urlencoded; charset=UTF-8",
       url: "/back/idduplicationcheck",
       type: "get",
       data: { client_id: $clientId.val() },
@@ -33,7 +34,7 @@ $(() => {
           $clientId.focus();
         }
       },
-      error: function (jqXHR) {
+      error: (jqXHR) => {
         alert(jqXHR.status + ":" + jqXHR.statusText);
       },
     });
@@ -49,6 +50,7 @@ $(() => {
   //닉네임중복체크
   $buttonNicknameDuplicationCheck.click(() => {
     $.ajax({
+      contentType: "application/x-www-form-urlencoded; charset=UTF-8",
       url: "/back/nicknameduplicationcheck",
       type: "get",
       data: { client_nickname: $clientNickname.val() },
@@ -67,7 +69,7 @@ $(() => {
           $clientNickname.focus();
         }
       },
-      error: function (jqXHR) {
+      error: (jqXHR) => {
         alert(jqXHR.status + ":" + jqXHR.statusText);
       },
     });
@@ -83,25 +85,26 @@ $(() => {
   // 가입
   let $buttonFormSubmit = $("form.signup");
   $buttonFormSubmit.submit(() => {
-    //비밀번호 중복확인
-    let $cliendPwdCheck = $("input.client_pwd_check");
-    if ($cliendPwd.val() != $cliendPwdCheck.val()) {
+    //비밀번호 일치확인
+    let $clientPwdCheck = $("input.client_pwd_check");
+    if ($clientPwd.val() != $clientPwdCheck.val()) {
       alert("비밀번호가 일치하지 않습니다.");
-      console.log("$cliendPwd의 값 : " + $cliendPwd.val());
-      console.log("$cliendPwdcheck의 값 : " + $cliendPwdCheck.val());
-      $cliendPwd.focus();
+      console.log("$clientPwd의 값 : " + $clientPwd.val());
+      console.log("$clientPwdcheck의 값 : " + $clientPwdCheck.val());
+      $clientPwd.focus();
       return false;
     }
     $.ajax({
+      contentType: "application/x-www-form-urlencoded; charset=UTF-8",
       url: "/back/signup",
       type: "post",
       data: {
         client_id: $clientId.val(),
-        client_pwd: $cliendPwd.val(),
+        client_pwd: $clientPwd.val(),
         client_nickname: $clientNickname.val(),
         client_cellphone_no: $clientCellPhoneNo.val(),
       },
-      success: function (jsonObj) {
+      success: (jsonObj) => {
         if (jsonObj.status == 1) {
           alert(jsonObj.message);
           location.href = "/front/html/index.html";
@@ -109,7 +112,7 @@ $(() => {
           alert(jsonObj.message);
         }
       },
-      error: function (jqXHR) {
+      error: (jqXHR) => {
         alert("errortest");
         alert(jqXHR.status + ": " + jqXHR.statusText);
       },
@@ -119,7 +122,7 @@ $(() => {
 
   //카카오 회원가입
   $kakaoSignupButton = $("a.kakao_signup_botton");
-  Kakao.init("0779ea6d9f42a70e98491db350719d86"); //발급받은 javascript키를 사용
+  Kakao.init("d3920eee159898958abaa00fc8f0ca01"); //발급받은 javascript키를 사용
   console.log("sdk초기화여부판단 - " + Kakao.isInitialized()); // sdk초기화여부판단
   isGottenKakaoIdFromAPI = false;
   $kakaoSignupButton.click(() => {
@@ -147,11 +150,13 @@ $(() => {
       let url = "/back/kakaosignup";
       let data = "client_id=" + kakaoId;
       $.ajax({
+        contentType: "application/x-www-form-urlencoded; charset=UTF-8",
         url: url,
         method: "post",
         data: data,
         success: (jsonObj) => {
           if (jsonObj.status == 1) {
+            alert(jsonObj.message);
             location.href = "/front/html/index.html";
           } else {
             alert(jsonObj.message);

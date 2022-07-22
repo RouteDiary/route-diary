@@ -28,7 +28,7 @@ $(() => {
 
   //카카오 로그인
   $kakaoLoginButton = $("a.kakao_login_botton");
-  Kakao.init("0779ea6d9f42a70e98491db350719d86"); //발급받은 javascript키를 사용
+  Kakao.init("d3920eee159898958abaa00fc8f0ca01"); //발급받은 javascript키를 사용
   console.log("sdk초기화여부판단 - " + Kakao.isInitialized()); // sdk초기화여부판단
   isGottenKakaoIdFromAPI = false;
   $kakaoLoginButton.click(() => {

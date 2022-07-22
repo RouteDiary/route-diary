@@ -1,63 +1,96 @@
 $(() => {
-  let $inputId = $();
+  let $inputId = $("input[name=client_id]");
   let $inputPwd = $("input[name=client_pwd]");
-  let $inputCellphone = $("input[name=client_cellphone_no]");
+  let $inputCellphoneNo = $("input[name=client_cellphone_no]");
   let $inputNickname = $("input[name=client_nickname]");
-  let $btUpdate = $("div>button");
+  let $buttonUpdateSubmit = $("input.update_submit");
+  $buttonUpdateSubmit.css("display", "none");
 
-  //--form 전송 START--
-  let $form = $("div.clientupdate>form");
-  $form.submit(() => {
-    let url = "http://localhost:8888/back/clientupdate";
-    let inputIdValue, inputPwdValue;
-    inputIdValue = $inputId.val();
-    inputPwdValue = $inputPwd.val(); //사용자가 입력해준 비밀번호값
-
-    let data = "id=" + inputIdValue + "&pwd=" + inputPwdValue;
+  //회원정보 불러오기
+  $(() => {
     $.ajax({
-      url: url,
+      contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+      url: "/back/clientinfo",
       method: "post",
-      data: data,
       success: (jsonObj) => {
         if (jsonObj.status == 1) {
-          alert("회원정보수정완료!");
-          location.href = "index.html";
+          $inputId.val(jsonObj.client.clientId);
+          $inputPwd.val(jsonObj.client.clientPwd);
+          $inputCellphoneNo.val(jsonObj.client.clientCellphoneNo);
+          $inputNickname.val(jsonObj.client.clientNickname);
         } else {
-          alert("회원정보수정 실패");
-          location.href = ""; //현재사용중인 주소로 재요청
+          alert(jsonObj.message);
         }
       },
       error: (jqXHR, textStatus, errorThrown) => {
-        alert(jqXHR.status + ":" + jqXHR.statusText);
+        errorThrown = "회원정보수정에 실패하였습니다.";
+        alert(errorThrown + " 사유 : " + jqXHR.status);
       },
     });
-
-    return false; //event.preventDefault() + event.stopPropagation()
+    return false;
   });
-  //--form 전송 END--
-  //--수정하기 버튼 클릭 START--
-  $("div.update>button.ok").click(() => {
+  //닉네임중복체크
+  let $buttonNicknameDuplicationCheck = $(
+    "button[name=nicknameduplicationcheck]"
+  );
+  $buttonNicknameDuplicationCheck.click(() => {
     $.ajax({
-      url: "/back/clientupdate",
+      contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+      url: "/back/nicknameduplicationcheck",
+      type: "get",
+      data: { client_nickname: $inputNickname.val() },
       success: (jsonObj) => {
         if (jsonObj.status == 1) {
-          //수정성공경우
-          alert(jsonObj.msg);
-
-          $('nav>a[href="productlist.html"]').trigger("click"); //상품목록
-        } else if (jsonObj.status == 0) {
-          //수정실패
-          alert(jsonObj.msg);
-          $('nav>a[href="login.html"]').trigger("click"); //로그인
-        } else if (jsonObj.status == -1) {
-          //주문실패
-          alert(jsonObj.msg);
+          alert(jsonObj.message);
+          $buttonUpdateSubmit.css("display", "inline");
+        } else {
+          alert(jsonObj.message);
+          $clientNickname.focus();
         }
       },
       error: (jqXHR) => {
-        alert("오류:" + jqXHR.status);
+        alert(jqXHR.status + ":" + jqXHR.statusText);
       },
     });
+    return false;
   });
-  //--주문하기 버튼 클릭 END--
+  $inputNickname.focus(() => {
+    $buttonUpdateSubmit.css("display", "none");
+  });
+
+  //정보수정
+  $formObj = $("form.update");
+  $formObj.submit(() => {
+    //비밀번호 일치확인
+    let $inputPwdConfirm = $("input.client_pwd_confirm");
+    if ($inputPwd.val() != $inputPwdConfirm.val()) {
+      alert("비밀번호가 일치하지 않습니다.");
+      console.log("$inputPwd의 값 : " + $inputPwd.val());
+      console.log("$inputPwdConfirm의 값 : " + $inputPwdConfirm.val());
+      $cliendPwd.focus();
+      return false;
+    }
+    $.ajax({
+      url: "/back/clientupdate",
+      method: "post",
+      data: {
+        client_pwd: $inputPwd.val(),
+        client_nickname: $inputNickname.val(),
+        client_cellphone_no: $inputCellphoneNo.val(),
+      },
+      success: (jsonObj) => {
+        if (jsonObj.status == 1) {
+          alert(jsonObj.message);
+          location.href = "/front/html/index.html";
+        } else {
+          alert(jsonObj.message);
+        }
+      },
+      error: (jqXHR, textStatus, errorThrown) => {
+        errorThrown = "회원정보수정에 실패하였습니다.";
+        alert(errorThrown + " 사유 : " + jqXHR.status);
+      },
+    });
+    return false;
+  });
 });

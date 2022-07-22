@@ -9,7 +9,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.my.dto.Client;
 import com.my.dto.Comment;
@@ -29,10 +28,12 @@ public class CommentInsertServlet extends HttpServlet {
     CommentRepository commentRepository = new CommentOracleRepository(envPath);
     ObjectMapper mapper = new ObjectMapper();
     Map<String, Object> map = new HashMap<String, Object>();
-    HttpSession session = request.getSession();
 
-    String clientId = (String) session.getAttribute("login_info");
-    // String clientId = "awerqaa"; // session없을 때 test용
+    // HttpSession session = request.getSession();
+    // String clientId = (String) session.getAttribute("login_info");
+    String clientId = "a11"; // session없을 때 test용
+    System.out.println("comment id :" + clientId);
+
     int diaryNo = Integer.parseInt(request.getParameter("diary_no"));
     String commentContent = request.getParameter("comment_content");
     Client client = new Client();

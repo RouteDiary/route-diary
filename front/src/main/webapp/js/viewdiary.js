@@ -28,12 +28,17 @@ $(() => {
       let routes = jsonObj.diary.routes;
 
       //---다이어리 form 가져오기---
+      // let $form = $("div.route>form");
+      // $form.submit(function () {
+      //   let url = "http://localhost:8888/back/viewdiary";
+
       // for 문 돌리기
       let routesArr = [];
       for (let i = 0; i < routes.length; i++) {
         routesArr.push(routes[i].routeContent);
       }
       console.log(routesArr);
+      // });
 
       //---다이어리 정보 WEB에 붙이기---
       $("div.diary span.diary_title").html(diaryTitle);
@@ -45,19 +50,28 @@ $(() => {
       $("div.diary span.diary_like_cnt").html(diaryLikeCnt);
       let $routesObj = $("div.routes");
 
+      //--좋아요 수 증가.감소 로직--
+
       //$("div.route").html(); // route 갯수만큼 html 태그 구조 카피해야함
       let $routeObj = $("div.route");
       $(routes).each((i, element) => {
         $routeCopyObj = $routeObj.clone(); //루트1개
 
         let route = "<fieldset>";
-        // route += '<p class="img">다이어리 사진' + img + "</p>";
-
+        //route += '<p class="img">다이어리 사진' + img + "</p>";
         route +=
           '<form class="route_content" >다이어리 기록' +
           element.routeContent +
           "</form>";
         route += "</fieldset>";
+
+        let comment = "<fieldset>";
+        comment +=
+          '<form class="comment_content" >댓글 ' +
+          element.commentContent +
+          "</form>";
+        comment += "</fieldset>";
+
         //$copyObj.find("div.viewdiary").html(route);
         $routeCopyObj
           .find("textarea")
@@ -69,10 +83,11 @@ $(() => {
       });
       $routeObj.hide();
       console.log(jsonObj);
+
       //---작성된 댓글 보여주기---
       let loginInfo = jsonObj.loginInfo; //로그인된 아이디
       let jsonarr = jsonObj.diary.comments;
-      let $commentObj = $("div.comment");
+      let $commentObj = $("div.comment_view");
       $(jsonarr).each((i, element) => {
         $copyObj = $commentObj.clone();
         var commentWritingTime = element.commentWritingTime;
@@ -86,13 +101,12 @@ $(() => {
           .find("span.commentWritingTime")
           .html("작성시간: " + commentWritingDate);
         $copyObj
-          .find("input[name=commentContent]")
-          .val("내용: " + element.commentContent)
+          .find("span.commentContent")
+          .html("내용: " + element.commentContent)
           .attr("readonly", "readonly")
           .css("border", "none");
-        $copyObj
-          .find("input[name=commentContent]")
-          .attr("onfocus", "this.blur();");
+        $copyObj.find("span.commentContent").attr("onfocus", "this.blur()");
+
         //댓글작성버튼 사라지기
         $copyObj.find("button.insert").hide();
 
@@ -111,7 +125,7 @@ $(() => {
   });
 
   //---댓글 등록---
-  $("div.comments>div.comment>button.insert").click(() => {
+  $("div.comments>div.comment>button.insert").click((e) => {
     alert("등록되었습니다");
     $.ajax({
       url: "/back/commentinsert",
@@ -119,8 +133,9 @@ $(() => {
       data:
         queryString +
         "&comment_content=" +
-        $(this).parent().find("input[name=commentContent]").val(),
+        $(e.target).parent().find("input[name=commentContent]").val(),
       success: (jsonObj) => {
+        console.log(jsonObj);
         if (jsonObj.status == 1) {
           location.href = "";
         } else {
@@ -128,10 +143,11 @@ $(() => {
         }
       },
     });
+    return false;
   });
 
   //---댓글 수정---
-  $("div.comments>div.comment>button.update").click(() => {
+  $("div.comments").on("click", "div.comment_view>button.update", (e) => {
     alert("update clicked");
     $.ajax({
       url: "/back/commentupdate",
@@ -139,7 +155,7 @@ $(() => {
       data:
         queryString +
         "&comment_content=" +
-        $(this).parent().find("input[name=commentContent]").val(),
+        $(e.target).parent().find("input[name=commentContent]").val(),
       success: (jsonObj) => {
         if (jsonObj.status == 1) {
           location.href = "";
@@ -148,10 +164,11 @@ $(() => {
         }
       },
     });
+    return false;
   });
 
   //---댓글 삭제---
-  $("div.comments>div.comment>button.delete").click(() => {
+  $("div.comments").on("click", "div.comment_view>button.delete", (e) => {
     alert("delete clicked");
     $.ajax({
       url: "/back/commentdelete",
@@ -159,7 +176,7 @@ $(() => {
       data:
         queryString +
         "&comment_content=" +
-        $(this).parent().find("input[name=commentContent]").val(),
+        $(e.target).parent().find("input[name=commentContent]").val(),
       success: (jsonObj) => {
         if (jsonObj.status == 1) {
           location.href = "";
@@ -168,5 +185,6 @@ $(() => {
         }
       },
     });
+    return false;
   });
 });

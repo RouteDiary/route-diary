@@ -34,13 +34,12 @@ public class ClientUpdateServlet extends HttpServlet {
     String clientPwd = request.getParameter("client_pwd");
     String clientCellphoneNo = request.getParameter("client_cellphone_no");
     String clientNickname = request.getParameter("client_nickname");
-    int clientStatusFlag = Integer.parseInt(request.getParameter("client_status_flag"));
     Client client = new Client();
-    client.setClientId(clientId);
+    client.setClientId("a11");
     client.setClientPwd(clientPwd);
     client.setClientCellphoneNo(clientCellphoneNo);
     client.setClientNickname(clientNickname);
-    client.setClientStatusFlag(clientStatusFlag);
+    client.setClientStatusFlag(1);
 
     try {
       clientRepository.update(client);

@@ -28,7 +28,6 @@ public class CommentUpdateServlet extends HttpServlet {
 
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
-    HttpSession session = request.getSession();
     PrintWriter out = response.getWriter();
     response.setContentType("application/json;charset=UTF-8");
     ObjectMapper mapper = new ObjectMapper();
@@ -36,10 +35,17 @@ public class CommentUpdateServlet extends HttpServlet {
     String envPath = getServletContext().getRealPath("project.properties");
     CommentRepository commentRepository = new CommentOracleRepository(envPath);
     ClientRepository clientRepository = new ClientOracleRepository(envPath);
-    String clientId = (String) session.getAttribute("client_id");
+    HttpSession session = request.getSession();
+    // String clientId = (String) session.getAttribute("client_id");
+    String clientId = "a11";
+    System.out.println("client_id:" + clientId);
     int diaryNo = Integer.parseInt(request.getParameter("diary_no"));
+    System.out.println("diary_no:" + diaryNo);
     int commentNo = Integer.parseInt(request.getParameter("comment_no"));
+    System.out.println("comment_no:" + commentNo);
     String commentContent = request.getParameter("comment_content");
+    System.out.println("comment_content:" + commentContent);
+
     try {
       Client client = new Client();
       Comment comment = new Comment();
