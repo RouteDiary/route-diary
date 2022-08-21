@@ -482,7 +482,7 @@
 
 ### #6-5 함수의 parameter 갯수
 
-        - 권고 : 하나의 함수는 4개 이상의 파라미터를 갖지 않도록 설계할 것. 그보다 많을 시, 파라미터의 갯수를 줄일 수 있을까 
+        - 권고 : 하나의 함수는 4개 이상의 파라미터를 갖지 않도록 설계할 것. 그보다 많을 시, 파라미터의 갯수를 줄일 수 있을까
 
 ### #7 JavaDoc
 
@@ -589,23 +589,14 @@
           font-weight: normal;
           line-height: 1.2;
         }
-        9. 각각의 선언 사이에 공백을 한 줄 넣을것
-        html {
-          background: #fff;
-        }
-
-        body {
-          margin: auto;
-          width: 50%;
-        }
-        10. 16진법으로 rgb 표현시, 모두 같은 문자일 경우 r,g,b당 한개만 사용할것
+        9. 16진법으로 rgb 표현시, 모두 같은 문자일 경우 r,g,b당 한개만 사용할것
         ex. #ffffff -> #fff / #10aa23 -> #10aa23 / #aaaaab -> #aaaaab
-        11. quotation mark로 ''를 사용 (""는 사용 X)
+        10. quotation mark로 ''를 사용 (""는 사용 X)
         html {
           font-family: 'open sans', arial, sans-serif;
         }
-        12. 주석으로 /* */ 사용
-        13. 참고자료 : css 유효성 검사기 (https://jigsaw.w3.org/css-validator/validator)
+        11. 주석으로 /* */ 사용
+        12. 참고자료 : css 유효성 검사기 (https://jigsaw.w3.org/css-validator/validator)
 
 ### #3 JavaScript 작성규칙
 
