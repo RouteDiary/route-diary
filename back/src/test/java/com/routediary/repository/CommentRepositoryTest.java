@@ -1,31 +1,36 @@
-package com.routediary.repository;
+package com.routediary.respository;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
 import com.routediary.dto.Client;
 import com.routediary.dto.Comment;
 import com.routediary.exception.InsertException;
+import com.routediary.repository.CommentRepository;
+
+import lombok.NonNull;
 
 
 @SpringBootTest
 public class CommentRepositoryTest {
 
   @Autowired
-  CommentRepository repository;
+  CommentRepository repository1;
 
   @Test
-  public void commentInsertTest() throws InsertException {
+  public void InsertTest() throws InsertException {
 
-    Comment c = new Comment();
     Client client = new Client();
-    client.setClientId("koreaman@gmail.com");
-
+    
+    Comment c = new Comment();
+    client.setClientId("chinaman@gmail.com");
     c.setDiaryNo(1);
     c.setDiaryNo(1);
     c.setClient(client);
     c.setCommentContent("tq");
-    repository.insert(c);
+    repository1.insert(c);
+
 
   }
 }
