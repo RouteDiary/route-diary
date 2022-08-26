@@ -1,4 +1,4 @@
-package com.my.exception;
+package com.routediary.exception;
 
 public class DeleteException extends Exception {
   public DeleteException() {

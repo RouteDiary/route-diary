@@ -13,7 +13,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Notice {
-  @NonNull
+//  @NonNull
   private int noticeNo;
   private String noticeTitle;
   private String noticeContent;
@@ -22,7 +22,7 @@ public class Notice {
   @JsonFormat(pattern = "yyyy/MM/dd hh:mm:ss", timezone = "Asia/Seoul")
   private Date noticeModifyingTime;
   private int noticeViewCnt;
-  @NonNull
+//  @NonNull
   private String adminId;
 
 }

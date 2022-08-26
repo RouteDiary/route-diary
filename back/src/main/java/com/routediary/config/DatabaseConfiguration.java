@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 package com.routediary.config;
 import javax.sql.DataSource;
 
