@@ -1,4 +1,4 @@
-package com.my.exception;
+package com.routediary.exception;
 
 
 public class InsertException extends Exception {
