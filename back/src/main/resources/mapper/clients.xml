@@ -19,14 +19,15 @@ WHERE client_nickname = #{clientNickname}
 
 
 <insert id="insert" parameterType="Client">
-INSERT INTO clients(client_id, client_pwd, client_cellphone_no, client_nickname)
-VALUES(#{clientId}, #{clientPwd}, #{clientCellphoneNo}, #{clientNickname})
+INSERT INTO clients(client_id, client_pwd, client_cellphone_no, client_nickname, client_status_flag)
+VALUES(#{clientId}, #{clientPwd}, #{clientCellphoneNo}, #{clientNickname}, #{clientStatusFlag})
 </insert>
 
 
 <update id="update" parameterType="Client">
 UPDATE clients
 <set>
+client_id = #{clientId},
 client_pwd = #{clientPwd},
 client_cellphone_no = #{clientCellphoneNo},
 client_nickname = #{clientNickname},
