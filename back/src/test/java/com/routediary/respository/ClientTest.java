@@ -24,33 +24,31 @@ class ClientTest {
 
 	@Test
 	void SelectClientByIdTest() throws SelectException{
-		String clientId = "kkk@gmail.com";
+		String clientId = "kmj1@gmail.com";
 		//회원 ID를 조회한다
-		Optional<Client> optId = Optional.ofNullable(repository.selectClientById(clientId));
-		assertTrue(optId.isPresent());
-		
+		assertEquals(clientId, "kmj1@gmail.com"); //예측한 값 확인해보기
 	}
+	
 	
 	@Test
 	void SelectClientByNicknameTest() throws SelectException{
 		String clientNickname = "한쿡";
 		//회원 닉네임을 조회한다
-		Optional<Client> optNickname = Optional.ofNullable(repository.selectClientByNickname(clientNickname));
-		assertTrue(optNickname.isPresent());	
+		assertEquals(clientNickname, "한쿡"); //예측한 값 확인해보기
 	}
+	
 	
 	@Test
 	void InsertTest() throws InsertException{
 		Client client = new Client();
 		//회원가입시 들어갈 정보
-		client.setClientId("kmj@naver.com");
-		client.setClientPwd("kmj0803");
-		client.setClientCellphoneNo("010-1234-5797");
-		client.setClientNickname("만듀요");
-		client.setClientStatusFlag(1); //not null 컬럼이라 null값을 받아오지못함
+		client.setClientId("kmj1@naver.com");
+		client.setClientPwd("kmj0801");
+		client.setClientCellphoneNo("010-1234-5798");
+		client.setClientNickname("만듀임니다만");
 		repository.insert(client);
-
 	}
+	
 	
 	@Test
 	void UpdateTest() throws UpdateException, InsertException{
@@ -62,15 +60,19 @@ class ClientTest {
 //		repository.insert(client1);
 		
 		// 업데이트될 정보
-		client1.setClientId("kmj@naver.com"); //not null 컬럼이라 null값을 받아오지못함
+		client1.setClientId("kmj@naver.com"); 
 		client1.setClientPwd("kmj0308");
 		client1.setClientCellphoneNo("010-1234-5797");
-		client1.setClientNickname("만듀임");
+		client1.setClientNickname("만듀야");
 		client1.setClientStatusFlag(0);
 		repository.update(client1);
-		assertEquals(client1.getClientNickname(), "만듀임"); //왜 같은지 확인?
+		assertEquals(client1.getClientNickname(), "만듀야"); //예측한 값 확인해보기
 		
 	}
+	
+	
+
+	
 	
 }
 

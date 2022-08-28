@@ -14,7 +14,7 @@ import com.routediary.exception.UpdateException;
 public interface ClientRepository {
 		
 	/**
-	 * 회원 ID를 조회한다
+	 * 회원 ID를 조회한다 (로그인할때, 중복체크할때)
 	 * @param clientId
 	 * @return Client
 	 * @throws FindException
@@ -23,7 +23,7 @@ public interface ClientRepository {
 
 	
 	/**
-	 * 회원 닉네임을 조회한다
+	 * 회원 닉네임을 조회한다(중복체크할때)
 	 * @param clientNickname
 	 * @return Client
 	 * @throws FindException
