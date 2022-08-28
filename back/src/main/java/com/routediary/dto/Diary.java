@@ -19,6 +19,7 @@ public class Diary {
   private String diaryTitle;
   @JsonFormat(pattern = "yyyy/MM/dd hh:mm:ss", timezone = "Asia/Seoul")
   private Date diaryWritingTime;
+  private Date diaryModifyingTime;
   private Date diaryStartDate;
   private Date diaryEndDate;
   private int diaryDisclosureFlag;
@@ -30,6 +31,4 @@ public class Diary {
   private List<Route> routes;
   private List<Comment> comments;
   private List<Comment> hashtags;
-  private Like like;
-  private Date diaryModifyingTime;
 }
