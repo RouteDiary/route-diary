@@ -14,6 +14,12 @@ import com.routediary.exception.UpdateException;
 @Mapper
 public interface NoticeRepository {
 	/**
+	 * 전체 개시물 게수를 가져온다.
+	 * @return 전체 개시물 개수 
+	 * @throws SelectException
+	 */
+	public int selectCount() throws SelectException;
+	/**
 	 * 공지사항을 추가한다.
 	 * @param notice 공지사항
 	 */
@@ -25,9 +31,9 @@ public interface NoticeRepository {
 	void update(Notice notice) throws UpdateException;
 	/**
 	 * 공지사항을 삭제한다.
-	 * @param notice 공지사항
+	 * @param noticeNo 공지사항
 	 */
-	void delete(Notice notice) throws DeleteException;
+	void delete(int noticeNo) throws DeleteException;
 	/**
 	 * 공지사항 한개를 본다.
 	 * @param noticeNo 공지사항번호
@@ -39,13 +45,13 @@ public interface NoticeRepository {
 	 * @param noticeNo 공지사항번호
 	 * @return List<Notice> 공지사항리스트
 	 */
-	List<Notice> selectNotices(int noticeNo) throws SelectException;
+	List<Notice> selectNotices(int startRow, int endRow) throws SelectException;
 	/**
 	 * 공지사항 목록중 검색어가 포함된 공지사항만 본다.
 	 * @param keyWord 검색어
 	 * @param noticeNo 공지사항번호
 	 * @return List<Notice> 공지사항리스트
 	 */
-	List<Notice> selectNotices(String keyWord,int noticeNo) throws SelectException;
+	List<Notice> selectNoticesWord(String keyWord,int noticeNo, int currentPage, int cntPerPage) throws SelectException;
 
 }

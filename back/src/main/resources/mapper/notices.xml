@@ -2,6 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.routediary.repository.NoticeRepository">
+
 	<insert id="insert" parameterType="Notice">
 		INSERT INTO notices VALUES
 		(notice_no_SEQ.NEXTVAL, #{adminId}, #{noticeTitle},
@@ -19,4 +20,38 @@
 		</set>
 		WHERE notice_no = #{noticeNo}
 	</update>
+
+	<delete id="delete" parameterType="int">
+		DELETE FROM notices WHERE
+		notice_no= #{noticeNo}
+	</delete>
+
+	<select id="selectNotice" parameterType="Notice"
+		resultType="Notice">
+		SELECT * FROM notices WHERE notice_no = #{noticeNo}
+	</select>
+
+	<select id="selectCount" resultType="int">
+		SELECT COUNT(*) FROM notices
+	</select>
+
+	<select id="selectNotices" parameterType="map" resultType="Notice">
+		SELECT *
+		FROM ( 
+		SELECT ROWNUM r, a.*
+		FROM (SELECT
+		notice_no, admin_id, notice_title, notice_writing_time, notice_view_cnt
+		FROM notices
+		ORDER BY notice_no DESC
+		) a
+		)
+		WHERE r BETWEEN #{startRow} AND #{endRow}
+	</select>
+
+	<select id="selectNoticesWord" parameterType="map"
+		resultType="Notice">
+
+
+	</select> 
+
 </mapper>
