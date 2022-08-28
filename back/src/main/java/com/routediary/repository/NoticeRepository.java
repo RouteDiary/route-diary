@@ -42,16 +42,16 @@ public interface NoticeRepository {
 	Notice selectNotice(int noticeNo) throws SelectException;
 	/**
 	 * 공지사항 목록을 본다.
-	 * @param noticeNo 공지사항번호
+	 * @param startRow,endRow 
 	 * @return List<Notice> 공지사항리스트
 	 */
 	List<Notice> selectNotices(int startRow, int endRow) throws SelectException;
 	/**
 	 * 공지사항 목록중 검색어가 포함된 공지사항만 본다.
 	 * @param keyWord 검색어
-	 * @param noticeNo 공지사항번호
+	 * @param startRow,endRow 
 	 * @return List<Notice> 공지사항리스트
 	 */
-	List<Notice> selectNoticesWord(String keyWord,int noticeNo, int currentPage, int cntPerPage) throws SelectException;
+	List<Notice> selectNoticeskeyWord(String keyWord, int startRow, int endRow) throws SelectException;
 
 }
