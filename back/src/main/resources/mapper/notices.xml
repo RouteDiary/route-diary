@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+                        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.routediary.repository.NoticeRepository">
+	<insert id="insert" parameterType="Notice">
+		INSERT INTO notices VALUES
+		(notice_no_SEQ.NEXTVAL, #{adminId}, #{noticeTitle},
+		#{noticeContent},
+		SYSDATE,SYSDATE, 0)
+	</insert>
+
+	<update id="update" parameterType="Notice">
+		UPDATE notices
+		<set>
+			notice_title = #{noticeTitle}
+			,notice_content = #{noticeContent}
+			,notice_writing_time = SYSDATE
+			,notice_modifying_time = SYSDATE
+		</set>
+		WHERE notice_no = #{noticeNo}
+	</update>
+</mapper>

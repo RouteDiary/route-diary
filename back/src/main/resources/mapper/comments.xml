@@ -29,4 +29,5 @@
 		DELETE FROM comments
 		WHERE diary_no = #{diaryNo}
 	</delete>
-	</mapper>
+	
+</mapper>
