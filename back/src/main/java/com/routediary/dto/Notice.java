@@ -25,3 +25,4 @@ public class Notice {
   private String adminId;
 
 }
+

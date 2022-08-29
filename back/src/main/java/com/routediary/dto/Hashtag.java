@@ -1,16 +1,19 @@
 package com.routediary.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NonNull;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class Hashtag {
-  @NonNull
-  public class HashTag {
-    private int diaryNo;
-    private String hashtag;
-  }
-}
+@NoArgsConstructor
+@AllArgsConstructor
 
+
+public class Hashtag {
+
+
+  private int diaryNo;
+  private String hashtag;
+}
