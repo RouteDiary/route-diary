@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+                        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.routediary.repository.CommentRepository">
+
+	<!-- 댓글 작성 -->
+	<insert id="insert" parameterType="Comment">
+		INSERT INTO comments
+     	VALUES (#{diaryNo}, 
+     		(SELECT NVL(MAX(comment_no), 0) + 1
+        	FROM comments WHERE diary_no = #{diaryNo}), #{client.clientId}, #{commentContent}, SYSDATE)
+	</insert>
+	
+	<!-- 댓글 수정 -->
+	<update id="update" parameterType="Comment">
+		UPDATE comments  
+   		SET comment_content = #{commentContent},
+        comment_writing_time = TO_DATE(SYSDATE)
+		WHERE client_id = #{client.clientId}
+	</update>
+	
+	<!-- 댓글 삭제 -->
+	<delete id="delete" parameterType="int">
+		DELETE FROM comments 
+     	WHERE diary_no = #{diaryNo} AND comment_no = #{commentNo}
+	</delete>
+	
+	<delete id="deleteAll" parameterType="int">
+		DELETE FROM comments
+		WHERE diary_no = #{diaryNo}
+	</delete>
+	
+</mapper>

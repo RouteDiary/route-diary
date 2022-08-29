@@ -3,7 +3,6 @@ package com.routediary.dto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 import lombok.Setter;
 
 @Getter
@@ -11,7 +10,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Hashtag {
-  @NonNull
   private int diaryNo;
   private String hashtag;
 }

@@ -1,4 +1,4 @@
-package com.routediary.respository;
+package com.routediary.repository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
@@ -8,7 +8,6 @@ import com.routediary.dto.Route;
 import com.routediary.exception.DeleteException;
 import com.routediary.exception.InsertException;
 import com.routediary.exception.SelectException;
-import com.routediary.repository.RouteRepository;
 
 @SpringBootTest
 class RouteRepositoryTest {
