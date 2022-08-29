@@ -1,5 +1,3 @@
-
-
 package com.routediary.dto;
 
 import lombok.AllArgsConstructor;
@@ -16,5 +14,4 @@ public class Like {
   private int diaryNo;
   private String clientId;
 }
-
 

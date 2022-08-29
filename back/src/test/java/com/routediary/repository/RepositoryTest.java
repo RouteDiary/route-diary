@@ -1,4 +1,4 @@
-package com.routediary.respository;
+package com.routediary.repository;
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;

@@ -47,63 +47,20 @@ LEFT OUTER JOIN clients c ON (d.client_id = c.client_id)
 WHERE rnum BETWEEN ? AND ?;
 
 -- 다이어리 게시판에 들어갔을때 ?번째부터 ?번째 다이어리 반환 (검색어로 검색할 경우)
-SELECT DISTINCT diary_no
-              , client_id 
-              , diary_title
-              , diary_writing_time
-              , diary_start_date
-              , diary_end_date
-              , diary_disclosure_flag
-              , diary_view_cnt
-              , diary_like_cnt
-              , diary_delete_flag
-              , client_pwd
-              , client_cellphone_no
+SELECT * 
+  FROM  (SELECT d.*
               , client_nickname
-              , client_status_flag 
-              , rnum
-           FROM (SELECT diary_no 
-                      , client_id 
-                      , diary_title
-                      , diary_writing_time
-                      , diary_start_date
-                      , diary_end_date
-                      , diary_disclosure_flag
-                      , diary_view_cnt
-                      , diary_like_cnt
-                      , diary_delete_flag
-                      , client_pwd
-                      , client_cellphone_no
-                      , client_nickname
-                      , client_status_flag
-                      , row_number() OVER (PARTITION BY 1 ORDER BY 1) AS rnum
-                   FROM (SELECT d.diary_no
-                              , d.client_id 
-                              , d.diary_title
-                              , d.diary_writing_time
-                              , d.diary_start_date
-                              , d.diary_end_date
-                              , d.diary_disclosure_flag
-                              , d.diary_view_cnt
-                              , d.diary_like_cnt
-                              , d.diary_delete_flag
-                              , c.client_pwd
-                              , c.client_cellphone_no
-                              , c.client_nickname
-                              , c.client_status_flag
-                           FROM diaries d
-                LEFT OUTER JOIN routes r ON (d.diary_no = r.diary_no)
-                LEFT OUTER JOIN clients c ON (d.client_id = c.client_id)
-                          WHERE diary_disclosure_flag = 1
-                            AND diary_delete_flag = 1                        
-                            AND (r.route_content LIKE '%' || ? || '%'  
-                                 OR d.diary_title LIKE '%' || ? || '%' 
-                                )
-                )
-     )            
- WHERE rnum BETWEEN ? AND ? 
- ORDER BY ? DESC,
-          diary_writing_time DESC;
+              , client_status_flag
+              , row_number() OVER (PARTITION BY 1 ORDER BY 1) AS rnum
+           FROM diaries d
+LEFT OUTER JOIN clients c ON (d.client_id = c.client_id)
+LEFT OUTER JOIN routes r ON (d.diary_no = r.diary_no)
+          WHERE diary_disclosure_flag = 1 AND
+                diary_title LIKE '%광주%' OR
+                route_content LIKE '%$광주%'
+       ORDER BY diary_view_cnt DESC,
+                diary_writing_time DESC)
+WHERE rnum BETWEEN 1 AND 10
 
 -- 내 전체 다이어리 보기 SQL 구문
 
@@ -184,7 +141,7 @@ UPDATE comments
 DELETE FROM comments 
       WHERE client_id='koreaman@gmail.com';
            
---다이어리 조회 2개 SQL 이용
+--다이어리 조회 2개 이상 SQL 이용
 		   SELECT *
              FROM diaries d
   LEFT OUTER JOIN clients c ON (d.client_id = c.client_id)
