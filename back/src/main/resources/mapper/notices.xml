@@ -2,6 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.routediary.repository.NoticeRepository">
+
 	<insert id="insert" parameterType="Notice">
 		INSERT INTO notices VALUES
 		(notice_no_SEQ.NEXTVAL, #{adminId}, #{noticeTitle},
@@ -12,11 +13,53 @@
 	<update id="update" parameterType="Notice">
 		UPDATE notices
 		<set>
-			notice_title = #{noticeTitle}
-			,notice_content = #{noticeContent}
-			,notice_writing_time = SYSDATE
-			,notice_modifying_time = SYSDATE
+
+			<if test="noticeTitle != null">
+				notice_title = #{noticeTitle},
+			</if>
+			<if test="noticeContent != null">
+				notice_content = #{noticeContent},
+			</if>
+			<if test="noticeViewCnt != -1">
+				notice_view_cnt = #{noticeViewCnt}+1,
+			</if>
+			notice_modifying_time = SYSDATE
 		</set>
 		WHERE notice_no = #{noticeNo}
 	</update>
+
+	<delete id="delete" parameterType="int">
+		DELETE FROM notices WHERE
+		notice_no= #{noticeNo}
+	</delete>
+
+	<select id="selectNotice" parameterType="Notice"
+		resultType="Notice">
+		SELECT * FROM notices WHERE notice_no = #{noticeNo}
+	</select>
+
+	<select id="selectCount" resultType="int">
+		SELECT COUNT(*) FROM notices
+	</select>
+
+	<select id="selectNotices" parameterType="map"
+		resultType="Notice">
+		SELECT *
+		FROM (
+		SELECT ROW_NUMBER() OVER (PARTITION BY 1 ORDER BY 1) AS r, a.*
+		FROM (SELECT
+		notice_no,
+		admin_id, notice_title,
+		notice_writing_time, notice_view_cnt
+		FROM notices
+		<trim prefix="WHERE" prefixOverrides="AND |OR">
+			<if test="keyword != null">
+				notice_title LIKE '%${keyword}%' OR notice_content LIKE '%${keyword}%'
+			</if>
+		</trim>
+		ORDER BY notice_no DESC
+		) a
+		)
+		WHERE r BETWEEN #{startRow} AND #{endRow}
+	</select>
 </mapper>

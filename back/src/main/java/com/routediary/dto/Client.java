@@ -21,5 +21,3 @@ public class Client {
   private int clientStatusFlag;
 
 }
-
-

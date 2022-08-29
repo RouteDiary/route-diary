@@ -1,3 +1,4 @@
+
 package com.routediary.dto;
 
 import java.sql.Date;
@@ -24,4 +25,6 @@ public class Comment {
   public Date commentWritingTime;
   // @NonNull
   public Client client;
+
 }
+
