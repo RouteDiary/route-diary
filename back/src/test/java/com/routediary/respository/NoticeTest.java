@@ -26,7 +26,7 @@ class NoticeTest {
 	NoticeRepository repository;
 
 	@Test
-	void InsertTest() throws InsertException {
+	void InsertTest() throws InsertException { // 공지사항 작성 테스트
 		Notice notice = new Notice();
 		notice.setAdminId("msk");
 		notice.setNoticeTitle("강만두");
@@ -35,13 +35,14 @@ class NoticeTest {
 	}
 
 	@Test
-	void UpdateTest() throws UpdateException, SelectException {
+	void UpdateTest() throws UpdateException, SelectException { // 공지사항 수정 및 조회수 증가 테스트
+																//조회수 증가 테스트 하려면 content,title 주석처리하고 진행
 
 		int noticeNo = 1;
 		Notice b = repository.selectNotice(noticeNo);
 		String noticeContent = b.getNoticeContent();
 		String noticeTitle = b.getNoticeTitle();
-		int noticeViewCnt = b.getNoticeViewCnt();// 3
+		Integer noticeViewCnt = b.getNoticeViewCnt();// 3
 		
 		Notice b1 = new Notice();
 		b1.setNoticeTitle(noticeTitle+"만두");
@@ -56,14 +57,14 @@ class NoticeTest {
 		assertNotEquals(noticeViewCnt, b2.getNoticeViewCnt());
 	}
 	@Test
-	void DeleteTest() throws DeleteException {
+	void DeleteTest() throws DeleteException { //공지사항 삭제 테스트
 
 		int noticeNo = 64;
 		repository.delete(noticeNo);
 
 	}
 	@Test
-	void SelectOneTest() throws SelectException {
+	void SelectOneTest() throws SelectException { // 공지사항 클릭했을때 한개 보여주기 테스트
 		
 		int noticeNo = 65;
 		
@@ -77,14 +78,14 @@ class NoticeTest {
 		
 	}
 	@Test
-	void SelectCountTest() throws SelectException{
+	void SelectCountTest() throws SelectException{ // 공지사항 총개수 테스트
 		
 		int expectedCnt = 13;
 		int cnt = repository.selectCount();
 		assertEquals(expectedCnt, cnt);
 	}
 	@Test
-	void SelectNoticesTest() throws SelectException{
+	void SelectNoticesTest() throws SelectException{ // 공지사항 목록 테스트
 		int currentPage = 1;
 		int cntPerPage = 10;
 		int endRow = currentPage * cntPerPage; //10
@@ -92,7 +93,7 @@ class NoticeTest {
 		
 		int expectedSize = 10;
 //		int []expectedNoticeNoArr = {12,11,10,9,8,7,6,5,4,3}; 
-		List<Notice> list = repository.selectNotices(startRow, endRow);
+		List<Notice> list = repository.selectNotices(startRow, endRow,null);
 		assertNotNull(list);
 		assertEquals(expectedSize, list.size());
 //		for(int i = 0; i<list.size(); i++) {
@@ -100,7 +101,7 @@ class NoticeTest {
 //		}
 	}
 	@Test
-	void SelectNoticesWordTest() throws SelectException{
+	void SelectNoticesWordTest() throws SelectException{ // 공지사항 검색어를통한 목록 테스
 		int currentPage = 1;
 		int cntPerPage = 10;
 		int endRow = currentPage * cntPerPage; //10
@@ -108,7 +109,7 @@ class NoticeTest {
 		
 		int expectedSize = 3;
 		String keyWord = "개";
-		List<Notice> list = repository.selectNoticeskeyWord(keyWord,startRow, endRow);
+		List<Notice> list = repository.selectNotices(startRow, endRow,keyWord);
 		assertNotNull(list);
 		assertEquals(expectedSize, list.size());
 	}

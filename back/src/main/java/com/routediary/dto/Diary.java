@@ -1,4 +1,7 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> ceecc3b (Feat: Notice.xml 메서드 통합)
 package com.routediary.dto;
 
 
@@ -33,6 +36,7 @@ public class Diary {
   private Client client;
   private List<Route> routes;
   private List<Comment> comments;
+<<<<<<< HEAD
   private List<Hashtag> hashtags;
 }
 =======
@@ -71,3 +75,7 @@ public class Diary {
   private List<Hashtag> hashtags;
 }
 >>>>>>> 58ded0b (Feat: ClientRepository 완성 & test 완료)
+=======
+  private List<HashTag> hashtags;
+}
+>>>>>>> ceecc3b (Feat: Notice.xml 메서드 통합)
