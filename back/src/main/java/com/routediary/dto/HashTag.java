@@ -10,7 +10,9 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 
+
 public class Hashtag {
+
 
   private int diaryNo;
   private String hashtag;

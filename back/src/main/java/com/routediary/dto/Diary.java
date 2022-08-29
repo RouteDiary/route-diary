@@ -1,4 +1,5 @@
 
+
 package com.routediary.dto;
 
 
@@ -35,3 +36,5 @@ public class Diary {
   private List<Comment> comments;
   private List<Hashtag> hashtags;
 }
+
+

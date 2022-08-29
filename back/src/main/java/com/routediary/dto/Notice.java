@@ -1,4 +1,5 @@
 
+
 package com.routediary.dto;
 
 import java.sql.Date;
@@ -26,3 +27,4 @@ public class Notice {
   private String adminId;
 
 }
+

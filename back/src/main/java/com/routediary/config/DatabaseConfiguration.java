@@ -1,12 +1,12 @@
 package com.routediary.config;
 
-import javax.sql.DataSource;
 
+
+import javax.sql.DataSource;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
-
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
@@ -25,6 +25,7 @@ public class DatabaseConfiguration {
     DataSource dataSource = new HikariDataSource(hikariConfig());
     return dataSource;
   }
+
 
 
 }

@@ -1,4 +1,5 @@
 
+
 package com.routediary.dto;
 
 import lombok.AllArgsConstructor;
@@ -16,4 +17,5 @@ public class Admin {
   private String adminId;
   private String adminPwd;
 }
+
 
