@@ -16,7 +16,7 @@ public class Client {
   private String clientPwd;
   private String clientCellphoneNo;
   private String clientNickname;
-  private int clientStatusFlag;
+  private Integer clientStatusFlag;
 
 }
 
