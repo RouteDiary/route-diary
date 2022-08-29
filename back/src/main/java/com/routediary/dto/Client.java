@@ -10,14 +10,13 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-
 public class Client {
   @NonNull
   private String clientId;
   private String clientPwd;
   private String clientCellphoneNo;
   private String clientNickname;
-  private int clientStatusFlag;
+  private Integer clientStatusFlag;
 
 }
 
