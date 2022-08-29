@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
@@ -16,8 +17,6 @@ public class Client {
   private String clientPwd;
   private String clientCellphoneNo;
   private String clientNickname;
-  private int clientStatusFlag;
+  private Integer clientStatusFlag;
 
 }
-
-

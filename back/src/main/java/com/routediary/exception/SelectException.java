@@ -1,6 +1,5 @@
 package com.routediary.exception;
 
-
 public class SelectException extends Exception {
   public SelectException() {
     super();
@@ -10,4 +9,3 @@ public class SelectException extends Exception {
     super(message);
   }
 }
-

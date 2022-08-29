@@ -1,7 +1,6 @@
-# Created by https://www.toptal.com/developers/gitignore/api/java
-# Edit at https://www.toptal.com/developers/gitignore?templates=java
 *.DS_Store
-/.metadata/
+.metadata/
+back/.mvn/
 
 ### Java ###
 # Compiled class file
@@ -34,6 +33,7 @@ project.properties
 # End of https://www.toptal.com/developers/gitignore/api/java
 back/.classpath
 back/src/main/webapp/WEB-INF/web.xml
+
 ### Maven ###
 target/
 pom.xml.tag
@@ -46,3 +46,13 @@ buildNumber.properties
 .mvn/timing.properties
 # https://github.com/takari/maven-wrapper#usage-without-binary-jar
 .mvn/wrapper/maven-wrapper.jar
+
+# Eclipse m2e generated files
+# Eclipse Core
+.project
+# JDT-specific (Eclipse Java Development Tools)
+.classpath
+
+# End of https://www.toptal.com/developers/gitignore/api/java
+back/.classpath
+back/src/main/webapp/WEB-INF/web.xml
