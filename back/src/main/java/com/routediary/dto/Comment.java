@@ -13,9 +13,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Comment {
-  @NonNull
   private int diaryNo;
-  @NonNull
   private int commentNo;
   private String commentContent;
   @JsonFormat(pattern = "yyyy/MM/dd hh:mm:ss", timezone = "Asia/Seoul")

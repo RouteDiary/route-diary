@@ -11,7 +11,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class HashTag {
-  @NonNull
   private int diaryNo;
-  private String hashTag;
+  private String hashtag;
 }

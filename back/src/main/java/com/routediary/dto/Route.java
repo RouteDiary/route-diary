@@ -11,9 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Route {
-  @NonNull
   private int diaryNo;
-  @NonNull
   private int routeNo;
   private String routeContent;
   private String kakaoMapId;
