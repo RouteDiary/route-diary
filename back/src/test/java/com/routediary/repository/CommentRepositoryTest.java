@@ -57,7 +57,7 @@ class CommentRepositoryTest {
   void DeleteAllCommentTest() throws DeleteException {
     int diaryNo = 1;
 
-    commentRepository.delete(diaryNo, diaryNo);
+    commentRepository.deleteAll(diaryNo);
   }
 
 }
