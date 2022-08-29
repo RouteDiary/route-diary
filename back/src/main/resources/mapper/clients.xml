@@ -4,78 +4,38 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.routediary.repository.ClientRepository">
 
-<select id="selectClientById" parameterType="String" resultType="Client">
-<<<<<<< HEAD
-SELECT client_id
-FROM clients
-WHERE client_id = #{clientId}
-=======
+  <select id="selectClientById" parameterType="String" resultType="Client">
 	SELECT *
 	FROM clients
 	WHERE client_id = #{clientId}
->>>>>>> 58ded0b (Feat: ClientRepository 완성 & test 완료)
-</select>
+  </select>
 
-
-<select id="selectClientByNickname" parameterType="String" resultType="Client">
-<<<<<<< HEAD
-SELECT client_nickname 
-FROM clients
-WHERE client_nickname = #{clientNickname}
-=======
+  <select id="selectClientByNickname" parameterType="String" resultType="Client">
 	SELECT *
 	FROM clients
 	WHERE client_nickname = #{clientNickname}
->>>>>>> 58ded0b (Feat: ClientRepository 완성 & test 완료)
-</select>
+  </select>
 
-
-<insert id="insert" parameterType="Client">
-<<<<<<< HEAD
-INSERT INTO clients(client_id, client_pwd, client_cellphone_no, client_nickname, client_status_flag)
-VALUES(#{clientId}, #{clientPwd}, #{clientCellphoneNo}, #{clientNickname}, 1)
-=======
+  <insert id="insert" parameterType="Client">
 	INSERT INTO clients(client_id, client_pwd, client_cellphone_no, client_nickname, client_status_flag)
 	VALUES(#{clientId}, #{clientPwd}, #{clientCellphoneNo}, #{clientNickname}, 1)
->>>>>>> 58ded0b (Feat: ClientRepository 완성 & test 완료)
-</insert>
+  </insert>
 
-
-<update id="update" parameterType="Client">
-<<<<<<< HEAD
-UPDATE clients
-<set>
-client_pwd = #{clientPwd},
-client_cellphone_no = #{clientCellphoneNo},
-client_nickname = #{clientNickname},
-client_status_flag = #{clientStatusFlag}
-</set>
-WHERE client_id = #{clientId}
-</update>
-
-
-
-
-
-
-
-
-=======
+  <update id="update" parameterType="Client">
 	UPDATE clients
-  <set>
-    <choose>
-      <when test="clientStatusFlag == 0">
+    <set>
+      <choose>
+        <when test="clientStatusFlag == 0">
         client_status_flag = 0
-      </when>
-      <otherwise>
+        </when>
+        <otherwise>
       	client_pwd = #{clientPwd},
 		client_cellphone_no = #{clientCellphoneNo},
 		client_nickname = #{clientNickname}
-      </otherwise>
-    </choose>
-  </set>
+        </otherwise>
+      </choose>
+    </set>
 	WHERE client_id = #{clientId}
-</update>
+  </update>
 
->>>>>>> 58ded0b (Feat: ClientRepository 완성 & test 완료)
 </mapper>

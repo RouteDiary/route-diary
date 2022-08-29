@@ -60,3 +60,7 @@ Team. 7K
 ### 🧐 ETC
 
 ![ESlint](https://img.shields.io/badge/eslint-3A33D1?style=for-the-badge&logo=eslint&logoColor=white)
+
+### Notion page
+
+![Notion](https://www.notion.so/Route_diary-c181af4351034a6eb45d3da07e410064)

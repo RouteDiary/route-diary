@@ -1,41 +1,3 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-package com.routediary.dto;
-
-import java.util.Date;
-=======
-package com.routediary.dto;
-
-import java.sql.Date;
->>>>>>> ceecc3b (Feat: Notice.xml 메서드 통합)
-import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-<<<<<<< HEAD
-=======
-import lombok.NonNull;
->>>>>>> ceecc3b (Feat: Notice.xml 메서드 통합)
-import lombok.Setter;
-
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-public class Notice {
-  private int noticeNo;
-  private String noticeTitle;
-  private String noticeContent;
-  @JsonFormat(pattern = "yyyy/MM/dd hh:mm:ss", timezone = "Asia/Seoul")
-  private Date noticeWritingTime;
-  @JsonFormat(pattern = "yyyy/MM/dd hh:mm:ss", timezone = "Asia/Seoul")
-  private Date noticeModifyingTime;
-  private Integer noticeViewCnt;
-<<<<<<< HEAD
-  private String adminId;
-
-}
-=======
 package com.routediary.dto;
 
 import java.util.Date;
@@ -59,12 +21,4 @@ public class Notice {
   private Date noticeModifyingTime;
   private Integer noticeViewCnt;
   private String adminId;
-
 }
->>>>>>> 58ded0b (Feat: ClientRepository 완성 & test 완료)
-=======
-  @NonNull
-  private String adminId;
-
-}
->>>>>>> ceecc3b (Feat: Notice.xml 메서드 통합)

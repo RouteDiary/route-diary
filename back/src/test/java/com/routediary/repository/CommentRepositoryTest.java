@@ -1,7 +1,5 @@
-<<<<<<< HEAD
 package com.routediary.repository;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -9,6 +7,7 @@ import com.routediary.dto.Client;
 import com.routediary.dto.Comment;
 import com.routediary.exception.DeleteException;
 import com.routediary.exception.InsertException;
+import com.routediary.exception.SelectException;
 import com.routediary.exception.UpdateException;
 
 
@@ -21,27 +20,24 @@ class CommentRepositoryTest {
   @Test
   void InsertCommentTest() throws InsertException {
     Client client = new Client();
-    Comment c = new Comment();
+    Comment comment = new Comment();
     client.setClientId("japanwoman@gmail.com");
-    c.setDiaryNo(4);
-    c.setDiaryNo(4);
-    c.setClient(client);
-    c.setCommentContent("제육없이도 살수있어!");
-    commentRepository.insert(c);
-
+    comment.setDiaryNo(4);
+    comment.setClient(client);
+    comment.setCommentContent("유익해요");
+    commentRepository.insert(comment);
   }
 
   @Test
-  void UpdateCommentTest() throws UpdateException {
-    Client client = new Client();
-    Comment c1 = new Comment();
-    client.setClientId("koreawoman@gmail.com");
-    c1.setDiaryNo(4);
-    c1.setDiaryNo(4);
-    c1.setClient(client);
-    c1.setCommentContent("살수없어");
-    commentRepository.update(c1);
-    assertEquals(c1.getCommentContent(), "살수없어");
+  void UpdateCommentTest() throws UpdateException, SelectException {
+    Comment comment = new Comment();
+    int diaryNo = 4;
+    int commentNo = 1;
+    String commentContent = "이거진짜인가요?";
+    comment.setDiaryNo(diaryNo);
+    comment.setCommentNo(commentNo);
+    comment.setCommentContent(commentContent);
+    commentRepository.update(comment);
 
   }
 
@@ -49,81 +45,12 @@ class CommentRepositoryTest {
   void DeleteCommentTest() throws DeleteException {
     int diaryNo = 4;
     int commentNo = 3;
-
     commentRepository.delete(diaryNo, commentNo);
-
   }
 
   @Test
   void DeleteAllCommentTest() throws DeleteException {
     int diaryNo = 1;
-
-    commentRepository.delete(diaryNo, diaryNo);
-  }
-
-}
-=======
-package com.routediary.repository;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import com.routediary.dto.Client;
-import com.routediary.dto.Comment;
-import com.routediary.exception.DeleteException;
-import com.routediary.exception.InsertException;
-import com.routediary.exception.UpdateException;
-
-
-@SpringBootTest
-class CommentRepositoryTest {
-
-  @Autowired
-  CommentRepository commentRepository;
-
-  @Test
-  void InsertCommentTest() throws InsertException {
-    Client client = new Client();
-    Comment c = new Comment();
-    client.setClientId("japanwoman@gmail.com");
-    c.setDiaryNo(4);
-    c.setDiaryNo(4);
-    c.setClient(client);
-    c.setCommentContent("제육없이도 살수있어!");
-    commentRepository.insert(c);
-
-  }
-
-  @Test
-  void UpdateCommentTest() throws UpdateException {
-    Client client = new Client();
-    Comment c1 = new Comment();
-    client.setClientId("koreawoman@gmail.com");
-    c1.setDiaryNo(4);
-    c1.setDiaryNo(4);
-    c1.setClient(client);
-    c1.setCommentContent("살수없어");
-    commentRepository.update(c1);
-    assertEquals(c1.getCommentContent(), "살수없어");
-
-  }
-
-  @Test
-  void DeleteCommentTest() throws DeleteException {
-    int diaryNo = 4;
-    int commentNo = 3;
-
-    commentRepository.delete(diaryNo, commentNo);
-
-  }
-
-  @Test
-  void DeleteAllCommentTest() throws DeleteException {
-    int diaryNo = 1;
-
     commentRepository.deleteAll(diaryNo);
   }
-
 }
->>>>>>> 39f93b8 (commentRepositoryTest 수정완료)

@@ -1,7 +1,5 @@
 package com.routediary.exception;
 
-
-
 public class InsertException extends Exception {
   public InsertException() {
     super();
@@ -11,5 +9,3 @@ public class InsertException extends Exception {
     super(message);
   }
 }
-
-

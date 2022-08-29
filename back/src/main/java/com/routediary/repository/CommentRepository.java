@@ -29,7 +29,8 @@ public interface CommentRepository {
   /**
    * 댓글을 삭제한다
    * 
-   * @param comment
+   * @param diaryNo
+   * @param commentNo
    * @throws DeleteException
    */
   public void delete(int diaryNo, int commentNo) throws DeleteException;

@@ -11,7 +11,7 @@ import com.zaxxer.hikari.HikariDataSource;
 @Configuration
 @PropertySource("classpath:/application.properties")
 public class DatabaseConfiguration {
-<<<<<<< HEAD
+
   @Bean
   @ConfigurationProperties(prefix = "spring.datasource.hikari")
   public HikariConfig hikariConfig() {
@@ -23,19 +23,4 @@ public class DatabaseConfiguration {
     DataSource dataSource = new HikariDataSource(hikariConfig());
     return dataSource;
   }
-=======
-
-	@Bean
-	@ConfigurationProperties(prefix="spring.datasource.hikari")
-	public HikariConfig hikariConfig() {
-		return new HikariConfig();
-	}
-	@Bean
-	public DataSource dataSource() throws Exception {
-		DataSource dataSource = new HikariDataSource(hikariConfig());
-		return dataSource;
-	}
-
->>>>>>> 58ded0b (Feat: ClientRepository 완성 & test 완료)
-
 }

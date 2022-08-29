@@ -1,28 +1,23 @@
 package com.routediary.repository;
 
-import static org.junit.jupiter.api.Assertions.*;
-
+import static org.junit.Assert.assertEquals;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.context.SpringBootTest;
-
 import com.routediary.dto.Admin;
-import com.routediary.exception.InsertException;
 import com.routediary.exception.SelectException;
-import com.routediary.repository.AdminRepository;
 
 @SpringBootTest
-class AdminTest {
-	@Autowired
-	AdminRepository repository;
-	
-	@Test
-	void testselectAdminById() throws SelectException{
-	Admin admin = new Admin();
-	admin.setAdminId("abc");
-	assertEquals(admin.getAdminId(), repository.selectAdminById("abc"));
-		
-	}
+public class AdminRepositoryTest {
+  @Autowired
+  AdminRepository repository;
 
+  @Test
+  void testselectAdminById() throws SelectException {
+    String adminId = "1234";
+    String expectedAdminPwd = "PW4321";
+    Admin admin = repository.selectAdminById(adminId);
+    assertEquals(adminId, admin.getAdminId());
+    assertEquals(expectedAdminPwd, admin.getAdminPwd());
+  }
 }

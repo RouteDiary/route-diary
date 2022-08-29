@@ -51,4 +51,5 @@ buildNumber.properties
 
 # End of https://www.toptal.com/developers/gitignore/api/java
 back/.classpath
+
 back/src/main/webapp/WEB-INF/web.xml
