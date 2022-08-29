@@ -7,7 +7,11 @@
 	</select>
 	<insert id="insert" parameterType="Route">
 		INSERT INTO Routes(diary_no, route_no, route_content, kakao_map_id)
-		VALUES (#{diaryNo}, #{routeNo}, #{routeContent}, #{kakaoMapId})
+		VALUES (#{diaryNo}, 
+			   (SELECT NVL(MAX(route_no), 0) + 1
+        		FROM routes 
+        		WHERE diary_no = #{diaryNo}),
+        		#{routeContent}, #{kakaoMapId})
 	</insert>
 	<delete id="delete" parameterType="int">
 		DELETE FROM ROUTES WHERE diary_no = #{diaryNo} AND route_no = #{routeNo}
