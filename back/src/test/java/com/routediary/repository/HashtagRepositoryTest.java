@@ -1,4 +1,4 @@
-package com.routediary.respository;
+package com.routediary.repository;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ public class HashtagRepositoryTest {
 	public void testinsert() throws InsertException{
 		Hashtag hashtag = new Hashtag();
 		hashtag.setDiaryNo(3);
-		hashtag.setHashTag("제육");
+		hashtag.setHashtag("제육");
 
 		repository.insert(hashtag);
 	}
@@ -29,14 +29,14 @@ public class HashtagRepositoryTest {
 	public void testupdate() throws UpdateException{
 		Hashtag hashtag = new Hashtag();
 		hashtag.setDiaryNo(3);
-		hashtag.setHashTag("김치");
+		hashtag.setHashtag("김치");
 		repository.update(hashtag);
 	}
 	@Test
 	public void testdelete() throws DeleteException{
 		Hashtag hashtag = new Hashtag();
 		hashtag.setDiaryNo(3);
-		hashtag.setHashTag("제육");
+		hashtag.setHashtag("제육");
 		repository.delete(hashtag);
 	}
 	
