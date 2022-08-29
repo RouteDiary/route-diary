@@ -11,5 +11,5 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Hashtag {
   private int diaryNo;
-  private String hashTag;
+  private String hashtag;
 }

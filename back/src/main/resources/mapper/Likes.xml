@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+                        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.routediary.repository.LikeRepository">
+
+	<!-- 좋아요 추가한다. -->
+	<insert id="insert" parameterType="Like">
+		INSERT INTO Likes VALUES (#{diaryNo}, #{clientId})
+	</insert>
+	
+	<!-- 좋아요 삭제한다. -->
+	<delete id="delete" parameterType="Like"> 
+		DELETE FROM Likes WHERE diary_no = #{diaryNo} AND client_id = #{clientId}
+	</delete>
+	
+	<!-- 좋아요가 눌린 다이어리 번호를 찾아 전체 삭제한다. -->
+	<delete id="deleteAll" parameterType="int">
+		DELETE FROM Likes WHERE diary_no = #{diaryNo}
+	</delete>
+</mapper>
