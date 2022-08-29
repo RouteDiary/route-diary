@@ -1,115 +1,3 @@
--- comments table
-CREATE TABLE comments(
-    diary_no NUMBER(6) NOT NULL, -- PK, FK
-    comment_no NUMBER(8) NOT NULL, -- PK
-    client_id VARCHAR2(20 CHAR) NOT NULL, 
-    comment_content VARCHAR2(300 CHAR) NOT NULL,
-    comment_writing_time DATE NOT NULL, 
-    CONSTRAINT comments_pk PRIMARY KEY(diary_no, comment_no),
-    CONSTRAINT comments_diaries_fk FOREIGN KEY(diary_no) REFERENCES diaries(diary_no),
-    CONSTRAINT comments_clients_fk FOREIGN KEY(client_id) REFERENCES clients(client_id)
-);
-
--- 시험용데이터(다이어리 번호, 댓글 번호, 아이디(이메일주소), 댓글 내용, 댓글작성시간)
-INSERT INTO comments
-     VALUES (1, 1, 'koreaman@gmail.com', '좋은 여행정보 감사합니다~' , SYSDATE);
-INSERT INTO comments
-     VALUES (1, 2, 'chinaman@gmail.com', '재밌게 보고갑니다', SYSDATE); 
-INSERT INTO comments
-     VALUES (1, 3, 'americaman@gmail.com', '좋아요 눌렀어요', SYSDATE); 
-INSERT INTO comments
-     VALUES (2, 1, 'koreawoman@gmail.com', '오 좋은글 감사합니다', SYSDATE);
-INSERT INTO comments
-     VALUES (2, 2, 'japanwoman@gmail.com', '와 자알 보다갑니다', SYSDATE);
-INSERT INTO comments
-     VALUES (3, 1, 'chinawoman@gmail.com', '굿', SYSDATE);
-INSERT INTO comments
-     VALUES (3, 2, 'chinawoman@gmail.com', '좋아요클릭', SYSDATE);
-INSERT INTO comments
-     VALUES (3, 3, 'americaman@daum.net', '베리굳', SYSDATE);
-INSERT INTO comments
-     VALUES (4, 1, 'koreaman@naver.com', '너무 유익해요', SYSDATE);
-INSERT INTO comments
-     VALUES (1, 1, 'japanwoman@naver.com', '재밌습니다', SYSDATE); -- PK 중복
-
-
-
--- hashtags table
-CREATE TABLE hashtags(
-    diary_no NUMBER NOT NULL, --PK
-    hashtag VARCHAR2(20), --PK,FK
-    CONSTRAINT hashtags_pk PRIMARY KEY(diary_no, hashtag),
-    CONSTRAINT hashtags_diaries_fk FOREIGN KEY(diary_no) REFERENCES diaries(diary_no)
-);
-
--- 시험용데이터(다이어리 번호, 해시태그)
-INSERT INTO HASHTAGS
-     VALUES (1, '여행');
-INSERT INTO HASHTAGS
-     VALUES (2, '양양');
-INSERT INTO HASHTAGS
-     VALUES (3, '속초');
-INSERT INTO HASHTAGS
-     VALUES (4, '통영');
-INSERT INTO HASHTAGS
-     VALUES (5, '거제도 바다');
-INSERT INTO HASHTAGS
-     VALUES (6, '남원');
-INSERT INTO HASHTAGS
-     VALUES (7, '광주');
-INSERT INTO HASHTAGS
-     VALUES (8, '부산');
-INSERT INTO HASHTAGS
-     VALUES (1, '문형리');
-INSERT INTO HASHTAGS
-     VALUES (2, '남이섬');
-INSERT INTO HASHTAGS
-     VALUES (3, '한라산_경치');
-INSERT INTO HASHTAGS
-     VALUES (4, '평창');
-INSERT INTO HASHTAGS
-     VALUES (5, '가평');
-INSERT INTO HASHTAGS
-     VALUES (6, '포항');
-INSERT INTO HASHTAGS
-     VALUES (7, '목포');
-
-
-
-
--- likes table
-CREATE TABLE likes(
-    diary_no NUMBER(6), -- FK, PK
-    client_id VARCHAR2(20 CHAR), -- FK , PK
-    CONSTRAINT likes_pk PRIMARY KEY(diary_no, client_id),
-    CONSTRAINT likes_clients_fk FOREIGN KEY(client_id) REFERENCES clients(client_id),
-    CONSTRAINT likes_diaries_fk FOREIGN KEY(diary_no) REFERENCES diaries(diary_no)
-);
-
--- 시험용데이터(다이어리번호, 아이디)
-INSERT INTO likes
-     VALUES (1, 'koreaman@gmail.com');
-INSERT INTO likes
-     VALUES (2, 'japanwoman@naver.com');
-INSERT INTO likes
-     VALUES (3, 'chinaman@gmail.com');
-INSERT INTO likes
-     VALUES (4, 'americaman@gmail.com'); 
-INSERT INTO likes
-     VALUES (5, 'japanwoman@gmail.com');
-INSERT INTO likes
-     VALUES (6, 'chinawoman@gmail.com');
-INSERT INTO likes
-     VALUES (7, 'americaman@daum.net');
-INSERT INTO likes
-     VALUES (8, 'koreaman@naver.com');
-INSERT INTO likes
-     VALUES (8, 'koreawoman@naver.com');
-INSERT INTO likes
-     VALUES (1, 'japanwoman@naver.com');
-INSERT INTO likes
-     VALUES (1, 'koreaman@gmail.com'); -- PK LIKE_ID 중복
-
 
 -- clients table
 CREATE TABLE clients (
@@ -155,7 +43,6 @@ INSERT INTO clients
      VALUES ('japanwoman@naver.com', 'asd23', '010-1121-2237', '민성스', 1); -- 아이디 중복 (에러 예상)
 INSERT INTO clients 
      VALUES ('koreaman@naver.com', 'asd50', '010-1121-2280', '용호오', 1); 
-
 
 
 --diaries table
@@ -248,6 +135,115 @@ INSERT INTO ROUTES VALUES (2, 6, '여행지11갔다옴',10); -- ROUTE_NO가 4에
 INSERT INTO ROUTES VALUES (10000, 1, 11, '여행지11갔다옴',11); -- 없는 다이어리에 루트를 추가하는 경우
 
 
+-- comments table
+CREATE TABLE comments(
+    diary_no NUMBER(6) NOT NULL, -- PK, FK
+    comment_no NUMBER(8) NOT NULL, -- PK
+    client_id VARCHAR2(20 CHAR) NOT NULL, 
+    comment_content VARCHAR2(300 CHAR) NOT NULL,
+    comment_writing_time DATE NOT NULL, 
+    CONSTRAINT comments_pk PRIMARY KEY(diary_no, comment_no),
+    CONSTRAINT comments_diaries_fk FOREIGN KEY(diary_no) REFERENCES diaries(diary_no),
+    CONSTRAINT comments_clients_fk FOREIGN KEY(client_id) REFERENCES clients(client_id)
+);
+
+-- 시험용데이터(다이어리 번호, 댓글 번호, 아이디(이메일주소), 댓글 내용, 댓글작성시간)
+INSERT INTO comments
+     VALUES (1, 1, 'koreaman@gmail.com', '좋은 여행정보 감사합니다~' , SYSDATE);
+INSERT INTO comments
+     VALUES (1, 2, 'chinaman@gmail.com', '재밌게 보고갑니다', SYSDATE); 
+INSERT INTO comments
+     VALUES (1, 3, 'americaman@gmail.com', '좋아요 눌렀어요', SYSDATE); 
+INSERT INTO comments
+     VALUES (2, 1, 'koreawoman@gmail.com', '오 좋은글 감사합니다', SYSDATE);
+INSERT INTO comments
+     VALUES (2, 2, 'japanwoman@gmail.com', '와 자알 보다갑니다', SYSDATE);
+INSERT INTO comments
+     VALUES (3, 1, 'chinawoman@gmail.com', '굿', SYSDATE);
+INSERT INTO comments
+     VALUES (3, 2, 'chinawoman@gmail.com', '좋아요클릭', SYSDATE);
+INSERT INTO comments
+     VALUES (3, 3, 'americaman@daum.net', '베리굳', SYSDATE);
+INSERT INTO comments
+     VALUES (4, 1, 'koreaman@naver.com', '너무 유익해요', SYSDATE);
+INSERT INTO comments
+     VALUES (1, 1, 'japanwoman@naver.com', '재밌습니다', SYSDATE); -- PK 중복
+
+
+
+-- hashtags table
+CREATE TABLE hashtags(
+    diary_no NUMBER NOT NULL, --PK
+    hashtag VARCHAR2(20), --PK,FK
+    CONSTRAINT hashtags_pk PRIMARY KEY(diary_no, hashtag),
+    CONSTRAINT hashtags_diaries_fk FOREIGN KEY(diary_no) REFERENCES diaries(diary_no)
+);
+
+-- 시험용데이터(다이어리 번호, 해시태그)
+INSERT INTO HASHTAGS
+     VALUES (1, '여행');
+INSERT INTO HASHTAGS
+     VALUES (2, '양양');
+INSERT INTO HASHTAGS
+     VALUES (3, '속초');
+INSERT INTO HASHTAGS
+     VALUES (4, '통영');
+INSERT INTO HASHTAGS
+     VALUES (5, '거제도 바다');
+INSERT INTO HASHTAGS
+     VALUES (6, '남원');
+INSERT INTO HASHTAGS
+     VALUES (7, '광주');
+INSERT INTO HASHTAGS
+     VALUES (8, '부산');
+INSERT INTO HASHTAGS
+     VALUES (1, '문형리');
+INSERT INTO HASHTAGS
+     VALUES (2, '남이섬');
+INSERT INTO HASHTAGS
+     VALUES (3, '한라산_경치');
+INSERT INTO HASHTAGS
+     VALUES (4, '평창');
+INSERT INTO HASHTAGS
+     VALUES (5, '가평');
+INSERT INTO HASHTAGS
+     VALUES (6, '포항');
+INSERT INTO HASHTAGS
+     VALUES (7, '목포');
+
+-- likes table
+CREATE TABLE likes(
+    diary_no NUMBER(6), -- FK, PK
+    client_id VARCHAR2(20 CHAR), -- FK , PK
+    CONSTRAINT likes_pk PRIMARY KEY(diary_no, client_id),
+    CONSTRAINT likes_clients_fk FOREIGN KEY(client_id) REFERENCES clients(client_id),
+    CONSTRAINT likes_diaries_fk FOREIGN KEY(diary_no) REFERENCES diaries(diary_no)
+);
+
+-- 시험용데이터(다이어리번호, 아이디)
+INSERT INTO likes
+     VALUES (1, 'koreaman@gmail.com');
+INSERT INTO likes
+     VALUES (2, 'japanwoman@naver.com');
+INSERT INTO likes
+     VALUES (3, 'chinaman@gmail.com');
+INSERT INTO likes
+     VALUES (4, 'americaman@gmail.com'); 
+INSERT INTO likes
+     VALUES (5, 'japanwoman@gmail.com');
+INSERT INTO likes
+     VALUES (6, 'chinawoman@gmail.com');
+INSERT INTO likes
+     VALUES (7, 'americaman@daum.net');
+INSERT INTO likes
+     VALUES (8, 'koreaman@naver.com');
+INSERT INTO likes
+     VALUES (8, 'koreawoman@naver.com');
+INSERT INTO likes
+     VALUES (1, 'japanwoman@naver.com');
+INSERT INTO likes
+     VALUES (1, 'koreaman@gmail.com'); -- PK LIKE_ID 중복
+
 
 -- admins table
 CREATE TABLE admins(
@@ -271,7 +267,7 @@ CREATE TABLE notices (
     notice_title VARCHAR2(50) NOT NULL,
     notice_content VARCHAR2(255) NOT NULL,
     notice_writing_time DATE NOT NULL,
-    notice_modifying_time DATE NOT NULL,
+    notice_modifying_time DATE,
     notice_view_cnt NUMBER NOT NULL,
     CONSTRAINT notices_pk PRIMARY KEY(notice_no),
     CONSTRAINT notices_admin_id_fk FOREIGN KEY(admin_id) REFERENCES admins(admin_id)
@@ -301,3 +297,15 @@ INSERT INTO NOTICES VALUES (NOTICE_NO_SEQ.NEXTVAL,'3141', '혜화동 이벤트',
 
 CREATE SEQUENCE diary_no_seq;
 CREATE SEQUENCE notice_no_seq;
+
+
+CREATE OR REPLACE TRIGGER like_cnt_trig
+AFTER INSERT OR DELETE ON likes
+FOR EACH ROW
+BEGIN
+IF INSERTING THEN
+    UPDATE diaries SET diary_like_cnt = (NVL(diary_like_cnt,0) + 1) WHERE :new.diary_no = diaries.diary_no;
+ELSEIF DELETING THEN 
+    UPDATE diaries SET diary_like_cnt = (NVL(diary_like_cnt,0) - 1) WHERE :old.diary_no = diaries.diary_no;
+END IF;
+END;
