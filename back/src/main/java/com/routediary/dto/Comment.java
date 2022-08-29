@@ -19,4 +19,3 @@ public class Comment {
   private Date commentWritingTime;
   private Client client;
 }
-
