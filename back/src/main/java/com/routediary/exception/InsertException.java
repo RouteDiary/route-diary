@@ -9,5 +9,3 @@ public class InsertException extends Exception {
     super(message);
   }
 }
-
-
