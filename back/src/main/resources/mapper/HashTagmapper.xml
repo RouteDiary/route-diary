@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+                        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.routediary.repository.HashTagRepository">
+	<insert id="insert" parameterType="HashTag">
+		INSERT INTO HASHTAG
+		VALUES ( #{diaryNo},#{hashTag})
+	</insert>
+	<update id="update" parameterType="HashTag">
+		UPDATE HASHTAG 
+		SET hash_tag=#{hashTag} 
+		WHERE diary_no = #{diaryNo}
+	</update>
+	
+	<delete id="delete" parameterType="HashTag">
+		DELETE FROM HASHTAG
+		WHERE hash_tag=#{hashTag} AND diary_no = #{diaryNo}
+	</delete>
+	
+	<delete id="deleteAll" parameterType="int">
+		DELETE FROM HASHTAG
+		WHERE hash_tag=#{hashTag}
+	</delete>
+</mapper>
