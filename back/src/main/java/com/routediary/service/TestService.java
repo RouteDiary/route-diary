@@ -4,7 +4,6 @@ import org.springframework.stereotype.Service;
 import com.routediary.dto.Notice;
 import com.routediary.dto.PageBean;
 
-@Service
 public interface TestService {
 
   /**
