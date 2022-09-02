@@ -3,9 +3,6 @@ package com.routediary.repository;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 import com.routediary.dto.Client;
-import com.routediary.exception.InsertException;
-import com.routediary.exception.SelectException;
-import com.routediary.exception.UpdateException;
 
 @Repository
 @Mapper
@@ -18,7 +15,7 @@ public interface ClientRepository {
    * @return Client
    * @throws SelectException
    */
-  Client selectClientById(String clientId) throws SelectException;
+  public Client selectClientById(String clientId);
 
   /**
    * 회원 닉네임을 조회한다(중복체크할때)
@@ -27,7 +24,7 @@ public interface ClientRepository {
    * @return Client
    * @throws SelectException
    */
-  Client selectClientByNickname(String clientNickname) throws SelectException;
+  public Client selectClientByNickname(String clientNickname);
 
   /**
    * Client(회원) 객체를 DB에 추가
@@ -35,7 +32,7 @@ public interface ClientRepository {
    * @param client
    * @throws InsertException
    */
-  public void insert(Client client) throws InsertException;
+  public void insert(Client client);
 
   /**
    * 1. 회원정보를 수정 - clientPwd, clientNickname, clientCellphoneNo 2. 회원탈퇴 - clientStatusFlag = 1 ->
@@ -44,5 +41,5 @@ public interface ClientRepository {
    * @param client
    * @throw UpdateException
    */
-  public void update(Client client) throws UpdateException;
+  public void update(Client client);
 }

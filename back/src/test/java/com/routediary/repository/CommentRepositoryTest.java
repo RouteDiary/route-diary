@@ -5,10 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import com.routediary.dto.Client;
 import com.routediary.dto.Comment;
-import com.routediary.exception.DeleteException;
-import com.routediary.exception.InsertException;
-import com.routediary.exception.SelectException;
-import com.routediary.exception.UpdateException;
 
 
 @SpringBootTest
@@ -18,7 +14,7 @@ class CommentRepositoryTest {
   CommentRepository commentRepository;
 
   @Test
-  void InsertCommentTest() throws InsertException {
+  void InsertCommentTest() throws Exception {
     Client client = new Client();
     Comment comment = new Comment();
     client.setClientId("japanwoman@gmail.com");
@@ -29,7 +25,7 @@ class CommentRepositoryTest {
   }
 
   @Test
-  void UpdateCommentTest() throws UpdateException, SelectException {
+  void UpdateCommentTest() throws Exception {
     Comment comment = new Comment();
     int diaryNo = 4;
     int commentNo = 1;
@@ -42,14 +38,14 @@ class CommentRepositoryTest {
   }
 
   @Test
-  void DeleteCommentTest() throws DeleteException {
+  void DeleteCommentTest() throws Exception {
     int diaryNo = 4;
     int commentNo = 3;
     commentRepository.delete(diaryNo, commentNo);
   }
 
   @Test
-  void DeleteAllCommentTest() throws DeleteException {
+  void DeleteAllCommentTest() throws Exception {
     int diaryNo = 1;
     commentRepository.deleteAll(diaryNo);
   }

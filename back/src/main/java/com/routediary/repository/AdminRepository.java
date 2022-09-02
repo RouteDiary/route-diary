@@ -3,7 +3,6 @@ package com.routediary.repository;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 import com.routediary.dto.Admin;
-import com.routediary.exception.SelectException;
 
 
 @Repository
@@ -17,6 +16,6 @@ public interface AdminRepository {
    * @return Admin
    * @throws SelectException
    */
-  public Admin selectAdminById(String adminId) throws SelectException;
+  public Admin selectAdminById(String adminId);
 
 }

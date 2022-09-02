@@ -6,10 +6,6 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Repository;
 import com.routediary.dto.Notice;
-import com.routediary.exception.DeleteException;
-import com.routediary.exception.InsertException;
-import com.routediary.exception.SelectException;
-import com.routediary.exception.UpdateException;
 
 @Repository
 @Mapper
@@ -20,7 +16,7 @@ public interface NoticeRepository {
    * @return int
    * @throws SelectException
    */
-  public int selectCount() throws SelectException;
+  public int selectCount();
 
   /**
    * 공지사항을 추가한다.
@@ -28,7 +24,7 @@ public interface NoticeRepository {
    * @param notice
    * @throws InsertException
    */
-  public void insert(Notice notice) throws InsertException;
+  public void insert(Notice notice);
 
   /**
    * 공지사항을 수정한다.
@@ -36,7 +32,7 @@ public interface NoticeRepository {
    * @param notice
    * @throws UpdateException
    */
-  public void update(Notice notice) throws UpdateException;
+  public void update(Notice notice);
 
   /**
    * 공지사항을 삭제한다.
@@ -44,7 +40,7 @@ public interface NoticeRepository {
    * @param noticeNo
    * @throws DeleteException
    */
-  public void delete(int noticeNo) throws DeleteException;
+  public void delete(int noticeNo);
 
   /**
    * Notice(공지사항) 객체 1개를 반환
@@ -53,7 +49,7 @@ public interface NoticeRepository {
    * @return Notice
    * @throws SelectException
    */
-  public Notice selectNotice(int noticeNo) throws SelectException;
+  public Notice selectNotice(int noticeNo);
 
   /**
    * keyword parameter가 null이 아닌 경우, 검색어에 해당되는 Notice(공지사항) 객체들이 반환. null인 경우, 검색어와 상관없이
@@ -66,6 +62,13 @@ public interface NoticeRepository {
    * @throws SelectException
    */
   public List<Notice> selectNotices(@Param("startRow") int startRow, @Param("endRow") int endRow,
-      @Param("keyword") @Nullable String keyword) throws SelectException;
+      @Param("keyword") @Nullable String keyword);
 
+  /**
+   * 공지사항의 조회수(notice_view_cnt)를 증가함
+   * 
+   * @param noticeNo
+   * @throws UpdateException
+   */
+  public void updateViewCnt(int NoticeNo);
 }
