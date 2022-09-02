@@ -9,10 +9,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import com.routediary.dto.Notice;
-import com.routediary.exception.DeleteException;
-import com.routediary.exception.InsertException;
-import com.routediary.exception.SelectException;
-import com.routediary.exception.UpdateException;
 
 @SpringBootTest
 class NoticeRepositoryTest {
@@ -22,7 +18,7 @@ class NoticeRepositoryTest {
   NoticeRepository repository;
 
   @Test
-  void InsertTest() throws InsertException, SelectException { // 공지사항 작성 테스트
+  void InsertTest() throws Exception { // 공지사항 작성 테스트
     Notice notice = new Notice();
     notice.setAdminId("1234");
     notice.setNoticeTitle("강만두");
@@ -35,7 +31,7 @@ class NoticeRepositoryTest {
   }
 
   @Test
-  void updateTest() throws UpdateException, SelectException {
+  void updateTest() throws Exception {
     String expectedAdminId = "1234";
     String noticeTitle = "modified notice";
     String noticeContent = "modified notice";
@@ -52,7 +48,7 @@ class NoticeRepositoryTest {
   }
 
   @Test
-  void updateViewCntTest() throws UpdateException, SelectException {
+  void updateViewCntTest() throws Exception {
 
     repository.updateViewCnt(41);
 
@@ -61,7 +57,7 @@ class NoticeRepositoryTest {
   }
 
   @Test
-  void DeleteTest() throws DeleteException, SelectException { // 공지사항 삭제 테스트
+  void DeleteTest() throws Exception { // 공지사항 삭제 테스트
 
     int noticeNo = 11;
     repository.delete(noticeNo);
@@ -70,7 +66,7 @@ class NoticeRepositoryTest {
   }
 
   @Test
-  void SelectOneTest() throws SelectException { // 공지사항 클릭했을때 한개 보여주기 테스트
+  void SelectOneTest() throws Exception { // 공지사항 클릭했을때 한개 보여주기 테스트
 
     int noticeNo = 1;
 
@@ -85,15 +81,14 @@ class NoticeRepositoryTest {
   }
 
   @Test
-  void SelectCountTest() throws SelectException { // 공지사항 총개수 테스트
-
+  void SelectCountTest() throws Exception { // 공지사항 총개수 테스트
     int expectedCnt = 10;
     int cnt = repository.selectCount();
     assertEquals(expectedCnt, cnt);
   }
 
   @Test
-  void SelectNoticesTest() throws SelectException { // 공지사항 목록 테스트
+  void SelectNoticesTest() throws Exception { // 공지사항 목록 테스트
     int currentPage = 1;
     int cntPerPage = 10;
     int endRow = currentPage * cntPerPage; // 10
@@ -110,7 +105,7 @@ class NoticeRepositoryTest {
   }
 
   @Test
-  void SelectNoticesWordTest() throws SelectException { // 공지사항 검색어를통한 목록 테스
+  void SelectNoticesWordTest() throws Exception { // 공지사항 검색어를통한 목록 테스
     int currentPage = 1;
     int cntPerPage = 10;
     int endRow = currentPage * cntPerPage; // 10

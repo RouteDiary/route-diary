@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import com.routediary.dto.Admin;
-import com.routediary.exception.SelectException;
 
 @SpringBootTest
 public class AdminRepositoryTest {
@@ -13,7 +12,7 @@ public class AdminRepositoryTest {
   AdminRepository repository;
 
   @Test
-  void testselectAdminById() throws SelectException {
+  void testselectAdminById() throws Exception {
     String adminId = "1234";
     String expectedAdminPwd = "PW4321";
     Admin admin = repository.selectAdminById(adminId);

@@ -5,9 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import com.routediary.dto.Like;
-import com.routediary.exception.DeleteException;
-import com.routediary.exception.InsertException;
-import com.routediary.exception.SelectException;
 
 @SpringBootTest
 public class LikeRepositoryTest {
@@ -15,7 +12,7 @@ public class LikeRepositoryTest {
   private LikeRepository repository;
 
   @Test
-  public void testSelectCount() throws SelectException {
+  public void testSelectCount() throws Exception {
     int diaryNo = 1;
     int expectedCount = 2;
     int count = repository.selectCount(diaryNo);
@@ -23,7 +20,7 @@ public class LikeRepositoryTest {
   }
 
   @Test
-  public void testInsert() throws InsertException {
+  public void testInsert() throws Exception {
     Like like = new Like();
     like.setDiaryNo(1);
     like.setClientId("koreaman@gmail.com");
@@ -31,7 +28,7 @@ public class LikeRepositoryTest {
   }
 
   @Test
-  public void testDelete() throws DeleteException {
+  public void testDelete() throws Exception {
     Like like = new Like();
     like.setDiaryNo(1);
     like.setClientId("koreaman@gmail.com");
@@ -39,7 +36,7 @@ public class LikeRepositoryTest {
   }
 
   @Test
-  public void testDeleteAll() throws DeleteException {
+  public void testDeleteAll() throws Exception {
     int diaryNo = 0;
     repository.deleteAll(diaryNo);
   }

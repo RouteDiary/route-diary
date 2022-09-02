@@ -19,7 +19,6 @@ import com.routediary.exception.AddException;
 import com.routediary.exception.FindException;
 import com.routediary.exception.ModifyException;
 import com.routediary.exception.RemoveException;
-import com.routediary.exception.SelectException;
 import com.routediary.repository.AdminRepository;
 import com.routediary.repository.DiaryRepository;
 import com.routediary.repository.NoticeRepository;
@@ -61,7 +60,7 @@ class AdminServiceTest {
 
   }
   @Test
-  void TestRemoveDiary() throws RemoveException, SelectException{
+  void TestRemoveDiary() throws RemoveException{
     int expectedDiaryNo = 2;
     
     adminService.removeDiary(expectedDiaryNo);
@@ -70,7 +69,7 @@ class AdminServiceTest {
   }
 
   @Test
-  void TestRemoveNotice() throws RemoveException, SelectException {
+  void TestRemoveNotice() throws RemoveException{
     int expectedNoticeNo = 1;
     adminService.removeNotice(expectedNoticeNo);
     Notice notice = noticeRepository.selectNotice(expectedNoticeNo);
@@ -78,7 +77,7 @@ class AdminServiceTest {
   }
   
   @Test
-  void TestRemoveComment() throws RemoveException, SelectException{
+  void TestRemoveComment() throws RemoveException{
     int expectedDiaryNo = 3;
     int expectedCommentNo = 1;
     
@@ -87,7 +86,7 @@ class AdminServiceTest {
   }
 
   @Test
-  void TestWriteNotice() throws SelectException, AddException {
+  void TestWriteNotice() throws  AddException {
     Notice notice = new Notice();
     
     String expectedAdminId = "msk@kosta.com";
@@ -151,7 +150,7 @@ class AdminServiceTest {
     assertEquals(expectedDiaryNo,diary.getDiaryNo());
   }
   @Test
-  void TestModifyNotice() throws SelectException, ModifyException {
+  void TestModifyNotice() throws  ModifyException {
     String expectedAdminId = "1111";
     String noticeTitle = "modified notice";
     String noticeContent = "modified notice";

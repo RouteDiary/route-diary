@@ -10,13 +10,9 @@ import com.routediary.dto.Diary;
 import com.routediary.dto.Notice;
 import com.routediary.dto.PageBean;
 import com.routediary.exception.AddException;
-import com.routediary.exception.DeleteException;
 import com.routediary.exception.FindException;
-import com.routediary.exception.InsertException;
 import com.routediary.exception.ModifyException;
 import com.routediary.exception.RemoveException;
-import com.routediary.exception.SelectException;
-import com.routediary.exception.UpdateException;
 import com.routediary.repository.AdminRepository;
 import com.routediary.repository.CommentRepository;
 import com.routediary.repository.DiaryRepository;
@@ -58,7 +54,7 @@ public class AdminServiceImpl implements AdminService {
         }
       }
       throw new FindException("아이디 혹은 비밀번호가 일치하지 않습니다.");
-    } catch (SelectException e) {
+    } catch (Exception e) {
       e.printStackTrace();
       throw new FindException(e.getMessage());
     }
@@ -69,16 +65,14 @@ public class AdminServiceImpl implements AdminService {
   public void removeDiary(int diaryNo) throws RemoveException {
     try {
       if(diaryRepository.selectDiary(diaryNo)==null) {
-        throw new SelectException("존재하지않는 다이어리 입니다");
+        throw new Exception("존재하지않는 다이어리 입니다");
       }
       commentRepository.deleteAll(diaryNo);
       hashtagRepository.deleteAll(diaryNo);
       likeRepository.deleteAll(diaryNo);
       routeRepository.deleteAll(diaryNo);
       diaryRepository.delete(diaryNo);
-    } catch (DeleteException e) {
-      e.printStackTrace();
-    } catch (SelectException e) {
+    } catch (Exception e) {
       e.printStackTrace();
       throw new RemoveException(e.getMessage());
     } 
@@ -93,9 +87,7 @@ public class AdminServiceImpl implements AdminService {
         throw new RemoveException("댓글이 없습니다");
       }
       commentRepository.delete(diaryNo, commentNo);
-    } catch (DeleteException e) {
-      e.printStackTrace();
-    } catch (SelectException e) {
+    } catch (Exception e) {
       e.printStackTrace();
       throw new RemoveException("댓글삭제 되지않았습니다"+e.getMessage());
     }
@@ -105,7 +97,7 @@ public class AdminServiceImpl implements AdminService {
   public void writeNotice(Notice notice) throws AddException {
     try {
       noticeRepository.insert(notice);
-    } catch (InsertException e) {
+    } catch (Exception e) {
       e.printStackTrace();
       throw new AddException("저장되지않았습니다"+e.getMessage());
     }
@@ -116,7 +108,7 @@ public class AdminServiceImpl implements AdminService {
   public void modifyNotice(Notice notice) throws ModifyException {
     try {
       noticeRepository.update(notice);
-    } catch (UpdateException e) {
+    } catch (Exception e) {
       e.printStackTrace();
       throw new ModifyException("저장되지 않았습니다"+e.getMessage());
     }
@@ -127,15 +119,14 @@ public class AdminServiceImpl implements AdminService {
   public void removeNotice(int noticeNo) throws RemoveException {
     try {
       if (noticeRepository.selectNotice(noticeNo) == null) {
-        throw new SelectException("존재하지 않는 다이어리 입니다.");
+        throw new Exception("존재하지 않는 다이어리 입니다.");
       }
       noticeRepository.delete(noticeNo);
-    } catch (SelectException e) {
-      e.printStackTrace();
-    } catch (DeleteException e) {
+    } catch (Exception e) {
       e.printStackTrace();
       throw new RemoveException("존재하지 않는 다이어리 입니다"+e.getMessage());
-    }
+    } 
+    
   }
 
   @Override
@@ -151,7 +142,7 @@ public class AdminServiceImpl implements AdminService {
       }
       List<Diary>diaries = diaryRepository.selectAllDiaries(order, startRow, endRow, null);
       pageBean = new PageBean<Diary>(diaries,totalRows,currentPage,CNT_PER_PAGE,CNT_PER_PAGE_GROUP);
-    }catch (SelectException e) {
+    }catch (Exception e) {
       e.printStackTrace();
       throw new FindException("다이어리가 없습니다"+e.getMessage());
     }
@@ -163,7 +154,7 @@ public class AdminServiceImpl implements AdminService {
     Optional<Diary> diaryOpt = Optional.empty();
     try {
       diaryOpt = Optional.ofNullable(diaryRepository.selectDiary(diaryNo));
-    } catch (SelectException e) {
+    } catch (Exception e) {
       e.printStackTrace();
       throw new FindException("게시글이 없습니다"+e.getMessage());
     }

@@ -10,10 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import com.routediary.dto.Client;
 import com.routediary.dto.Diary;
-import com.routediary.exception.DeleteException;
-import com.routediary.exception.InsertException;
-import com.routediary.exception.SelectException;
-import com.routediary.exception.UpdateException;
 
 @SpringBootTest
 class DiaryRepositoryTest {
@@ -21,21 +17,21 @@ class DiaryRepositoryTest {
   DiaryRepository diaryRepository;
 
   @Test
-  void selectCountByDisclosureFlagTest() throws SelectException {
+  void selectCountByDisclosureFlagTest() throws Exception {
     int expectedCount = 198;
     int count = diaryRepository.selectCountByDisclosureFlag(1);
     assertEquals(expectedCount, count);
   }
 
   @Test
-  void selectCountByClientIdTest() throws SelectException {
+  void selectCountByClientIdTest() throws Exception {
     int expectedCount = 65;
     int count = diaryRepository.selectCountByClientId("koreaman@gmail.com");
     assertEquals(expectedCount, count);
   }
 
   @Test
-  void selectDiariesByClientIdTest() throws SelectException {
+  void selectDiariesByClientIdTest() throws Exception {
     String clientId = "koreaman@gmail.com";
     String expectedTitle = "즐거운 서울로 떠나요";
     String expectedClientNickname = "한쿡";
@@ -48,7 +44,7 @@ class DiaryRepositoryTest {
   }
 
   @Test
-  void selectDiariesTest() throws SelectException {
+  void selectDiariesTest() throws Exception {
     int order = 2; // diary_view_cnt
 
     // hashtag를 이용한 검색
@@ -76,7 +72,7 @@ class DiaryRepositoryTest {
   }
 
   @Test
-  void selectDiaryTest() throws SelectException {
+  void selectDiaryTest() throws Exception {
     int diaryNo = 1;
     int expectedRoutesCount = 5;
     int expectedCommentsCount = 3;
@@ -99,7 +95,7 @@ class DiaryRepositoryTest {
   }
 
   @Test
-  void insertTest() throws InsertException, SelectException {
+  void insertTest() throws Exception {
     String clientId = "chinaman@gmail.com";
     String expectedClientNickname = "한국남자3";
     String diaryTitle = "new diary";
@@ -118,7 +114,7 @@ class DiaryRepositoryTest {
   }
 
   @Test
-  void updateTest() throws UpdateException, SelectException {
+  void updateTest() throws Exception {
     String expectedClientId = "chinaman@gmail.com";
     String diaryTitle = "modified diary";
     Diary diary = new Diary();
@@ -135,7 +131,7 @@ class DiaryRepositoryTest {
   }
 
   @Test
-  void updateViewCntTest() throws UpdateException, SelectException {
+  void updateViewCntTest() throws Exception {
 
     diaryRepository.updateViewCnt(1);
     Diary diaryInDb = diaryRepository.selectDiary(1);
@@ -143,7 +139,7 @@ class DiaryRepositoryTest {
   }
 
   @Test
-  void updateLikeCntTest() throws UpdateException, SelectException {
+  void updateLikeCntTest() throws Exception {
 
     diaryRepository.updateIncreaseLikeCnt(1);
     Diary diaryInDb = diaryRepository.selectDiary(1);
@@ -155,7 +151,7 @@ class DiaryRepositoryTest {
   }
 
   @Test
-  void deleteTest() throws DeleteException, SelectException {
+  void deleteTest() throws Exception {
     int diaryNo = 10;
     diaryRepository.delete(diaryNo);
 

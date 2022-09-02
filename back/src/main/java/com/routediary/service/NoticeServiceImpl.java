@@ -7,8 +7,6 @@ import org.springframework.stereotype.Service;
 import com.routediary.dto.Notice;
 import com.routediary.dto.PageBean;
 import com.routediary.exception.FindException;
-import com.routediary.exception.SelectException;
-import com.routediary.exception.UpdateException;
 import com.routediary.repository.NoticeRepository;
 
 @Service(value = "NoticeService")
@@ -31,7 +29,7 @@ public class NoticeServiceImpl implements NoticeService {
       List<Notice> notices = noticeRepository.selectNotices(startRow, endRow, keyword);
       pageBean =
           new PageBean<Notice>(notices, totalRows, currentPage, CNT_PER_PAGE, CNT_PER_PAGE_GROUP);
-    } catch (SelectException e) {
+    } catch (Exception e) {
       e.printStackTrace();
       throw new FindException("가져올 공지사항이 없습니다"+e.getMessage());
     }
@@ -51,7 +49,7 @@ public class NoticeServiceImpl implements NoticeService {
       List<Notice> notices = noticeRepository.selectNotices(startRow, endRow, keyword);
       pageBean =
           new PageBean<Notice>(notices, totalRows, currentPage, CNT_PER_PAGE, CNT_PER_PAGE_GROUP);
-    } catch (SelectException e) {
+    } catch (Exception e) {
       e.printStackTrace();
       throw new FindException("해당"+keyword+"에 해당하는 공지사항이 없습니다"+e.getMessage());
     }
@@ -74,16 +72,14 @@ public class NoticeServiceImpl implements NoticeService {
       } else {
         throw new FindException("게시글이 없습니다");
       }
-    } catch (SelectException e) {
-      e.printStackTrace();
-    } catch (UpdateException e) {
+    } catch (Exception e) {
       e.printStackTrace();
     }
     // 게시글 한개 불러오기
     Optional<Notice> notice = Optional.empty();
     try {
       notice = Optional.ofNullable(noticeRepository.selectNotice(noticeNo));
-    } catch (SelectException e) {
+    } catch (Exception e) {
       e.printStackTrace();
       throw new FindException("게시글이 없습니다"+e.getMessage());
     }

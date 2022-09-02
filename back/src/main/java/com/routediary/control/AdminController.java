@@ -4,6 +4,7 @@ import java.util.Optional;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +17,7 @@ import com.routediary.dto.Diary;
 import com.routediary.dto.PageBean;
 import com.routediary.dto.ResultBean;
 import com.routediary.exception.FindException;
+import com.routediary.exception.RemoveException;
 import com.routediary.service.AdminServiceImpl;
 import com.routediary.service.NoticeServiceImpl;
 
@@ -108,8 +110,9 @@ public class AdminController {
     return resultBean;
 
   }
-  @DeleteMapping(value = {"{diary}"})
-  public ResponseEntity<?> removeDiary(int diaryNo){
+  @DeleteMapping(value = {"{diary}"} , produces= MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<?> removeDiary(int diaryNo) throws RemoveException{
+    adminService.removeDiary(diaryNo);
     return null;
   }
 
