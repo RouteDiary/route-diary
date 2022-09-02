@@ -68,4 +68,11 @@ public interface NoticeRepository {
   public List<Notice> selectNotices(@Param("startRow") int startRow, @Param("endRow") int endRow,
       @Param("keyword") @Nullable String keyword) throws SelectException;
 
+  /**
+   * 공지사항의 조회수(notice_view_cnt)를 증가함
+   * 
+   * @param noticeNo
+   * @throws UpdateException
+   */
+  public void updateViewCnt(int NoticeNo) throws UpdateException;
 }

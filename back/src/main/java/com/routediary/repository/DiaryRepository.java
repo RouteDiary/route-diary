@@ -15,12 +15,44 @@ import com.routediary.exception.UpdateException;
 @Mapper
 public interface DiaryRepository {
   /**
-   * 현재 DB에 저장되있는 전체 diary의 개수를 반환
-   * 
+   * 전체 다이어리(공개 여부 상관없이)반환
+   * @param order
+   * @param startRow
+   * @param endRow
+   * @param hashtags
+   * @return List<Diary>
+   * @throws SelectException
+   */
+  public List<Diary> selectAllDiaries(@Param("order") int order, @Param("startRow") int startRow,
+      @Param("endRow") int endRow, @Param("hashtags") @Nullable List<String> hashtags)
+      throws SelectException;
+  
+  /**
+   * 전체 다이어리개수를 반환
    * @return int
    * @throws SelectException
    */
-  public int selectCount() throws SelectException;
+  
+   public int selectCountByAllDiaries() throws SelectException;
+
+  /**
+   * diaryDisclosureFlag = 1 : DB에 있는 공개상태의 다이어리 전체갯수를 반환 / diaryDisclosureFlag = 0 : DB에 있는 비공개상태의
+   * 다이어리 전체갯수를 반환
+   * 
+   * @param diaryDisclosureFlag
+   * @return int
+   * @throws SelectException
+   */
+  public int selectCountByDisclosureFlag(int diaryDisclosureFlag) throws SelectException;
+
+  /**
+   * clientId(아이디)에 따라 DB에 있는 다이어리 전체갯수를 반환
+   * 
+   * @param clientId
+   * @return int
+   * @throws SelectException
+   */
+  public int selectCountByClientId(String clientId) throws SelectException;
 
   /**
    * 회원의 ID(clientId)값과 일치하는 다이어리들을 반환
@@ -68,8 +100,7 @@ public interface DiaryRepository {
   public void insert(Diary diary) throws InsertException;
 
   /**
-   * 다이어리의 내용(diary_title, diary_start_date, diary_end_date, diary_disclosure_flag)을 수정하거나
-   * 조회수(diary_view_cnt)를 증가시킬때 사용
+   * 다이어리의 내용(diary_title, diary_start_date, diary_end_date, diary_disclosure_flag)을 수정할때 사용
    * 
    * @param diary
    * @throws UpdateException
@@ -84,5 +115,27 @@ public interface DiaryRepository {
    */
   public void delete(int diaryNo) throws DeleteException;
 
+  /**
+   * 다이어리의 조회수(diary_view_cnt)를 1 증가시킴
+   * 
+   * @param diaryNo
+   * @throws UpdateException
+   */
+  public void updateViewCnt(int diaryNo) throws UpdateException;
 
+  /**
+   * 다이어리의 좋아요수(diary_like_cnt)를 1 증가시킴
+   * 
+   * @param diaryNo
+   * @throws UpdateException
+   */
+  public void updateIncreaseLikeCnt(int diaryNo) throws UpdateException;
+
+  /**
+   * 다이어리의 좋아요수(diary_like_cnt)를 1 감소시킴
+   * 
+   * @param diaryNo
+   * @throws UpdateException
+   */
+  public void updateDecreaseLikeCnt(int diaryNo) throws UpdateException;
 }

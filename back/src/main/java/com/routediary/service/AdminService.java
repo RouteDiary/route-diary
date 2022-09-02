@@ -1,8 +1,10 @@
 package com.routediary.service;
 
-import org.springframework.stereotype.Service;
+import java.util.List;
 import com.routediary.dto.Admin;
+import com.routediary.dto.Diary;
 import com.routediary.dto.Notice;
+import com.routediary.dto.PageBean;
 import com.routediary.exception.AddException;
 import com.routediary.exception.FindException;
 import com.routediary.exception.ModifyException;
@@ -10,6 +12,19 @@ import com.routediary.exception.RemoveException;
 
 
 public interface AdminService {
+  public Diary showDiary(int diaryNo) throws FindException;
+  /**
+   * 다이어리 목록을  1 - diary_view_cnt
+   *              2 - diary_writing_time
+   *              3 - diary_like_cnt 
+   *              DESC 순으로 정
+   * @param order
+   * @param currentPage
+   * @param hashtags
+   * @return PageBean<Diary>
+   * @throws FindException
+   */
+  public PageBean<Diary> showDiaryBoard(int order,int currentPage,List<String>hashtags) throws FindException;
   /**
    * 로그인 한다.
    * @param adminId

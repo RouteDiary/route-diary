@@ -18,7 +18,7 @@ public interface ClientRepository {
    * @return Client
    * @throws SelectException
    */
-  Client selectClientById(String clientId) throws SelectException;
+  public Client selectClientById(String clientId) throws SelectException;
 
   /**
    * 회원 닉네임을 조회한다(중복체크할때)
@@ -27,7 +27,7 @@ public interface ClientRepository {
    * @return Client
    * @throws SelectException
    */
-  Client selectClientByNickname(String clientNickname) throws SelectException;
+  public Client selectClientByNickname(String clientNickname) throws SelectException;
 
   /**
    * Client(회원) 객체를 DB에 추가

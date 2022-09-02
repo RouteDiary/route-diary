@@ -3,10 +3,7 @@ package com.routediary.repository;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import org.apache.log4j.Logger;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +35,7 @@ class NoticeRepositoryTest {
   }
 
   @Test
-  void updateTest() throws UpdateException, SelectException { // 내용을 수정하기 위해 update()를 사용하는 경우
+  void updateTest() throws UpdateException, SelectException {
     String expectedAdminId = "1234";
     String noticeTitle = "modified notice";
     String noticeContent = "modified notice";
@@ -55,14 +52,11 @@ class NoticeRepositoryTest {
   }
 
   @Test
-  void updateViewCntTest() throws UpdateException, SelectException { // 조회수를 증가시키기 위해
-                                                                     // update()를 사용하는 경우
-    Notice noticeForViewCnt = new Notice();
-    noticeForViewCnt.setNoticeNo(11);
-    noticeForViewCnt.setNoticeViewCnt(-1);
-    repository.update(noticeForViewCnt);
+  void updateViewCntTest() throws UpdateException, SelectException {
 
-    Notice noticeInDb = repository.selectNotice(11);
+    repository.updateViewCnt(41);
+
+    Notice noticeInDb = repository.selectNotice(41);
     assertEquals(new Integer(1), noticeInDb.getNoticeViewCnt());
   }
 
@@ -102,36 +96,29 @@ class NoticeRepositoryTest {
   void SelectNoticesTest() throws SelectException { // 공지사항 목록 테스트
     int currentPage = 1;
     int cntPerPage = 10;
-    int endRow = currentPage * cntPerPage; // 10 20
-    int startRow = endRow - cntPerPage + 1; // 1 11
+    int endRow = currentPage * cntPerPage; // 10
+    int startRow = endRow - cntPerPage + 1; // 1
+
     int expectedSize = 10;
-    
     // int []expectedNoticeNoArr = {12,11,10,9,8,7,6,5,4,3};
     List<Notice> list = repository.selectNotices(startRow, endRow, null);
     assertNotNull(list);
     assertEquals(expectedSize, list.size());
-//     for(int i = 0; i<list.size(); i++) {
-//     assertEquals(list[i], list.get(i).getNoticeNo());
-//     }
+    // for(int i = 0; i<list.size(); i++) {
+    // assertEquals(expectedNoticeNoArr[i], list.get(i).getNoticeNo());
+    // }
   }
 
   @Test
   void SelectNoticesWordTest() throws SelectException { // 공지사항 검색어를통한 목록 테스
     int currentPage = 1;
     int cntPerPage = 10;
-    int endRow = currentPage * cntPerPage; // 10 20
-    int startRow = endRow - cntPerPage + 1; // 1 11
+    int endRow = currentPage * cntPerPage; // 10
+    int startRow = endRow - cntPerPage + 1; // 1
 
     int expectedSize = 3;
     String keyword = "개";
-//    Map<String, Integer> map = new HashMap<>();
-//    map.put("startRow", startRow);
-//    map.put("endRow", endRow);
-//    map.put("", endRow);
-//    List<Notice> list = repository.selectNotices(startRow, endRow, keyword);
     List<Notice> list = repository.selectNotices(startRow, endRow, keyword);
-//    list.add((Notice) map);
-    System.out.println(list);
     assertNotNull(list);
     assertEquals(expectedSize, list.size());
   }

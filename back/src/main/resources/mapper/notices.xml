@@ -18,18 +18,9 @@
   <update id="update" parameterType="Notice">
 		UPDATE notices
 	<set>
-	  <trim prefixOverrides=",">
-        <choose>
-          <when test="noticeViewCnt == -1">
-      	 , notice_view_cnt = #{noticeViewCnt} + 1
-	      </when>
-          <otherwise>
-		 , notice_title = #{noticeTitle}
+		   notice_title = #{noticeTitle}
 		 , notice_content = #{noticeContent}
-		 , notice_modifying_time = SYSDATE
-          </otherwise>
-	    </choose>
-	  </trim>	  
+		 , notice_modifying_time = SYSDATE  
 	</set>
 		WHERE notice_no = #{noticeNo}
   </update>
@@ -68,4 +59,12 @@
 		)
 		WHERE r BETWEEN #{startRow} AND #{endRow}
   </select>
+  
+  <update id="updateViewCnt" parameterType="Notice">
+		UPDATE notices
+	<set>
+		   notice_view_cnt = notice_view_cnt + 1  
+	</set>
+		WHERE notice_no = #{noticeNo}
+  </update>
 </mapper>

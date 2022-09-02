@@ -21,9 +21,16 @@ class DiaryRepositoryTest {
   DiaryRepository diaryRepository;
 
   @Test
-  void selectCountTest() throws SelectException {
-    int expectedCount = 9;
-    int count = diaryRepository.selectCount();
+  void selectCountByDisclosureFlagTest() throws SelectException {
+    int expectedCount = 198;
+    int count = diaryRepository.selectCountByDisclosureFlag(1);
+    assertEquals(expectedCount, count);
+  }
+
+  @Test
+  void selectCountByClientIdTest() throws SelectException {
+    int expectedCount = 65;
+    int count = diaryRepository.selectCountByClientId("koreaman@gmail.com");
     assertEquals(expectedCount, count);
   }
 
@@ -111,7 +118,7 @@ class DiaryRepositoryTest {
   }
 
   @Test
-  void updateTest() throws UpdateException, SelectException { // 다이어리의 내용을 수정하기 위해 update()를 사용하는 경우
+  void updateTest() throws UpdateException, SelectException {
     String expectedClientId = "chinaman@gmail.com";
     String diaryTitle = "modified diary";
     Diary diary = new Diary();
@@ -128,15 +135,23 @@ class DiaryRepositoryTest {
   }
 
   @Test
-  void updateViewCntTest() throws UpdateException, SelectException { // 다이어리의 조회수를 증가시키기 위해
-                                                                     // update()를 사용하는 경우
-    Diary diaryForViewCnt = new Diary();
-    diaryForViewCnt.setDiaryNo(10);
-    diaryForViewCnt.setDiaryViewCnt(-1);
-    diaryRepository.update(diaryForViewCnt);
+  void updateViewCntTest() throws UpdateException, SelectException {
 
-    Diary diaryInDb = diaryRepository.selectDiary(10);
-    assertEquals(1, diaryInDb.getDiaryViewCnt());
+    diaryRepository.updateViewCnt(1);
+    Diary diaryInDb = diaryRepository.selectDiary(1);
+    assertEquals(14, diaryInDb.getDiaryViewCnt());
+  }
+
+  @Test
+  void updateLikeCntTest() throws UpdateException, SelectException {
+
+    diaryRepository.updateIncreaseLikeCnt(1);
+    Diary diaryInDb = diaryRepository.selectDiary(1);
+    assertEquals(3, diaryInDb.getDiaryLikeCnt());
+
+    diaryRepository.updateDecreaseLikeCnt(1);
+    Diary diaryInDb2 = diaryRepository.selectDiary(1);
+    assertEquals(2, diaryInDb2.getDiaryLikeCnt());
   }
 
   @Test
