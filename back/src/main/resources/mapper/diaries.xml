@@ -24,7 +24,11 @@
     <collection property="comments" column="diary_no" javaType="List" ofType="Comment" autoMapping="true" select="selectComments"/>
     <collection property="hashtags" column="diary_no" javaType="List" ofType="Hashtag" autoMapping="true" select="selectHashtags"/>
   </resultMap>
+<<<<<<< HEAD
 
+=======
+  
+>>>>>>> 72c97bd (Feat: diary service, control 기능 완성)
   <select id="selectAllDiaries" resultMap="DiariesMap">
 		SELECT DISTINCT diary_no
 		              , client_id
@@ -46,9 +50,15 @@
     <choose>
 	  <when test="hashtags != null">
 		LEFT OUTER JOIN hashtags h ON (d.diary_no = h.diary_no)
+<<<<<<< HEAD
 		          WHERE diary_disclosure_flag = 1 AND
 	    <foreach item="hashtag" index="index" collection="hashtags" separator="OR">
 		  <trim prefixOverrides="OR">
+=======
+		          WHERE diary_disclosure_flag = 1 AND                 
+	    <foreach item="hashtag" index="index" collection="hashtags" separator="OR">
+		  <trim prefixOverrides="OR">  
+>>>>>>> 72c97bd (Feat: diary service, control 기능 완성)
 		             OR h.hashtag LIKE '%${hashtag}%'
 		  </trim>
 		</foreach>
@@ -63,22 +73,39 @@
 	  </when>
 	  <when test="order == 3">
 		       ORDER BY diary_like_cnt DESC,
+<<<<<<< HEAD
 	  </when>
     </choose>
+=======
+	  </when> 		  
+    </choose>	       
+>>>>>>> 72c97bd (Feat: diary service, control 기능 완성)
 				        diary_writing_time DESC)
 		  WHERE rnum BETWEEN #{startRow} AND #{endRow}
 	</select>
   <select id="selectCountAll" resultType="int">
+<<<<<<< HEAD
   	SELECT COUNT(*) FROM diaries
+=======
+  	SELECT COUNT(*) FROM diaries 
+>>>>>>> 72c97bd (Feat: diary service, control 기능 완성)
   </select>
   <select id="selectCountByDisclosureFlag" parameterType="int" resultType="int">
 		SELECT COUNT(*) FROM diaries WHERE diary_disclosure_flag = #{diaryDisclosureFlag}
   </select>
+<<<<<<< HEAD
 
   <select id="selectCountByClientId" parameterType="String" resultType="int">
 		SELECT COUNT(*) FROM diaries WHERE client_id = #{clientId}
   </select>
 
+=======
+	
+  <select id="selectCountByClientId" parameterType="String" resultType="int">
+		SELECT COUNT(*) FROM diaries WHERE client_id = #{clientId}
+  </select>	
+	
+>>>>>>> 72c97bd (Feat: diary service, control 기능 완성)
   <select id="selectDiariesByClientId" resultMap="DiariesMap">
 				SELECT *
 		  FROM (SELECT d.*
@@ -134,9 +161,15 @@
 	  </when>
 	  <when test="order == 3">
 		       ORDER BY diary_like_cnt DESC,
+<<<<<<< HEAD
 	  </when>
     </choose>
     				        diary_writing_time DESC
+=======
+	  </when> 		  
+    </choose>
+    				        diary_writing_time DESC		
+>>>>>>> 72c97bd (Feat: diary service, control 기능 완성)
   </select>
 
 	<!-- selectDiary()에 필요한 코드 START -->
@@ -150,12 +183,20 @@
 		         SELECT *
 		           FROM routes
 		          WHERE diary_no = #{diaryNo}
+<<<<<<< HEAD
   </select>
+=======
+  </select>	
+>>>>>>> 72c97bd (Feat: diary service, control 기능 완성)
   <select id="selectDiaryImages" parameterType="int" resultType="DiaryImage">
 		         SELECT *
 		           FROM diary_images
 		          WHERE diary_no = #{diaryNo}
+<<<<<<< HEAD
   </select>
+=======
+  </select>	
+>>>>>>> 72c97bd (Feat: diary service, control 기능 완성)
   <select id="selectComments" parameterType="int" resultType="Comment">
 		         SELECT *
 		           FROM comments
@@ -179,10 +220,17 @@
 	           , #{diaryStartDate}
 	           , #{diaryEndDate}
 	           , #{diaryDisclosureFlag}
+<<<<<<< HEAD
 	           , 0
 	           , 0
 	           )
   </insert>
+=======
+	           , 0 
+	           , 0
+	           )
+  </insert>	
+>>>>>>> 72c97bd (Feat: diary service, control 기능 완성)
 
   <select id="selectLatestDiaryNo" resultType="int">
     SELECT diary_no_seq.CURRVAL FROM dual
@@ -195,7 +243,11 @@
          , diary_start_date = #{diaryStartDate}
          , diary_end_date = #{diaryEndDate}
          , diary_disclosure_flag = #{diaryDisclosureFlag}
+<<<<<<< HEAD
 	     , diary_modifying_time = SYSDATE
+=======
+	     , diary_modifying_time = SYSDATE  
+>>>>>>> 72c97bd (Feat: diary service, control 기능 완성)
 	</set>
 	 WHERE diary_no = #{diaryNo}
   </update>
@@ -208,6 +260,7 @@
   <update id="updateViewCnt" parameterType="int">
 	UPDATE diaries
 	<set>
+<<<<<<< HEAD
            diary_view_cnt = diary_view_cnt + 1
 	</set>
 	 WHERE diary_no = #{diaryNo}
@@ -229,3 +282,26 @@
 	 WHERE diary_no = #{diaryNo}
   </update>
 </mapper>
+=======
+           diary_view_cnt = diary_view_cnt + 1 
+	</set>
+	 WHERE diary_no = #{diaryNo}
+  </update>	
+  
+  <update id="updateIncreaseLikeCnt" parameterType="int">
+	UPDATE diaries
+	<set>
+           diary_like_cnt = diary_like_cnt + 1 
+	</set>
+	 WHERE diary_no = #{diaryNo}
+  </update>	
+  
+    <update id="updateDecreaseLikeCnt" parameterType="int">
+	UPDATE diaries
+	<set>
+           diary_like_cnt = diary_like_cnt - 1 
+	</set>
+	 WHERE diary_no = #{diaryNo}
+  </update>	
+</mapper>
+>>>>>>> 72c97bd (Feat: diary service, control 기능 완성)

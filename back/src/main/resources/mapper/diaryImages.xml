@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<<<<<<< HEAD
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+=======
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+>>>>>>> 72c97bd (Feat: diary service, control 기능 완성)
                         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.routediary.repository.DiaryImageRepository">
   <select id="selectDiaryImages" parameterType="int" resultType="DiaryImage">
@@ -7,7 +11,11 @@
 		FROM diary_images
 		WHERE diary_no = #{diaryNo}
   </select>
+<<<<<<< HEAD
 
+=======
+  
+>>>>>>> 72c97bd (Feat: diary service, control 기능 완성)
   <insert id="insert" parameterType="DiaryImage">
         INSERT INTO diary_images (diary_no, image_no, file_name, stored_file_path)
              VALUES (#{diaryNo}
@@ -16,14 +24,27 @@
         	       , #{fileName}
         	       , #{storedFilePath})
   </insert>
+<<<<<<< HEAD
 
   <delete id="delete" parameterType="int">
         DELETE FROM diary_images
+=======
+  
+  <delete id="delete" parameterType="int">
+        DELETE FROM diary_images 
+>>>>>>> 72c97bd (Feat: diary service, control 기능 완성)
               WHERE diary_no = #{diaryNo} AND image_no = #{imageNo}
   </delete>
 
   <delete id="deleteAll" parameterType="int">
+<<<<<<< HEAD
         DELETE FROM diary_images
               WHERE diary_no = #{diaryNo}
   </delete>
 </mapper>
+=======
+        DELETE FROM diary_images 
+              WHERE diary_no = #{diaryNo}    
+  </delete>
+</mapper>
+>>>>>>> 72c97bd (Feat: diary service, control 기능 완성)

@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<<<<<<< HEAD
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+=======
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+>>>>>>> 72c97bd (Feat: diary service, control 기능 완성)
                         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.routediary.repository.NoticeImageRepository">
   <select id="selectNoticeImages" parameterType="int" resultType="NoticeImage">
@@ -7,7 +11,11 @@
 		FROM notice_images
 		WHERE notice_no = #{noticeNo}
   </select>
+<<<<<<< HEAD
 
+=======
+  
+>>>>>>> 72c97bd (Feat: diary service, control 기능 완성)
   <insert id="insert" parameterType="NoticeImage">
         INSERT INTO notice_images (notice_no, image_no, file_name, stored_file_path)
              VALUES (#{noticeNo}
@@ -16,14 +24,27 @@
         	       , #{fileName}
         	       , #{storedFilePath})
   </insert>
+<<<<<<< HEAD
 
   <delete id="delete" parameterType="int">
         DELETE FROM notice_images
+=======
+  
+  <delete id="delete" parameterType="int">
+        DELETE FROM notice_images 
+>>>>>>> 72c97bd (Feat: diary service, control 기능 완성)
               WHERE notice_no = #{noticeNo} AND image_no = #{imageNo}
   </delete>
 
   <delete id="deleteAll" parameterType="int">
+<<<<<<< HEAD
         DELETE FROM notice_images
               WHERE notice_no = #{noticeNo}
   </delete>
 </mapper>
+=======
+        DELETE FROM notice_images 
+              WHERE notice_no = #{noticeNo}    
+  </delete>
+</mapper>
+>>>>>>> 72c97bd (Feat: diary service, control 기능 완성)

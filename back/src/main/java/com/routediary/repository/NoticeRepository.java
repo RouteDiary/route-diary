@@ -60,6 +60,7 @@ public interface NoticeRepository {
 
   /**
    * 공지사항의 조회수(notice_view_cnt)를 증가함
+<<<<<<< HEAD
    *
    * @param noticeNo
    */
@@ -73,4 +74,10 @@ public interface NoticeRepository {
    * @return int
    */
   public int selectLatestNoticeNo();
+=======
+   * 
+   * @param noticeNo
+   */
+  public void updateViewCnt(int NoticeNo);
+>>>>>>> 72c97bd (Feat: diary service, control 기능 완성)
 }

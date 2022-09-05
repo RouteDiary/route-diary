@@ -78,8 +78,11 @@
 	</set>
 		WHERE notice_no = #{noticeNo}
   </update>
+<<<<<<< HEAD
   
   <select id="selectLatestNoticeNo" resultType="int">
     SELECT notice_no_seq.CURRVAL FROM dual
   </select>
+=======
+>>>>>>> 72c97bd (Feat: diary service, control 기능 완성)
 </mapper>
