@@ -156,9 +156,11 @@ public class AdminController {
 
   // --------다이어리 관련 END
   // --------공지사항 관련 START
-  @PutMapping(value = {"notice/{noticeNo}"}, produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<?> modifyNotice(@PathVariable int noticeNo, @RequestBody Notice notice,
-      HttpSession session) throws ModifyException {
+  @PutMapping(value = {"notice/{noticeNo}"}, consumes = {"multipart/form-data"})
+  public ResponseEntity<?> modifyNotice(@PathVariable int noticeNo,
+                                        @RequestPart(required = false) List<MultipartFile> imgFiles,
+                                        @RequestPart Notice notice,
+                                        HttpSession session) throws ModifyException {
 
     String adminId = (String) session.getAttribute("loginInfo");
     if (notice.getNoticeTitle() == null || notice.getNoticeTitle().equals("")
@@ -167,7 +169,7 @@ public class AdminController {
     } else if (adminId == null) {
       return new ResponseEntity<>("관리자가 아닙니다", HttpStatus.BAD_REQUEST);
     }
-    adminService.modifyNotice(notice);
+    adminService.modifyNotice(notice,imgFiles);
     return new ResponseEntity<>("공지사항이 수정되었습니다", HttpStatus.OK);
 
   }

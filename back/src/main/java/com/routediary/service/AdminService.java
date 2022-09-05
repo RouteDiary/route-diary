@@ -62,7 +62,7 @@ public interface AdminService {
    * @param notice
    * @throws ModifyException
    */
-  public void modifyNotice(Notice notice) throws ModifyException;
+//  public void modifyNotice(Notice notice) throws ModifyException;
   
   /**
    * 공지사항을 삭제한다.
@@ -71,11 +71,18 @@ public interface AdminService {
    */
   public void removeNotice(int noticeNo) throws RemoveException;
   /**
-   * 
+   * 공지사항을 작성한다.
    * @param notice
    * @param imageFiles
    * @throws AddException
    */
   public void writeNotice(Notice notice, List<MultipartFile> imgFiles) throws AddException;
+  /**
+   * 공지사항을 수정한다.
+   * @param notice
+   * @param imgFiles
+   * @throws ModifyException
+   */
+  public void modifyNotice(Notice notice, List<MultipartFile> imgFiles) throws ModifyException;
   
 }

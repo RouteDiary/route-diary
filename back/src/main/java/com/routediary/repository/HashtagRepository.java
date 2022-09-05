@@ -12,7 +12,6 @@ public interface HashtagRepository {
    * Hashtag를 넣는다
    * 
    * @param hashtag
-   * @throws InsertException
    */
   public void insert(Hashtag hashtag);
 
@@ -20,7 +19,6 @@ public interface HashtagRepository {
    * Hashtag를 업데이트한다
    * 
    * @param hashtag
-   * @throws UpdateException
    */
   public void update(Hashtag hashtag);
 
@@ -28,7 +26,6 @@ public interface HashtagRepository {
    * 특정 Hashtag를 지운다
    * 
    * @param hashtag
-   * @throws DeleteException
    */
   public void delete(Hashtag hashtag);
 
@@ -36,7 +33,6 @@ public interface HashtagRepository {
    * 해당 게시물의 Hashtag를 전부 지운다
    * 
    * @param diaryNo
-   * @throws DeleteException
    */
   public void deleteAll(int diaryNo);
 

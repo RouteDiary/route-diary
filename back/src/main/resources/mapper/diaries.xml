@@ -19,11 +19,13 @@
       <result property="clientNickname" column="client_nickname"/>
       <result property="clientStatusFlag" column="client_status_flag"/>
     </association>
-    <collection property="routes" column="diary_no" javaType="List" ofType="Route" autoMapping="true" select="selectRoutes"/>
+    <collection property="routes" column="diary_no" javaType="List" ofType="Route" select="selectRoutes"/>
+    <collection property="diaryImages" column="diary_no" javaType="List" ofType="DiaryImage" select="selectDiaryImages"/>
     <collection property="comments" column="diary_no" javaType="List" ofType="Comment" autoMapping="true" select="selectComments"/>
     <collection property="hashtags" column="diary_no" javaType="List" ofType="Hashtag" autoMapping="true" select="selectHashtags"/>
   </resultMap>
-	<select id="selectAllDiaries" resultMap="DiariesMap">
+  
+  <select id="selectAllDiaries" resultMap="DiariesMap">
 		SELECT DISTINCT diary_no
 		              , client_id
 		              , client_nickname
@@ -66,7 +68,7 @@
 				        diary_writing_time DESC)
 		  WHERE rnum BETWEEN #{startRow} AND #{endRow}
 	</select>
-  <select id="selectCountByAllDiaries" resultType="int">
+  <select id="selectCountAll" resultType="int">
   	SELECT COUNT(*) FROM diaries 
   </select>
   <select id="selectCountByDisclosureFlag" parameterType="int" resultType="int">
@@ -122,7 +124,8 @@
 		          WHERE diary_disclosure_flag = 1     		
 	  </otherwise>
 	</choose>
-	<choose>
+		  ) WHERE rnum BETWEEN #{startRow} AND #{endRow}
+		  	<choose>
 	  <when test="order == 1">
 		       ORDER BY diary_view_cnt DESC,
 	  </when>
@@ -132,9 +135,8 @@
 	  <when test="order == 3">
 		       ORDER BY diary_like_cnt DESC,
 	  </when> 		  
-    </choose>	       
-				        diary_writing_time DESC)
-		  WHERE rnum BETWEEN #{startRow} AND #{endRow}
+    </choose>
+    				        diary_writing_time DESC		
   </select>
 	
 	<!-- selectDiary()에 필요한 코드 START -->
@@ -148,7 +150,12 @@
 		         SELECT *
 		           FROM routes
 		          WHERE diary_no = #{diaryNo}
-  </select>		
+  </select>	
+  <select id="selectDiaryImages" parameterType="int" resultType="DiaryImage">
+		         SELECT *
+		           FROM diary_images
+		          WHERE diary_no = #{diaryNo}
+  </select>	
   <select id="selectComments" parameterType="int" resultType="Comment">
 		         SELECT *
 		           FROM comments
@@ -176,6 +183,10 @@
 	           , 0
 	           )
   </insert>	
+
+  <select id="selectLatestDiaryNo" resultType="int">
+    SELECT diary_no_seq.CURRVAL FROM dual
+  </select>
 
   <update id="update" parameterType="Diary">
 	UPDATE diaries

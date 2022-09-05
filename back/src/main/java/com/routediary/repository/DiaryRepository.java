@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Repository;
 import com.routediary.dto.Diary;
+import com.routediary.dto.Route;
 
 @Repository
 @Mapper
@@ -18,7 +19,6 @@ public interface DiaryRepository {
    * @param endRow
    * @param hashtags
    * @return List<Diary>
-   * @throws SelectException
    */
   public List<Diary> selectAllDiaries(@Param("order") int order, @Param("startRow") int startRow,
       @Param("endRow") int endRow, @Param("hashtags") @Nullable List<String> hashtags);
@@ -27,10 +27,9 @@ public interface DiaryRepository {
    * 전체 다이어리개수를 반환
    * 
    * @return int
-   * @throws SelectException
    */
 
-  public int selectCountByAllDiaries();
+  public int selectCountAll();
 
   /**
    * diaryDisclosureFlag = 1 : DB에 있는 공개상태의 다이어리 전체갯수를 반환 / diaryDisclosureFlag = 0 : DB에 있는 비공개상태의
@@ -38,7 +37,6 @@ public interface DiaryRepository {
    * 
    * @param diaryDisclosureFlag
    * @return int
-   * @throws SelectException
    */
   public int selectCountByDisclosureFlag(int diaryDisclosureFlag);
 
@@ -47,7 +45,6 @@ public interface DiaryRepository {
    * 
    * @param clientId
    * @return int
-   * @throws SelectException
    */
   public int selectCountByClientId(String clientId);
 
@@ -58,7 +55,6 @@ public interface DiaryRepository {
    * @param startRow
    * @param endRow
    * @return List<Diary>
-   * @throws SelectException
    */
   public List<Diary> selectDiariesByClientId(@Param("clientId") String clientId,
       @Param("startRow") int startRow, @Param("endRow") int endRow);
@@ -73,7 +69,6 @@ public interface DiaryRepository {
    * @param endRow
    * @param hashtags
    * @return List<Diary>
-   * @throws SelectException
    */
   public List<Diary> selectDiaries(@Param("order") int order, @Param("startRow") int startRow,
       @Param("endRow") int endRow, @Param("hashtags") @Nullable List<String> hashtags);
@@ -83,23 +78,31 @@ public interface DiaryRepository {
    * 
    * @param diaryNo
    * @return Diary
-   * @throws SelectException
    */
   public Diary selectDiary(int diaryNo);
+
+  public Route selectRoute(int diaryNo);
 
   /**
    * 작성한 다이어리를 DB에 추가
    * 
    * @param diary
-   * @throws InsertException
    */
   public void insert(Diary diary);
+
+  /**
+   * 가장 최근의 diaryNo(다이어리번호) 를 반환 (SQL에서 다이어리번호용 시퀀스의 CURRVAL를 찾아 반환함).
+   * 
+   * insert() method를 사용한 후, DB에 추가된 다이어리의 번호를 알아내는데 사용 가능
+   * 
+   * @return int
+   */
+  public int selectLatestDiaryNo();
 
   /**
    * 다이어리의 내용(diary_title, diary_start_date, diary_end_date, diary_disclosure_flag)을 수정할때 사용
    * 
    * @param diary
-   * @throws UpdateException
    */
   public void update(Diary diary);
 
@@ -107,7 +110,6 @@ public interface DiaryRepository {
    * 다이어리를 DB에서 삭제
    * 
    * @param diaryNo
-   * @throws DeleteException
    */
   public void delete(int diaryNo);
 
@@ -115,7 +117,6 @@ public interface DiaryRepository {
    * 다이어리의 조회수(diary_view_cnt)를 1 증가시킴
    * 
    * @param diaryNo
-   * @throws UpdateException
    */
   public void updateViewCnt(int diaryNo);
 
@@ -123,7 +124,6 @@ public interface DiaryRepository {
    * 다이어리의 좋아요수(diary_like_cnt)를 1 증가시킴
    * 
    * @param diaryNo
-   * @throws UpdateException
    */
   public void updateIncreaseLikeCnt(int diaryNo);
 
@@ -131,7 +131,6 @@ public interface DiaryRepository {
    * 다이어리의 좋아요수(diary_like_cnt)를 1 감소시킴
    * 
    * @param diaryNo
-   * @throws UpdateException
    */
   public void updateDecreaseLikeCnt(int diaryNo);
 }

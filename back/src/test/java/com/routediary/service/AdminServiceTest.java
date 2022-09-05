@@ -159,7 +159,7 @@ class AdminServiceTest {
     notice.setNoticeNo(2);
     notice.setNoticeTitle(noticeTitle);
     notice.setNoticeContent(noticeContent);
-    adminService.modifyNotice(notice);
+//    adminService.modifyNotice(notice);
 
     Notice noticeInDb = noticeRepository.selectNotice(2);
     assertEquals(noticeTitle, noticeInDb.getNoticeTitle());
