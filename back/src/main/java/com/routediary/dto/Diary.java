@@ -8,15 +8,17 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
-@Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
+@ToString
 public class Diary {
   private int diaryNo;
   private String diaryTitle;
-  @JsonFormat(pattern = "yyyy/MM/dd hh:mm:ss", timezone = "Asia/Seoul")
+  @JsonFormat(pattern = "yy/MM/dd hh:mm:ss", timezone = "Asia/Seoul")
   private Date diaryWritingTime;
   @JsonFormat(pattern = "yyyy/MM/dd hh:mm:ss", timezone = "Asia/Seoul")
   private Date diaryModifyingTime;
@@ -29,6 +31,7 @@ public class Diary {
   private int diaryLikeCnt;
   private Client client;
   private List<Route> routes;
+  private List<DiaryImage> diaryImages;
   private List<Comment> comments;
   private List<Hashtag> hashtags;
 }
