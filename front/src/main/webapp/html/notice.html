@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <!-- <link rel="stylesheet" href="../css/login.css" /> -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <!-- <script src="../js/diaryboard.js"></script> -->
+    <!-- <link rel="stylesheet" href="../css/diaryboard.css" /> -->
+  </head>
+  <style>
+    .layout {
+      width: 500px;
+      margin: 0 auto;
+      margin-top: 40px;
+    }
+    .layout input {
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .layout textarea {
+      width: 100%;
+      margin-top: 10px;
+      min-height: 300px;
+    }
+  </style>
+  <body>
+    <div class="layout">
+      <form action="back/notice" method="post" enctype="multipart/form-data">
+        <input name="content" type="text" />
+        <textarea name="content"></textarea>
+        <input type="file" />
+        <button type="submit">작성</button>
+      </form>
+    </div>
+  </body>
+</html>

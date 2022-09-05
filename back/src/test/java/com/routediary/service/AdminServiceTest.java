@@ -154,7 +154,7 @@ class AdminServiceTest {
     String expectedAdminId = "1111";
     String noticeTitle = "modified notice";
     String noticeContent = "modified notice";
-    Integer expectedViewCnt = 115;
+    Integer expectedViewCnt = 116;
     Notice notice = new Notice();
     notice.setNoticeNo(2);
     notice.setNoticeTitle(noticeTitle);

@@ -42,6 +42,7 @@ public class PageBean<T> {
 
     if (this.currentPage > this.totalPage) {
       this.currentPage = this.totalPage;
+       
     }
 
     this.endPage = (int) (Math.ceil((double) currentPage / cntPerPageGroup) * cntPerPageGroup);

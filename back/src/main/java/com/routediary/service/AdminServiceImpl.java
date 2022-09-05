@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.routediary.dto.Admin;
+import com.routediary.dto.Comment;
 import com.routediary.dto.Diary;
 import com.routediary.dto.Notice;
 import com.routediary.dto.PageBean;
@@ -83,8 +84,9 @@ public class AdminServiceImpl implements AdminService {
   public void removeComment(int diaryNo, int commentNo) throws RemoveException {
     try {
       Diary diary = diaryRepository.selectDiary(diaryNo);
-      if(diary.getComments()==null) {
-        throw new RemoveException("댓글이 없습니다");
+      List<Comment> comment = diary.getComments();
+      if(comment.get(commentNo)==null) {
+        throw new RemoveException("댓글이존재하지 않습니다");
       }
       commentRepository.delete(diaryNo, commentNo);
     } catch (Exception e) {

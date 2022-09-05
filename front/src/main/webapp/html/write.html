@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <title>공지사항</title>
+  </head>
+  <style>
+    .layout {
+      width: 500px;
+      margin: 0 auto;
+      margin-top: 40px;
+    }
+    .layout input {
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .layout textarea {
+      width: 100%;
+      margin-top: 10px;
+      min-height: 300px;
+    }
+  </style>
+  <body>
+    <div class="layout">
+      <form th:action="write" method="post" enctype="multipart/form-data">
+        <input name="content" type="text" />
+        <textarea name="content"></textarea>
+        <input type="file" />
+        <button type="submit">작성</button>
+      </form>
+    </div>
+  </body>
+</html>
