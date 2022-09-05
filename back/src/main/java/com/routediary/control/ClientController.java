@@ -26,10 +26,10 @@ import com.routediary.service.ClientService;
 public class ClientController {
 
   @Autowired
-  public ClientService clientService;
+  private ClientService clientService;
 
   @PostMapping("/signup")
-  public ResultBean<Client> signup(@RequestBody Client client) throws ClientException {
+  public ResultBean<Client> signup(@RequestBody Client client) throws AddException {
     ResultBean<Client> resultBean = new ResultBean();
     try {
       clientService.signup(client);
