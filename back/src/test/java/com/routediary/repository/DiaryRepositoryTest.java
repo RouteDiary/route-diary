@@ -1,19 +1,19 @@
 package com.routediary.repository;
 
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.routediary.dto.Client;
 import com.routediary.dto.Diary;
-import com.routediary.exception.DeleteException;
-import com.routediary.exception.InsertException;
-import com.routediary.exception.SelectException;
-import com.routediary.exception.UpdateException;
 
 @SpringBootTest
 class DiaryRepositoryTest {
@@ -21,14 +21,21 @@ class DiaryRepositoryTest {
   DiaryRepository diaryRepository;
 
   @Test
-  void selectCountTest() throws SelectException {
-    int expectedCount = 9;
-    int count = diaryRepository.selectCount();
+  void selectCountByDisclosureFlagTest() throws Exception {
+    int expectedCount = 198;
+    int count = diaryRepository.selectCountByDisclosureFlag(1);
     assertEquals(expectedCount, count);
   }
 
   @Test
-  void selectDiariesByClientIdTest() throws SelectException {
+  void selectCountByClientIdTest() throws Exception {
+    int expectedCount = 65;
+    int count = diaryRepository.selectCountByClientId("koreaman@gmail.com");
+    assertEquals(expectedCount, count);
+  }
+
+  @Test
+  void selectDiariesByClientIdTest() throws Exception {
     String clientId = "koreaman@gmail.com";
     String expectedTitle = "즐거운 서울로 떠나요";
     String expectedClientNickname = "한쿡";
@@ -41,7 +48,7 @@ class DiaryRepositoryTest {
   }
 
   @Test
-  void selectDiariesTest() throws SelectException {
+  void selectDiariesTest() throws Exception {
     int order = 2; // diary_view_cnt
 
     // hashtag를 이용한 검색
@@ -69,8 +76,8 @@ class DiaryRepositoryTest {
   }
 
   @Test
-  void selectDiaryTest() throws SelectException {
-    int diaryNo = 1;
+  void selectDiaryTest() throws Exception {
+    int diaryNo = 40;
     int expectedRoutesCount = 5;
     int expectedCommentsCount = 3;
     int expectedHashtagsCount = 2;
@@ -80,6 +87,12 @@ class DiaryRepositoryTest {
     String expectedFirstCommentContent = "좋은 여행정보 감사합니다~";
     String expectedFirstHashtag = "여행";
     Diary diary = diaryRepository.selectDiary(diaryNo);
+    System.out.println(diary.toString());
+    System.out.println(diary.getRoutes().get(1).toString());
+    ObjectMapper mapper = new ObjectMapper();
+    Map<String, Object> map = new HashMap<String, Object>();
+    map.put("diary", diary);
+    System.out.println(mapper.writeValueAsString(map));
     assertEquals(expectedRoutesCount, diary.getRoutes().size());
     assertEquals(expectedCommentsCount, diary.getComments().size());
     assertEquals(expectedHashtagsCount, diary.getHashtags().size());
@@ -88,30 +101,39 @@ class DiaryRepositoryTest {
     assertEquals(expectedFirstRouteContent, diary.getRoutes().get(0).getRouteContent());
     assertEquals(expectedFirstCommentContent, diary.getComments().get(0).getCommentContent());
     assertEquals(expectedFirstHashtag, diary.getHashtags().get(0).getHashtag());
-    System.out.println(diary.toString());
+
   }
 
   @Test
-  void insertTest() throws InsertException, SelectException {
+  void insertTest() throws Exception {
     String clientId = "chinaman@gmail.com";
     String expectedClientNickname = "한국남자3";
     String diaryTitle = "new diary";
+    int diaryDisclosureFlag = 1;
     Diary diary = new Diary();
     Client client = new Client();
     client.setClientId(clientId);
     diary.setDiaryTitle(diaryTitle);
     diary.setDiaryStartDate(new Date(2022, 1, 1));
     diary.setDiaryEndDate(new Date(2022, 1, 3));
+    diary.setDiaryDisclosureFlag(diaryDisclosureFlag);
     diary.setClient(client);
 
     diaryRepository.insert(diary);
-    Diary diaryInDb = diaryRepository.selectDiary(10);
+    Diary diaryInDb = diaryRepository.selectDiary(14);
     assertEquals(diaryTitle, diaryInDb.getDiaryTitle());
     assertEquals(expectedClientNickname, diaryInDb.getClient().getClientNickname());
   }
 
   @Test
-  void updateTest() throws UpdateException, SelectException { // 다이어리의 내용을 수정하기 위해 update()를 사용하는 경우
+  void selectLatestDiaryNoTest() throws Exception {
+    int diaryNo = diaryRepository.selectLatestDiaryNo();
+    System.out.println("latest diaryNo : " + diaryNo);
+    assertNotEquals(0, diaryNo);
+  }
+
+  @Test
+  void updateTest() throws Exception {
     String expectedClientId = "chinaman@gmail.com";
     String diaryTitle = "modified diary";
     Diary diary = new Diary();
@@ -128,19 +150,27 @@ class DiaryRepositoryTest {
   }
 
   @Test
-  void updateViewCntTest() throws UpdateException, SelectException { // 다이어리의 조회수를 증가시키기 위해
-                                                                     // update()를 사용하는 경우
-    Diary diaryForViewCnt = new Diary();
-    diaryForViewCnt.setDiaryNo(10);
-    diaryForViewCnt.setDiaryViewCnt(-1);
-    diaryRepository.update(diaryForViewCnt);
+  void updateViewCntTest() throws Exception {
 
-    Diary diaryInDb = diaryRepository.selectDiary(10);
-    assertEquals(1, diaryInDb.getDiaryViewCnt());
+    diaryRepository.updateViewCnt(1);
+    Diary diaryInDb = diaryRepository.selectDiary(1);
+    assertEquals(14, diaryInDb.getDiaryViewCnt());
   }
 
   @Test
-  void deleteTest() throws DeleteException, SelectException {
+  void updateLikeCntTest() throws Exception {
+
+    diaryRepository.updateIncreaseLikeCnt(1);
+    Diary diaryInDb = diaryRepository.selectDiary(1);
+    assertEquals(3, diaryInDb.getDiaryLikeCnt());
+
+    diaryRepository.updateDecreaseLikeCnt(1);
+    Diary diaryInDb2 = diaryRepository.selectDiary(1);
+    assertEquals(2, diaryInDb2.getDiaryLikeCnt());
+  }
+
+  @Test
+  void deleteTest() throws Exception {
     int diaryNo = 10;
     diaryRepository.delete(diaryNo);
 

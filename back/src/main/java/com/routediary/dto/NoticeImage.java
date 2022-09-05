@@ -6,12 +6,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-@Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 @ToString
-public class Hashtag {
-  private int diaryNo;
-  private String hashtag;
+public class NoticeImage {
+  private int noticeNo;
+  private int imageNo;
+  private String fileName;
+  private String storedFilePath;
 }
