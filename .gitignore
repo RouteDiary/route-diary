@@ -30,6 +30,10 @@ replay_pid*
 #env
 project.properties
 
+# End of https://www.toptal.com/developers/gitignore/api/java
+back/.classpath
+back/src/main/webapp/WEB-INF/web.xml
+
 ### Maven ###
 target/
 pom.xml.tag
@@ -51,5 +55,4 @@ buildNumber.properties
 
 # End of https://www.toptal.com/developers/gitignore/api/java
 back/.classpath
-
 back/src/main/webapp/WEB-INF/web.xml
