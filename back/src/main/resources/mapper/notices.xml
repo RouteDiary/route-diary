@@ -67,4 +67,8 @@
 	</set>
 		WHERE notice_no = #{noticeNo}
   </update>
+  
+  <select id="selectLatestNoticeNo" resultType="int">
+    SELECT notice_no_seq.CURRVAL FROM dual
+  </select>
 </mapper>

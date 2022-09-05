@@ -1,5 +1,6 @@
 package com.routediary.control;
 
+import java.io.File;
 import java.util.List;
 import java.util.Optional;
 import javax.servlet.http.HttpSession;
@@ -40,8 +41,9 @@ public class AdminController {
   @Autowired
   private NoticeServiceImpl noticeService;
   private Logger logger = LoggerFactory.getLogger(getClass());
-  
-  @GetMapping(value="write")
+
+
+  @GetMapping(value = "write")
   public String write() {
     return "write";
   }
@@ -169,31 +171,35 @@ public class AdminController {
     return new ResponseEntity<>("공지사항이 수정되었습니다", HttpStatus.OK);
 
   }
-  @DeleteMapping(value = {"notice/{noticeNo}"},produces= MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<?> removeNotice(@PathVariable @RequestParam(name="noticeNo",required=true) int noticeNo,HttpSession session) throws RemoveException{
-    
+
+  @DeleteMapping(value = {"notice/{noticeNo}"}, produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<?> removeNotice(
+      @PathVariable @RequestParam(name = "noticeNo", required = true) int noticeNo,
+      HttpSession session) throws RemoveException {
+
     String adminId = (String) session.getAttribute("loginInfo");
-    if(adminId == null) {
+    if (adminId == null) {
       return new ResponseEntity<>("관리자가 아닙니다", HttpStatus.BAD_REQUEST);
     }
     adminService.removeNotice(noticeNo);
     return new ResponseEntity<>("공지사항이 삭제되었습니다", HttpStatus.OK);
   }
-  @PostMapping(value= "notice/write", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<?> writeNotice(@RequestPart(value="files",required=false) List<MultipartFile> imgfiles,
-                                       @RequestPart(required=false) MultipartFile imgfile,
-                                       @RequestBody Notice notice,HttpSession session,
-                                       @RequestPart(required=false) String greeting) throws AddException{
-    logger.info(greeting);
+
+  @PostMapping(value = "notice/write",consumes = {"multipart/form-data"})
+  public ResultBean<?> writeNotice(
+      @RequestPart(required = false) List<MultipartFile> imgFiles,
+      @RequestPart Notice notice,
+      HttpSession session) throws AddException {
+    ResultBean<?> resultBean = new ResultBean<>();
     String adminId = (String) session.getAttribute("loginInfo");
-    
     notice.setAdminId(adminId);
-    adminService.writeNotice(notice);
-    return new ResponseEntity<>("공지사항이 작성되었습니다", HttpStatus.OK);
     
-    // ---이미지 업로드 START
-//    /Users/minseong/Desktop
-    // ---이미지 업로드 END
+    adminService.writeNotice(notice,imgFiles);
+    resultBean.setStatus(1);
+    resultBean.setMessage("공지사항 작성 성공했습니다");
+    return resultBean;
+    
+   
   }
   // --------공지사항 관련 END
 }

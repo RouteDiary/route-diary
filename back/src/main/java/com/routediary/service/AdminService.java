@@ -1,6 +1,7 @@
 package com.routediary.service;
 
 import java.util.List;
+import org.springframework.web.multipart.MultipartFile;
 import com.routediary.dto.Admin;
 import com.routediary.dto.Diary;
 import com.routediary.dto.Notice;
@@ -54,7 +55,7 @@ public interface AdminService {
    * @param notice
    * @throws AddException
    */
-  public void writeNotice(Notice notice) throws AddException;
+//  public void writeNotice(Notice notice) throws AddException;
   
   /**
    * 공지사항을 수정한다.
@@ -69,5 +70,12 @@ public interface AdminService {
    * @throws RemoveException
    */
   public void removeNotice(int noticeNo) throws RemoveException;
+  /**
+   * 
+   * @param notice
+   * @param imageFiles
+   * @throws AddException
+   */
+  public void writeNotice(Notice notice, List<MultipartFile> imgFiles) throws AddException;
   
 }

@@ -71,4 +71,6 @@ public interface NoticeRepository {
    * @throws UpdateException
    */
   public void updateViewCnt(int NoticeNo);
+  
+  public int selectLatestNoticeNo();
 }

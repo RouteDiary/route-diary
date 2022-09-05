@@ -95,7 +95,7 @@ class AdminServiceTest {
     notice.setAdminId(expectedAdminId);
     notice.setNoticeContent(expectedNoticeTitle);
     notice.setNoticeTitle(expectedNoticeContent);
-    adminService.writeNotice(notice);
+//    adminService.writeNotice(notice);
     
     assertNotNull(notice);
   }
