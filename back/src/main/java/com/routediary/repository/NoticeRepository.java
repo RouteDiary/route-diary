@@ -6,10 +6,6 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Repository;
 import com.routediary.dto.Notice;
-import com.routediary.exception.DeleteException;
-import com.routediary.exception.InsertException;
-import com.routediary.exception.SelectException;
-import com.routediary.exception.UpdateException;
 
 @Repository
 @Mapper
@@ -18,42 +14,37 @@ public interface NoticeRepository {
    * 공지사항 전체 갯수를 반환
    * 
    * @return int
-   * @throws SelectException
    */
-  public int selectCount() throws SelectException;
+  public int selectCount();
 
   /**
    * 공지사항을 추가한다.
    * 
    * @param notice
-   * @throws InsertException
    */
-  public void insert(Notice notice) throws InsertException;
+  public void insert(Notice notice);
 
   /**
    * 공지사항을 수정한다.
    * 
    * @param notice
-   * @throws UpdateException
    */
-  public void update(Notice notice) throws UpdateException;
+  public void update(Notice notice);
 
   /**
    * 공지사항을 삭제한다.
    * 
    * @param noticeNo
-   * @throws DeleteException
    */
-  public void delete(int noticeNo) throws DeleteException;
+  public void delete(int noticeNo);
 
   /**
    * Notice(공지사항) 객체 1개를 반환
    * 
    * @param noticeNo
    * @return Notice
-   * @throws SelectException
    */
-  public Notice selectNotice(int noticeNo) throws SelectException;
+  public Notice selectNotice(int noticeNo);
 
   /**
    * keyword parameter가 null이 아닌 경우, 검색어에 해당되는 Notice(공지사항) 객체들이 반환. null인 경우, 검색어와 상관없이
@@ -63,9 +54,23 @@ public interface NoticeRepository {
    * @param endRow
    * @param keyword
    * @return List<Notice>
-   * @throws SelectException
    */
   public List<Notice> selectNotices(@Param("startRow") int startRow, @Param("endRow") int endRow,
-      @Param("keyword") @Nullable String keyword) throws SelectException;
+      @Param("keyword") @Nullable String keyword);
 
+  /**
+   * 공지사항의 조회수(notice_view_cnt)를 증가함
+   * 
+   * @param noticeNo
+   */
+  public void updateViewCnt(int NoticeNo);
+
+  /**
+   * 가장 최근의 noticeNo(공지사항번호) 를 반환 (SQL에서 공지사항번호용 시퀀스의 CURRVAL를 찾아 반환함).
+   * 
+   * insert() method를 사용한 후, DB에 추가된 공지사항의 번호를 알아내는데 사용 가능
+   * 
+   * @return int
+   */
+  public int selectLatestNoticeNo();
 }
