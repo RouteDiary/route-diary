@@ -77,7 +77,7 @@ public class AdminController {
 
   @GetMapping(value = {"logout"})
   public ResponseEntity<?> logout(HttpSession session) {
-    session.removeAttribute("loginInfo"); // 바
+    session.removeAttribute("loginInfo"); 
     String adminId = (String) session.getAttribute("loginInfo");
     if (adminId == null) {
       return new ResponseEntity<>(HttpStatus.OK);
