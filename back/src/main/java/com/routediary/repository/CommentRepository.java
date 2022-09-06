@@ -9,21 +9,21 @@ import com.routediary.dto.Comment;
 public interface CommentRepository {
   /**
    * 댓글을 작성한다
-   * 
+   *
    * @param comment
    */
   public void insert(Comment comment);
 
   /**
    * 댓글을 수정한다
-   * 
+   *
    * @param comment
    */
   public void update(Comment comment);
 
   /**
    * 댓글을 삭제한다
-   * 
+   *
    * @param diaryNo
    * @param commentNo
    */
@@ -31,7 +31,7 @@ public interface CommentRepository {
 
   /**
    * 다이어리 diaryNo의 모든 행을 삭제한다
-   * 
+   *
    * @param diaryNo
    */
   public void deleteAll(int diaryNo);

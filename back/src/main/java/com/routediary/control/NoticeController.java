@@ -1,28 +1,24 @@
 package com.routediary.control;
 
 import java.util.Optional;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import com.routediary.dto.Diary;
 import com.routediary.dto.Notice;
 import com.routediary.dto.PageBean;
 import com.routediary.dto.ResultBean;
 import com.routediary.exception.FindException;
 import com.routediary.service.NoticeServiceImpl;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RestControllerAdvice
 @RequestMapping("notice/*")
 public class NoticeController {
   @Autowired
   NoticeServiceImpl noticeService;
-
-  private Logger logger = LoggerFactory.getLogger(getClass());
 
   // 공지사항 관련 START
   @GetMapping(value = {"list", "list/{currentPageOpt}"})
@@ -37,7 +33,7 @@ public class NoticeController {
     }
 
     PageBean<Notice> notice = noticeService.showNoticeBoard(currentPage);
-    logger.error("currentPage =" + currentPage); // 오 짱이다...
+    log.error("currentPage =" + currentPage); // 오 짱이다...
     if (currentPage > notice.getTotalPage()) {
       currentPage = notice.getTotalPage();
       resultBean.setStatus(0);
@@ -50,12 +46,12 @@ public class NoticeController {
     return resultBean;
 
   }
-  
+
   @GetMapping(value = {"list/{keyword}/{currentPageOpt}"})
   public ResultBean<PageBean<Notice>> showNoticeBoardByKeyword(
-      @PathVariable Optional<Integer> currentPageOpt, 
-      @PathVariable String keyword) throws FindException {
-    
+      @PathVariable Optional<Integer> currentPageOpt, @PathVariable String keyword)
+      throws FindException {
+
     ResultBean<PageBean<Notice>> resultBean = new ResultBean<PageBean<Notice>>();
     int currentPage;
     if (currentPageOpt.isPresent()) {
@@ -64,8 +60,8 @@ public class NoticeController {
       currentPage = 1;
     }
 
-    PageBean<Notice> notice = noticeService.showNoticeBoardByKeyword(currentPage,keyword);
-    logger.error("currentPage =" + currentPage); // 오 짱이다...
+    PageBean<Notice> notice = noticeService.showNoticeBoardByKeyword(currentPage, keyword);
+    log.error("currentPage =" + currentPage); // 오 짱이다...
     if (currentPage > notice.getTotalPage()) {
       currentPage = notice.getTotalPage();
       resultBean.setStatus(0);
@@ -78,7 +74,7 @@ public class NoticeController {
     return resultBean;
 
   }
-  
+
   @GetMapping(value = {"/{noticeNoOpt}"})
   public ResultBean<Notice> showNotice(@PathVariable Optional<Integer> noticeNoOpt)
       throws FindException {

@@ -1,11 +1,8 @@
 package com.routediary.control;
 
-import java.io.File;
 import java.util.List;
 import java.util.Optional;
 import javax.servlet.http.HttpSession;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -15,7 +12,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -32,7 +28,9 @@ import com.routediary.exception.ModifyException;
 import com.routediary.exception.RemoveException;
 import com.routediary.service.AdminServiceImpl;
 import com.routediary.service.NoticeServiceImpl;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RestControllerAdvice
 @RequestMapping("admin/*")
 public class AdminController {
@@ -40,7 +38,6 @@ public class AdminController {
   private AdminServiceImpl adminService;
   @Autowired
   private NoticeServiceImpl noticeService;
-  private Logger logger = LoggerFactory.getLogger(getClass());
 
 
   @GetMapping(value = "write")
@@ -158,9 +155,8 @@ public class AdminController {
   // --------공지사항 관련 START
   @PutMapping(value = {"notice/{noticeNo}"}, consumes = {"multipart/form-data"})
   public ResponseEntity<?> modifyNotice(@PathVariable int noticeNo,
-                                        @RequestPart(required = false) List<MultipartFile> imgFiles,
-                                        @RequestPart Notice notice,
-                                        HttpSession session) throws ModifyException {
+      @RequestPart(required = false) List<MultipartFile> imgFiles, @RequestPart Notice notice,
+      HttpSession session) throws ModifyException {
 
     String adminId = (String) session.getAttribute("loginInfo");
     if (notice.getNoticeTitle() == null || notice.getNoticeTitle().equals("")
@@ -169,7 +165,7 @@ public class AdminController {
     } else if (adminId == null) {
       return new ResponseEntity<>("관리자가 아닙니다", HttpStatus.BAD_REQUEST);
     }
-    adminService.modifyNotice(notice,imgFiles);
+    adminService.modifyNotice(notice, imgFiles);
     return new ResponseEntity<>("공지사항이 수정되었습니다", HttpStatus.OK);
 
   }
@@ -187,21 +183,19 @@ public class AdminController {
     return new ResponseEntity<>("공지사항이 삭제되었습니다", HttpStatus.OK);
   }
 
-  @PostMapping(value = "notice/write",consumes = {"multipart/form-data"})
-  public ResultBean<?> writeNotice(
-      @RequestPart(required = false) List<MultipartFile> imgFiles,
-      @RequestPart Notice notice,
-      HttpSession session) throws AddException {
+  @PostMapping(value = "notice/write", consumes = {"multipart/form-data"})
+  public ResultBean<?> writeNotice(@RequestPart(required = false) List<MultipartFile> imgFiles,
+      @RequestPart Notice notice, HttpSession session) throws AddException {
     ResultBean<?> resultBean = new ResultBean<>();
     String adminId = (String) session.getAttribute("loginInfo");
     notice.setAdminId(adminId);
-    
-    adminService.writeNotice(notice,imgFiles);
+
+    adminService.writeNotice(notice, imgFiles);
     resultBean.setStatus(1);
     resultBean.setMessage("공지사항 작성 성공했습니다");
     return resultBean;
-    
-   
+
+
   }
   // --------공지사항 관련 END
 }

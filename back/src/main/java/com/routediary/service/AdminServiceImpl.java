@@ -77,7 +77,7 @@ public class AdminServiceImpl implements AdminService {
   }
 
   @Override
-  @Transactional(rollbackFor = RemoveException.class)
+  @Transactional(rollbackFor = Exception.class)
   public void removeDiary(int diaryNo) throws RemoveException {
     try {
       if (diaryRepository.selectDiary(diaryNo) == null) {
@@ -89,7 +89,7 @@ public class AdminServiceImpl implements AdminService {
       routeRepository.deleteAll(diaryNo);
       diaryImageRepository.deleteAll(diaryNo);
       diaryRepository.delete(diaryNo);
-      
+
       File folder = new File(new File("").getAbsolutePath() + File.separator + "images"
           + File.separator + "diary_images" + File.separator + "diary" + diaryNo);
       // 이미지 삭제
@@ -108,7 +108,7 @@ public class AdminServiceImpl implements AdminService {
   }
 
   @Override
-  @Transactional(rollbackFor = RemoveException.class)
+  @Transactional(rollbackFor = Exception.class)
   public void removeComment(int diaryNo, int commentNo) throws RemoveException {
     try {
       Diary diary = diaryRepository.selectDiary(diaryNo);
@@ -124,7 +124,7 @@ public class AdminServiceImpl implements AdminService {
   }
 
   @Override
-  @Transactional(rollbackFor = AddException.class)
+  @Transactional(rollbackFor = Exception.class)
   public void writeNotice(Notice notice, List<MultipartFile> imgFiles) throws AddException {
     int noticeNo = noticeRepository.selectLatestNoticeNo(); // currentValue 를 찾아주는 메서드.
     try {
@@ -194,8 +194,8 @@ public class AdminServiceImpl implements AdminService {
   }
 
   @Override
-  @Transactional(rollbackFor = ModifyException.class)
-  public void modifyNotice(Notice notice,List<MultipartFile> imgFiles) throws ModifyException {
+  @Transactional(rollbackFor = Exception.class)
+  public void modifyNotice(Notice notice, List<MultipartFile> imgFiles) throws ModifyException {
     int noticeNo = notice.getNoticeNo();
     try {
       noticeRepository.update(notice);
@@ -249,7 +249,7 @@ public class AdminServiceImpl implements AdminService {
   }
 
   @Override
-  @Transactional(rollbackFor = RemoveException.class)
+  @Transactional(rollbackFor = Exception.class)
   public void removeNotice(int noticeNo) throws RemoveException {
     try {
       if (noticeRepository.selectNotice(noticeNo) == null) {

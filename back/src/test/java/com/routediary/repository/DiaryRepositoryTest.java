@@ -1,13 +1,17 @@
 package com.routediary.repository;
 
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.routediary.dto.Client;
 import com.routediary.dto.Diary;
 
@@ -54,11 +58,11 @@ class DiaryRepositoryTest {
     String expectedTitle = "즐거운 부산으로 떠나요";
     String expectedClientNickname = "한국남자6";
     int expectedDiariesCount = 6;
-    List<Diary> diaries = diaryRepository.selectDiaries(order, 1, 10, hashtags);
+    List<Diary> diaries = diaryRepository.selectDiaries(order, 1, 30, null);
+    System.out.println(diaries.toString());
     assertEquals(expectedTitle, diaries.get(0).getDiaryTitle());
     assertEquals(expectedClientNickname, diaries.get(0).getClient().getClientNickname());
     assertEquals(expectedDiariesCount, diaries.size());
-    System.out.println(diaries.toString());
 
     // hashtag 검색을 안하는 경우
     String expectedTitle2 = "즐거운 광주으로 떠나요";
@@ -83,6 +87,12 @@ class DiaryRepositoryTest {
     String expectedFirstCommentContent = "좋은 여행정보 감사합니다~";
     String expectedFirstHashtag = "여행";
     Diary diary = diaryRepository.selectDiary(diaryNo);
+    System.out.println(diary.toString());
+    System.out.println(diary.getRoutes().get(1).toString());
+    ObjectMapper mapper = new ObjectMapper();
+    Map<String, Object> map = new HashMap<String, Object>();
+    map.put("diary", diary);
+    System.out.println(mapper.writeValueAsString(map));
     assertEquals(expectedRoutesCount, diary.getRoutes().size());
     assertEquals(expectedCommentsCount, diary.getComments().size());
     assertEquals(expectedHashtagsCount, diary.getHashtags().size());
@@ -91,7 +101,7 @@ class DiaryRepositoryTest {
     assertEquals(expectedFirstRouteContent, diary.getRoutes().get(0).getRouteContent());
     assertEquals(expectedFirstCommentContent, diary.getComments().get(0).getCommentContent());
     assertEquals(expectedFirstHashtag, diary.getHashtags().get(0).getHashtag());
-    System.out.println(diary.toString());
+
   }
 
   @Test
@@ -99,18 +109,27 @@ class DiaryRepositoryTest {
     String clientId = "chinaman@gmail.com";
     String expectedClientNickname = "한국남자3";
     String diaryTitle = "new diary";
+    int diaryDisclosureFlag = 1;
     Diary diary = new Diary();
     Client client = new Client();
     client.setClientId(clientId);
     diary.setDiaryTitle(diaryTitle);
     diary.setDiaryStartDate(new Date(2022, 1, 1));
     diary.setDiaryEndDate(new Date(2022, 1, 3));
+    diary.setDiaryDisclosureFlag(diaryDisclosureFlag);
     diary.setClient(client);
 
     diaryRepository.insert(diary);
-    Diary diaryInDb = diaryRepository.selectDiary(10);
+    Diary diaryInDb = diaryRepository.selectDiary(14);
     assertEquals(diaryTitle, diaryInDb.getDiaryTitle());
     assertEquals(expectedClientNickname, diaryInDb.getClient().getClientNickname());
+  }
+
+  @Test
+  void selectLatestDiaryNoTest() throws Exception {
+    int diaryNo = diaryRepository.selectLatestDiaryNo();
+    System.out.println("latest diaryNo : " + diaryNo);
+    assertNotEquals(0, diaryNo);
   }
 
   @Test
