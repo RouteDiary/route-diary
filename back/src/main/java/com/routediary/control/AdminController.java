@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import com.routediary.dto.Admin;
 import com.routediary.dto.Diary;
@@ -31,7 +31,7 @@ import com.routediary.service.NoticeServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@RestControllerAdvice
+@RestController
 @RequestMapping("admin/*")
 public class AdminController {
   @Autowired

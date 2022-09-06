@@ -47,7 +47,11 @@ public class NoticeController {
 
   }
 
+<<<<<<< Updated upstream
   @GetMapping(value = {"list/{keyword}/{currentPageOpt}"})
+=======
+  @GetMapping(value = {"list/{keyword}/{pageNo}"})
+>>>>>>> Stashed changes
   public ResultBean<PageBean<Notice>> showNoticeBoardByKeyword(
       @PathVariable Optional<Integer> currentPageOpt, @PathVariable String keyword)
       throws FindException {
