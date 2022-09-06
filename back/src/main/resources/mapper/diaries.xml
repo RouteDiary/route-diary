@@ -24,7 +24,7 @@
     <collection property="comments" column="diary_no" javaType="List" ofType="Comment" autoMapping="true" select="selectComments"/>
     <collection property="hashtags" column="diary_no" javaType="List" ofType="Hashtag" autoMapping="true" select="selectHashtags"/>
   </resultMap>
-
+  
   <select id="selectAllDiaries" resultMap="DiariesMap">
 		SELECT DISTINCT diary_no
 		              , client_id

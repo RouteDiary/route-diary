@@ -7,7 +7,7 @@
 		FROM diary_images
 		WHERE diary_no = #{diaryNo}
   </select>
-
+  
   <insert id="insert" parameterType="DiaryImage">
         INSERT INTO diary_images (diary_no, image_no, file_name, stored_file_path)
              VALUES (#{diaryNo}
