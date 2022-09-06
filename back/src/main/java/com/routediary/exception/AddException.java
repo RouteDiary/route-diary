@@ -1,11 +1,17 @@
 package com.routediary.exception;
 
-public class AddException extends Exception {
-  public AddException() {
-    super();
-  }
+import com.routediary.enums.ErrorCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-  public AddException(String message) {
-    super(message);
+@NoArgsConstructor
+@Getter
+public class AddException extends Exception {
+  private ErrorCode errorCode;
+
+  public AddException(ErrorCode errorCode) {
+    super();
+    this.errorCode = errorCode;
   }
 }
+

@@ -1,11 +1,16 @@
 package com.routediary.exception;
 
-public class ModifyException extends Exception {
-  public ModifyException() {
-    super();
-  }
+import com.routediary.enums.ErrorCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-  public ModifyException(String message) {
-    super(message);
+@NoArgsConstructor
+@Getter
+public class ModifyException extends Exception {
+  private ErrorCode errorCode;
+
+  public ModifyException(ErrorCode errorCode) {
+    super();
+    this.errorCode = errorCode;
   }
 }

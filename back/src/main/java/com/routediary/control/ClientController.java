@@ -14,11 +14,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.routediary.dto.Client;
 import com.routediary.dto.ResultBean;
+import com.routediary.enums.ErrorCode;
+import com.routediary.enums.SuccessCode;
 import com.routediary.exception.AddException;
-import com.routediary.exception.ClientException;
+import com.routediary.exception.DuplicationException;
 import com.routediary.exception.FindException;
+import com.routediary.exception.LogoutFailureException;
+import com.routediary.exception.MismatchException;
 import com.routediary.exception.ModifyException;
+import com.routediary.exception.NoPermissionException;
+import com.routediary.exception.NotLoginedException;
 import com.routediary.exception.RemoveException;
+import com.routediary.exception.WithdrawnClientException;
 import com.routediary.service.ClientService;
 
 @RestController
@@ -29,109 +36,95 @@ public class ClientController {
   private ClientService clientService;
 
   @PostMapping("/signup")
-  public ResultBean<Client> signup(@RequestBody Client client) throws AddException {
-    ResultBean<Client> resultBean = new ResultBean();
-    try {
-      clientService.signup(client);
-      resultBean.setStatus(1);
-      resultBean.setMessage("회원가입 성공");
-    } catch (AddException e) {
-      e.printStackTrace();
-      resultBean.setStatus(0);
-      resultBean.setMessage("회원가입 실패");
-    }
-    return resultBean;
+  public ResponseEntity<?> signup(@RequestBody Client client) throws AddException {
+    clientService.signup(client);
+    ResultBean<?> resultBean = new ResultBean(SuccessCode.SIGNUP_SUCCESS);
+    return new ResponseEntity<>(resultBean, HttpStatus.OK);
   }
 
   @GetMapping("/login")
-  public ResultBean<Client> login(@RequestParam(name = "clientId", required = true) String clientId,
-      @RequestParam(name = "clientPwd", required = true) String clientPwd, HttpSession session)
-      throws ClientException {
-    ResultBean<Client> resultBean = new ResultBean();
-    try {
-      clientService.login(clientId, clientPwd);
-      resultBean.setStatus(1);
-      resultBean.setMessage("로그인 성공");
+  public ResponseEntity<?> login(@RequestParam String clientId, @RequestParam String clientPwd,
+      HttpSession session) throws FindException, MismatchException, WithdrawnClientException {
+    boolean isLoginSucceeded = clientService.login(clientId, clientPwd);
+    if (isLoginSucceeded) {
       session.setAttribute("loginInfo", clientId);
-    } catch (FindException e) {
-      e.printStackTrace();
-      resultBean.setStatus(0);
-      resultBean.setMessage("로그인 실패. \n" + e.getMessage());
+      ResultBean<?> resultBean = new ResultBean(SuccessCode.SIGNUP_SUCCESS);
+      return new ResponseEntity<>(resultBean, HttpStatus.OK);
+    } else {
+      throw new FindException();
     }
-    return resultBean;
   }
 
   @GetMapping("/logout")
-  public ResponseEntity<Client> logout(HttpSession session) throws ClientException {
+  public ResponseEntity<?> logout(HttpSession session) throws LogoutFailureException {
     session.removeAttribute("loginInfo");
     String clientId = (String) session.getAttribute("loginInfo");
     if (clientId == null) {
-      return new ResponseEntity<>(HttpStatus.OK);
+      ResultBean<?> resultBean = new ResultBean(SuccessCode.LOGOUT_SUCCESS);
+      return new ResponseEntity<>(resultBean, HttpStatus.OK);
     } else {
-      return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new LogoutFailureException(ErrorCode.FAILED_TO_LOGOUT);
     }
   }
 
   @PutMapping("/modify")
-  public ResultBean<Client> modifyAccount(@RequestBody Client client) throws ClientException {
-    ResultBean<Client> resultBean = new ResultBean();
-    try {
+  public ResponseEntity<?> modifyAccount(@RequestBody Client client, HttpSession session)
+      throws ModifyException, NotLoginedException, NoPermissionException {
+    String clientId = (String) session.getAttribute("loginInfo");
+    if (clientId == null) {
+      throw new NotLoginedException(ErrorCode.NOT_LOGINED);
+    } else if (!clientId.equals(client.getClientId())) {
+      throw new NoPermissionException(ErrorCode.NO_PERMISSION);
+    } else {
       clientService.modifyAccount(client);
-      resultBean.setStatus(1);
-      resultBean.setMessage("회원정보 수정완료");
-    } catch (ModifyException e) {
-      e.printStackTrace();
-      resultBean.setStatus(0);
-      resultBean.setMessage("회원정보 수정실패 \n" + e.getMessage());
+      ResultBean<?> resultBean = new ResultBean(SuccessCode.SUCCESS_TO_MODIFY);
+      return new ResponseEntity<>(resultBean, HttpStatus.OK);
     }
-    return resultBean;
   }
 
   @DeleteMapping("/remove")
-  public ResultBean<Client> removeAccount(@RequestBody Client client) throws ClientException {
-    ResultBean<Client> resultBean = new ResultBean();
-    try {
+  public ResponseEntity<?> removeAccount(@RequestBody Client client, HttpSession session)
+      throws RemoveException, NotLoginedException, NoPermissionException {
+    String clientId = (String) session.getAttribute("loginInfo");
+    if (clientId == null) {
+      throw new NotLoginedException(ErrorCode.NOT_LOGINED);
+    } else if (!clientId.equals(client.getClientId())) {
+      throw new NoPermissionException(ErrorCode.NO_PERMISSION);
+    } else {
       clientService.removeAccount(client);
-      resultBean.setStatus(1);
-      resultBean.setMessage("회원탈퇴 완료");
-    } catch (RemoveException e) {
-      e.printStackTrace();
-      resultBean.setStatus(0);
-      resultBean.setMessage("회원탈퇴 실패");
+      ResultBean<?> resultBean = new ResultBean(SuccessCode.SUCCESS_TO_REMOVE);
+      return new ResponseEntity<>(resultBean, HttpStatus.OK);
     }
-    return resultBean;
   }
 
   @GetMapping("/idcheck")
-  public ResultBean<Client> idDuplicationCheck(@RequestParam String clientId)
-      throws ClientException {
-    ResultBean<Client> resultBean = new ResultBean();
-    try {
-      clientService.idDuplicationCheck(clientId);
-    } catch (FindException e) {
-      e.printStackTrace();
-      resultBean.setStatus(1);
-      resultBean.setMessage("사용가능한 아이디입니다.");
-      if (clientId != null)
-        resultBean.setStatus(0);
-      resultBean.setMessage(e.getMessage());
-    }
-    return resultBean;
+  public ResponseEntity<?> idDuplicationCheck(@RequestParam String clientId)
+      throws FindException, DuplicationException {
+    clientService.idDuplicationCheck(clientId);
+    ResultBean<?> resultBean = new ResultBean(SuccessCode.VAILD_ID);
+    return new ResponseEntity<>(resultBean, HttpStatus.OK);
   }
 
   @GetMapping("/nicknamecheck")
-  public ResultBean<Client> NicknameDuplicationCheck(@RequestParam String clientNickname)
-      throws ClientException {
-    ResultBean<Client> resultBean = new ResultBean();
-    try {
-      clientService.NicknameDuplicationCheck(clientNickname);
-      resultBean.setStatus(1);
-      resultBean.setMessage("사용가능한 닉네임입니다.");
-    } catch (FindException e) {
-      e.printStackTrace();
-      resultBean.setStatus(0);
-      resultBean.setMessage(e.getMessage());
+  public ResponseEntity<?> nicknameDuplicationCheck(@RequestParam String clientNickname)
+      throws FindException, DuplicationException {
+    clientService.nicknameDuplicationCheck(clientNickname);
+    ResultBean<?> resultBean = new ResultBean(SuccessCode.VAILD_NICKNAME);
+    return new ResponseEntity<>(resultBean, HttpStatus.OK);
+  }
+
+  @GetMapping("/clientinfo")
+  public ResponseEntity<?> bringClientInfo(HttpSession session)
+      throws FindException, NotLoginedException, NoPermissionException {
+    String clientId = (String) session.getAttribute("loginInfo");
+    if (clientId == null) {
+      throw new NotLoginedException(ErrorCode.NOT_LOGINED);
+    } else {
+      Client client = clientService.bringClientInfo(clientId);
+      ResultBean<Client> resultBean =
+          new ResultBean<Client>(SuccessCode.SUCCESS_TO_BRING_CLIENT_INFO);
+      resultBean.setT(client);
+      return new ResponseEntity<>(resultBean, HttpStatus.OK);
     }
-    return resultBean;
   }
 }

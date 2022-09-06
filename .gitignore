@@ -1,7 +1,7 @@
 *.DS_Store
 .metadata/
-back/.mvn/
-
+back/.mvn/src/main/webapp/resource
+/front/
 ### Java ###
 # Compiled class file
 *.class
@@ -53,3 +53,4 @@ buildNumber.properties
 back/.classpath
 
 back/src/main/webapp/WEB-INF/web.xml
+

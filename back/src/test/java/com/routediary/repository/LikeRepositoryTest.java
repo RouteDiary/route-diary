@@ -22,7 +22,7 @@ public class LikeRepositoryTest {
   @Test
   public void testInsert() throws Exception {
     Like like = new Like();
-    like.setDiaryNo(1);
+    like.setDiaryNo(67);
     like.setClientId("koreaman@gmail.com");
     repository.insert(like);
   }

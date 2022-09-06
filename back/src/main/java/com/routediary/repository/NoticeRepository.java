@@ -18,6 +18,13 @@ public interface NoticeRepository {
   public int selectCount();
 
   /**
+   * 공지사항 키워드에 해당하는 갯수를 반환.
+   * 
+   * @return int
+   */
+  public int selectCountByKeyword(@Param("keyword") String keyword);
+
+  /**
    * 공지사항을 추가한다.
    *
    * @param notice

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.routediary.repository.DiaryRepository">
   <resultMap id="DiariesMap" type="Diary" autoMapping="true">
@@ -46,9 +46,9 @@
     <choose>
 	  <when test="hashtags != null">
 		LEFT OUTER JOIN hashtags h ON (d.diary_no = h.diary_no)
-		          WHERE diary_disclosure_flag = 1 AND                 
+		          WHERE diary_disclosure_flag = 1 AND
 	    <foreach item="hashtag" index="index" collection="hashtags" separator="OR">
-		  <trim prefixOverrides="OR">  
+		  <trim prefixOverrides="OR">
 		             OR h.hashtag LIKE '%${hashtag}%'
 		  </trim>
 		</foreach>
@@ -63,24 +63,24 @@
 	  </when>
 	  <when test="order == 3">
 		       ORDER BY diary_like_cnt DESC,
-	  </when> 		  
-    </choose>	       
+	  </when>
+    </choose>
 				        diary_writing_time DESC)
 		  WHERE rnum BETWEEN #{startRow} AND #{endRow}
 	</select>
   <select id="selectCountAll" resultType="int">
-  	SELECT COUNT(*) FROM diaries 
+  	SELECT COUNT(*) FROM diaries
   </select>
   <select id="selectCountByDisclosureFlag" parameterType="int" resultType="int">
 		SELECT COUNT(*) FROM diaries WHERE diary_disclosure_flag = #{diaryDisclosureFlag}
   </select>
-	
+
   <select id="selectCountByClientId" parameterType="String" resultType="int">
 		SELECT COUNT(*) FROM diaries WHERE client_id = #{clientId}
-  </select>	
-	
+  </select>
+
   <select id="selectDiariesByClientId" resultMap="DiariesMap">
-				SELECT * 
+				SELECT *
 		  FROM (SELECT d.*
 		             , client_nickname
 		             , client_status_flag
@@ -91,7 +91,7 @@
 		       ORDER BY diary_writing_time DESC)
 		 WHERE rnum BETWEEN #{startRow} AND #{endRow}
   </select>
-	
+
   <select id="selectDiaries" resultMap="DiariesMap">
 		SELECT DISTINCT diary_no
 		              , client_id
@@ -113,15 +113,15 @@
     <choose>
 	  <when test="hashtags != null">
 		LEFT OUTER JOIN hashtags h ON (d.diary_no = h.diary_no)
-		          WHERE diary_disclosure_flag = 1 AND                 
+		          WHERE diary_disclosure_flag = 1 AND
 	    <foreach item="hashtag" index="index" collection="hashtags" separator="OR">
-		  <trim prefixOverrides="OR">  
+		  <trim prefixOverrides="OR">
 		             OR h.hashtag LIKE '%${hashtag}%'
 		  </trim>
 		</foreach>
       </when>
 	  <otherwise>
-		          WHERE diary_disclosure_flag = 1     		
+		          WHERE diary_disclosure_flag = 1
 	  </otherwise>
 	</choose>
 		  ) WHERE rnum BETWEEN #{startRow} AND #{endRow}
@@ -134,42 +134,42 @@
 	  </when>
 	  <when test="order == 3">
 		       ORDER BY diary_like_cnt DESC,
-	  </when> 		  
+	  </when>
     </choose>
-    				        diary_writing_time DESC		
+    				        diary_writing_time DESC
   </select>
-	
+
 	<!-- selectDiary()에 필요한 코드 START -->
   <select id="selectDiary" parameterType="int" resultMap="DiaryMap">
 		         SELECT *
 		           FROM diaries d
 		LEFT OUTER JOIN clients c ON (d.client_id = c.client_id)
 		          WHERE d.diary_no = #{diaryNo}
-  </select>	
+  </select>
   <select id="selectRoutes" parameterType="int" resultType="Route">
 		         SELECT *
 		           FROM routes
 		          WHERE diary_no = #{diaryNo}
-  </select>	
+  </select>
   <select id="selectDiaryImages" parameterType="int" resultType="DiaryImage">
 		         SELECT *
 		           FROM diary_images
 		          WHERE diary_no = #{diaryNo}
-  </select>	
+  </select>
   <select id="selectComments" parameterType="int" resultType="Comment">
 		         SELECT *
 		           FROM comments
 		          WHERE diary_no = #{diaryNo}
-  </select>	
+  </select>
   <select id="selectHashtags" parameterType="int" resultType="Hashtag">
 		         SELECT *
 		           FROM hashtags
 		          WHERE diary_no = #{diaryNo}
-  </select>	
+  </select>
 	<!-- selectDiary()에 필요한 코드 END -->
-		
+
   <insert id="insert" parameterType="Diary">
-	INSERT INTO diaries (diary_no, client_id, diary_title, diary_writing_time, 
+	INSERT INTO diaries (diary_no, client_id, diary_title, diary_writing_time,
 	                     diary_start_date, diary_end_date, diary_disclosure_flag,
 	                     diary_view_cnt, diary_like_cnt)
 	     VALUES (diary_no_seq.NEXTVAL
@@ -179,10 +179,10 @@
 	           , #{diaryStartDate}
 	           , #{diaryEndDate}
 	           , #{diaryDisclosureFlag}
-	           , 0 
+	           , 0
 	           , 0
 	           )
-  </insert>	
+  </insert>
 
   <select id="selectLatestDiaryNo" resultType="int">
     SELECT diary_no_seq.CURRVAL FROM dual
@@ -195,11 +195,11 @@
          , diary_start_date = #{diaryStartDate}
          , diary_end_date = #{diaryEndDate}
          , diary_disclosure_flag = #{diaryDisclosureFlag}
-	     , diary_modifying_time = SYSDATE  
+	     , diary_modifying_time = SYSDATE
 	</set>
 	 WHERE diary_no = #{diaryNo}
-  </update>			
-  
+  </update>
+
   <delete id="delete" parameterType="int">
 	DELETE FROM diaries
 	 WHERE diary_no = #{diaryNo}
@@ -208,24 +208,24 @@
   <update id="updateViewCnt" parameterType="int">
 	UPDATE diaries
 	<set>
-           diary_view_cnt = diary_view_cnt + 1 
+           diary_view_cnt = diary_view_cnt + 1
 	</set>
 	 WHERE diary_no = #{diaryNo}
-  </update>	
-  
+  </update>
+
   <update id="updateIncreaseLikeCnt" parameterType="int">
 	UPDATE diaries
 	<set>
-           diary_like_cnt = diary_like_cnt + 1 
+           diary_like_cnt = diary_like_cnt + 1
 	</set>
 	 WHERE diary_no = #{diaryNo}
-  </update>	
-  
+  </update>
+
     <update id="updateDecreaseLikeCnt" parameterType="int">
 	UPDATE diaries
 	<set>
-           diary_like_cnt = diary_like_cnt - 1 
+           diary_like_cnt = diary_like_cnt - 1
 	</set>
 	 WHERE diary_no = #{diaryNo}
-  </update>	
+  </update>
 </mapper>
