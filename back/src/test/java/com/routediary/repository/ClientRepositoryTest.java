@@ -6,9 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import com.routediary.dto.Client;
-import com.routediary.exception.InsertException;
-import com.routediary.exception.SelectException;
-import com.routediary.exception.UpdateException;
 
 @SpringBootTest
 class ClientRepositoryTest {
@@ -17,7 +14,7 @@ class ClientRepositoryTest {
   ClientRepository clientRepository;
 
   @Test
-  void SelectClientByIdTest() throws SelectException {
+  void SelectClientByIdTest() throws Exception {
     // login을 위한 테스트
     String clientId = "koreawoman@gmail.com";
     String expectedClientPwd = "asd15";
@@ -38,7 +35,7 @@ class ClientRepositoryTest {
   }
 
   @Test
-  void SelectClientByNicknameTest() throws SelectException {
+  void SelectClientByNicknameTest() throws Exception {
     // nickname 중복체크를 위한 테스트
     String clientNickname = "새별명";
     Client client = clientRepository.selectClientByNickname(clientNickname);
@@ -46,7 +43,7 @@ class ClientRepositoryTest {
   }
 
   @Test
-  void InsertTest() throws InsertException, SelectException {
+  void InsertTest() throws Exception {
     String clientId = "kmj1@naver.com";
     String clientPwd = "kmj0801";
     String clientCellphoneNo = "010-1234-5798";
@@ -69,7 +66,7 @@ class ClientRepositoryTest {
   }
 
   @Test
-  void UpdateTest() throws UpdateException, SelectException {
+  void UpdateTest() throws Exception {
     // 회원정보를 수정하는 경우
     String expectedClientId = "kmj1@naver.com";
     String expectedClientPwd = "kmj0310";
@@ -91,7 +88,7 @@ class ClientRepositoryTest {
   }
 
   @Test
-  void UpdateForWithdrawalTest() throws UpdateException, SelectException {
+  void UpdateForWithdrawalTest() throws Exception {
     // 회원탈퇴하는 경우
     String expectedClientId2 = "koreaman@gmail.com";
     String expectedClientPwd2 = "asd11";
