@@ -13,7 +13,6 @@ public interface ClientRepository {
    *
    * @param clientId
    * @return Client
-   * @throws SelectException
    */
   public Client selectClientById(String clientId);
 
@@ -22,7 +21,6 @@ public interface ClientRepository {
    *
    * @param clientNickname
    * @return Client
-   * @throws SelectException
    */
   public Client selectClientByNickname(String clientNickname);
 
@@ -30,7 +28,6 @@ public interface ClientRepository {
    * Client(회원) 객체를 DB에 추가
    *
    * @param client
-   * @throws InsertException
    */
   public void insert(Client client);
 
@@ -39,7 +36,6 @@ public interface ClientRepository {
    * 가입상태, 0 -> 탈퇴상태로 변경
    *
    * @param client
-   * @throw UpdateException
    */
   public void update(Client client);
 }

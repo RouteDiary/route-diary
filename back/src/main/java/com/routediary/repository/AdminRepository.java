@@ -14,7 +14,6 @@ public interface AdminRepository {
    * @author yongho
    * @param adminId
    * @return Admin
-   * @throws SelectException
    */
   public Admin selectAdminById(String adminId);
 

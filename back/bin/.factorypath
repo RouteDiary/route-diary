@@ -91,5 +91,21 @@
     <factorypathentry kind="VARJAR" id="M2_REPO/org/apache/commons/commons-dbcp2/2.7.0/commons-dbcp2-2.7.0.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/apache/commons/commons-pool2/2.11.1/commons-pool2-2.11.1.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/net/coobird/thumbnailator/0.4.14/thumbnailator-0.4.14.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="ECLIPSE_HOME/plugins/org.junit.jupiter.api_5.8.1.v20211018-1956.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="ECLIPSE_HOME/plugins/org.junit.jupiter.engine_5.8.1.v20211018-1956.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="ECLIPSE_HOME/plugins/org.junit.jupiter.migrationsupport_5.8.1.v20211018-1956.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="ECLIPSE_HOME/plugins/org.junit.jupiter.params_5.8.1.v20211018-1956.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="ECLIPSE_HOME/plugins/org.junit.platform.commons_1.8.1.v20211018-1956.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="ECLIPSE_HOME/plugins/org.junit.platform.engine_1.8.1.v20211018-1956.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="ECLIPSE_HOME/plugins/org.junit.platform.launcher_1.8.1.v20211018-1956.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="ECLIPSE_HOME/plugins/org.junit.platform.runner_1.8.1.v20211018-1956.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="ECLIPSE_HOME/plugins/org.junit.platform.suite.api_1.8.1.v20211018-1956.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="ECLIPSE_HOME/plugins/org.junit.platform.suite.engine_1.8.1.v20211028-1957.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="ECLIPSE_HOME/plugins/org.junit.platform.suite.commons_1.8.1.v20211018-1956.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="ECLIPSE_HOME/plugins/org.junit.vintage.engine_5.8.1.v20211018-1956.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="ECLIPSE_HOME/plugins/org.opentest4j_1.2.0.v20211018-1956.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="ECLIPSE_HOME/plugins/org.apiguardian_1.1.2.v20211018-1956.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="JUNIT_HOME" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="ECLIPSE_HOME/plugins/org.hamcrest.core_1.3.0.v20180420-1519.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="PLUGIN" id="org.eclipse.jst.ws.annotations.core" enabled="true" runInBatchMode="false"/>
 </factorypath>

@@ -34,11 +34,11 @@ public class ClientController {
     try {
       clientService.signup(client);
       resultBean.setStatus(1);
-      resultBean.setMessage("성공");
+      resultBean.setMessage("회원가입 성공");
     } catch (AddException e) {
       e.printStackTrace();
       resultBean.setStatus(0);
-      resultBean.setMessage("실패");
+      resultBean.setMessage("회원가입 실패");
     }
     return resultBean;
   }
@@ -46,18 +46,23 @@ public class ClientController {
   @GetMapping("/login")
   public ResultBean<Client> login(@RequestParam(name = "clientId", required = true) String clientId,
       @RequestParam(name = "clientPwd", required = true) String clientPwd, HttpSession session)
-      throws FindException, ClientException {
+      throws ClientException {
     ResultBean<Client> resultBean = new ResultBean();
-    clientService.login(clientId, clientPwd);
-    resultBean.setStatus(1);
-    resultBean.setMessage("로그인 성공");
-    session.setAttribute("loginInfo", clientId);
+    try {
+      clientService.login(clientId, clientPwd);
+      resultBean.setStatus(1);
+      resultBean.setMessage("로그인 성공");
+      session.setAttribute("loginInfo", clientId);
+    } catch (FindException e) {
+      e.printStackTrace();
+      resultBean.setStatus(0);
+      resultBean.setMessage("로그인 실패. \n" + e.getMessage());
+    }
     return resultBean;
-
   }
 
   @GetMapping("/logout")
-  public ResponseEntity<Client> logout(HttpSession session) {
+  public ResponseEntity<Client> logout(HttpSession session) throws ClientException {
     session.removeAttribute("loginInfo");
     String clientId = (String) session.getAttribute("loginInfo");
     if (clientId == null) {
@@ -67,35 +72,37 @@ public class ClientController {
     }
   }
 
-  @PutMapping("/modifyAccount")
+  @PutMapping("/modify")
   public ResultBean<Client> modifyAccount(@RequestBody Client client) throws ClientException {
     ResultBean<Client> resultBean = new ResultBean();
     try {
       clientService.modifyAccount(client);
       resultBean.setStatus(1);
-      resultBean.setMessage("수정완료");
+      resultBean.setMessage("회원정보 수정완료");
     } catch (ModifyException e) {
       e.printStackTrace();
       resultBean.setStatus(0);
-      resultBean.setMessage("수정실패 : 잘못된 형식" + e.getMessage());
+      resultBean.setMessage("회원정보 수정실패 \n" + e.getMessage());
     }
     return resultBean;
   }
 
-  @DeleteMapping("/removeAccout")
+  @DeleteMapping("/remove")
   public ResultBean<Client> removeAccount(@RequestBody Client client) throws ClientException {
     ResultBean<Client> resultBean = new ResultBean();
     try {
       clientService.removeAccount(client);
+      resultBean.setStatus(1);
+      resultBean.setMessage("회원탈퇴 완료");
     } catch (RemoveException e) {
       e.printStackTrace();
       resultBean.setStatus(0);
-      resultBean.setMessage("탈퇴");
+      resultBean.setMessage("회원탈퇴 실패");
     }
     return resultBean;
   }
 
-  @GetMapping("/idDuplicationCheck")
+  @GetMapping("/idcheck")
   public ResultBean<Client> idDuplicationCheck(@RequestParam String clientId)
       throws ClientException {
     ResultBean<Client> resultBean = new ResultBean();
@@ -104,26 +111,26 @@ public class ClientController {
     } catch (FindException e) {
       e.printStackTrace();
       resultBean.setStatus(1);
-      resultBean.setMessage("사용가능요");
+      resultBean.setMessage("사용가능한 아이디입니다.");
       if (clientId != null)
         resultBean.setStatus(0);
-      resultBean.setMessage("중복이요");
+      resultBean.setMessage(e.getMessage());
     }
     return resultBean;
   }
 
-  @GetMapping("/NicknameDuplicationCheck")
+  @GetMapping("/nicknamecheck")
   public ResultBean<Client> NicknameDuplicationCheck(@RequestParam String clientNickname)
       throws ClientException {
     ResultBean<Client> resultBean = new ResultBean();
     try {
       clientService.NicknameDuplicationCheck(clientNickname);
       resultBean.setStatus(1);
-      resultBean.setMessage("사용가능요");
+      resultBean.setMessage("사용가능한 닉네임입니다.");
     } catch (FindException e) {
       e.printStackTrace();
       resultBean.setStatus(0);
-      resultBean.setMessage("중복이요");
+      resultBean.setMessage(e.getMessage());
     }
     return resultBean;
   }

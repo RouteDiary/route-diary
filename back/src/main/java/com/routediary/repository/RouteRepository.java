@@ -14,7 +14,6 @@ public interface RouteRepository {
    *
    * @param diaryNo
    * @return int
-   * @throws SelectException
    */
   public int selectCount(int diaryNo);
 
@@ -22,7 +21,6 @@ public interface RouteRepository {
    * Route(루트) 객체를 DB에 추가
    *
    * @param route
-   * @throws InsertException
    */
   public void insert(Route route);
 
@@ -31,7 +29,6 @@ public interface RouteRepository {
    *
    * @param diaryNo
    * @param routeNo
-   * @throws DeleteException
    */
   public void delete(int diaryNo, int routeNo);
 
@@ -39,7 +36,6 @@ public interface RouteRepository {
    * 해당 diaryNo의 모든 행을 삭제한다
    *
    * @param diaryNo
-   * @throws DeleteException
    */
   public void deleteAll(int diaryNo);
 
