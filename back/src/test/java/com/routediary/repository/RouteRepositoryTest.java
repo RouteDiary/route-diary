@@ -5,9 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import com.routediary.dto.Route;
-import com.routediary.exception.DeleteException;
-import com.routediary.exception.InsertException;
-import com.routediary.exception.SelectException;
 
 @SpringBootTest
 class RouteRepositoryTest {
@@ -15,16 +12,16 @@ class RouteRepositoryTest {
   @Autowired
   RouteRepository routeRepository;
 
-   @Test
-  void selectCountTest() throws SelectException {
+  @Test
+  void selectCountTest() throws Exception {
     int diaryNo = 2;
     int count = routeRepository.selectCount(diaryNo);
     int expectedCount = 5;
     assertEquals(expectedCount, count);
   }
 
-   @Test
-  void insertTest() throws InsertException {
+  @Test
+  void insertTest() throws Exception {
     int diaryNo = 3;
     String routeCotent = "ILikeParty";
     String kakaoMapId = "4";
@@ -36,8 +33,8 @@ class RouteRepositoryTest {
     routeRepository.insert(route);
   }
 
-   @Test
-  void deleteTest() throws DeleteException {
+  @Test
+  void deleteTest() throws Exception {
     int diaryNo = 3;
     int routeNo = 3;
 
@@ -45,10 +42,9 @@ class RouteRepositoryTest {
   }
 
   @Test
-  void deleteAllTest() throws DeleteException {
+  void deleteAllTest() throws Exception {
     int diaryNo = 3;
 
     routeRepository.deleteAll(diaryNo);
   }
 }
-

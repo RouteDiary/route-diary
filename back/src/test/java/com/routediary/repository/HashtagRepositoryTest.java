@@ -4,9 +4,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import com.routediary.dto.Hashtag;
-import com.routediary.exception.DeleteException;
-import com.routediary.exception.InsertException;
-import com.routediary.exception.UpdateException;
 
 @SpringBootTest
 public class HashtagRepositoryTest {
@@ -14,7 +11,7 @@ public class HashtagRepositoryTest {
   private HashtagRepository repository;
 
   @Test
-  public void testinsert() throws InsertException {
+  public void testinsert() throws Exception {
     Hashtag hashtag = new Hashtag();
     hashtag.setDiaryNo(3);
     hashtag.setHashtag("제육");
@@ -23,7 +20,7 @@ public class HashtagRepositoryTest {
   }
 
   @Test
-  public void testupdate() throws UpdateException {
+  public void testupdate() throws Exception {
     Hashtag hashtag = new Hashtag();
     hashtag.setDiaryNo(3);
     hashtag.setHashtag("김치");
@@ -31,7 +28,7 @@ public class HashtagRepositoryTest {
   }
 
   @Test
-  public void testdelete() throws DeleteException {
+  public void testdelete() throws Exception {
     Hashtag hashtag = new Hashtag();
     hashtag.setDiaryNo(3);
     hashtag.setHashtag("제육");
@@ -39,7 +36,7 @@ public class HashtagRepositoryTest {
   }
 
   @Test
-  public void testdeleteAll() throws DeleteException {
+  public void testdeleteAll() throws Exception {
     int diaryNo = 3;
     repository.deleteAll(diaryNo);
 
