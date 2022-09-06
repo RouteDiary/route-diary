@@ -126,9 +126,10 @@ public class AdminServiceImpl implements AdminService {
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void writeNotice(Notice notice, List<MultipartFile> imgFiles) throws AddException {
-    int noticeNo = noticeRepository.selectLatestNoticeNo(); // currentValue 를 찾아주는 메서드.
+    int noticeNo = 0;// currentValue 를 찾아주는 메서드.
     try {
       noticeRepository.insert(notice);
+      noticeNo = noticeRepository.selectLatestNoticeNo(); // currentValue 를 찾아주는 메서드.
       // ---이미지 업로드 START
       String absolutePath = new File("").getAbsolutePath() + File.separator; // 이미지파일을 저장할 경로중 절대경로
       logger.info(absolutePath); /// Users/minseong/Desktop/semi-project/back/ -->운영체제마다 다른걸
