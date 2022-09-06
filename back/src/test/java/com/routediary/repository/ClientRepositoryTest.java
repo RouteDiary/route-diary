@@ -107,4 +107,3 @@ class ClientRepositoryTest {
     assertEquals(expectedClientCellphoneNo2, updatedClient.getClientCellphoneNo());
   }
 }
-

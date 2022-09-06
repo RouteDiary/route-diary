@@ -48,4 +48,3 @@ class RouteRepositoryTest {
     routeRepository.deleteAll(diaryNo);
   }
 }
-
