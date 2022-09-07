@@ -111,11 +111,13 @@ public class AdminServiceImpl implements AdminService {
   @Transactional(rollbackFor = Exception.class)
   public void removeComment(int diaryNo, int commentNo) throws RemoveException {
     try {
-      Diary diary = diaryRepository.selectDiary(diaryNo);
-      List<Comment> comment = diary.getComments();
-      if (comment.get(commentNo) == null) {
-        throw new RemoveException("댓글이존재하지 않습니다");
-      }
+//      Diary diary = diaryRepository.selectDiary(diaryNo);
+//      List<Comment> comment = diary.getComments();
+//      if (comment.get(commentNo) == null) {
+//        throw new RemoveException("댓글이존재하지 않습니다");
+//      }
+//      Comment comment = comment.get
+//      if(commentRep)
       commentRepository.delete(diaryNo, commentNo);
     } catch (Exception e) {
       e.printStackTrace();
@@ -257,6 +259,17 @@ public class AdminServiceImpl implements AdminService {
         throw new Exception("존재하지 않는 다이어리 입니다.");
       }
       noticeRepository.delete(noticeNo);
+      noticeImageRepository.deleteAll(noticeNo);
+      File folder = new File(new File("").getAbsolutePath() + File.separator + "images"
+          + File.separator + "notice_images" + File.separator + "notice" + noticeNo);
+      if (folder.exists()) {
+        FileUtils.cleanDirectory(folder);// 하위 폴더와 파일 모두 삭제
+      }
+        if (folder.isDirectory()) {
+          folder.delete(); // 대상폴더 삭제
+          logger.debug(folder + "폴더가 삭제되었습니다.");
+        }
+      
     } catch (Exception e) {
       e.printStackTrace();
       throw new RemoveException("존재하지 않는 다이어리 입니다" + e.getMessage());
