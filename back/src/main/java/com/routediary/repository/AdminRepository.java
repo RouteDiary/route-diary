@@ -4,7 +4,6 @@ import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 import com.routediary.dto.Admin;
 
-
 @Repository
 @Mapper
 public interface AdminRepository {

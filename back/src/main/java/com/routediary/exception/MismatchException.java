@@ -6,12 +6,11 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @Getter
-public class RemoveException extends Exception {
+public class MismatchException extends Exception {
   private ErrorCode errorCode;
 
-  public RemoveException(ErrorCode errorCode) {
+  public MismatchException(ErrorCode errorCode) {
     super();
     this.errorCode = errorCode;
   }
 }
-

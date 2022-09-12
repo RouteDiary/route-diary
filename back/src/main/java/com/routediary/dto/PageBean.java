@@ -19,6 +19,7 @@ public class PageBean<T> {
   private int startPage; // (현재 페이지를 기준으로) 시작페이지 ex. 현재 페이지가 25인 경우, startPage = 21
   private int endPage; // (현재 페이지를 기준으로) 마지막페이지 ex. 현재 페이지가 25인 경우, endPage = 30
   private int cntPerPageGroup; // 한 화면에 보여줄 페이지 갯수
+  private int cntPerPage; // 한 페이지에 보여줄 다이어리 or 공지사항의 갯수
 
   /**
    * 파라미터에 대한 설명
@@ -37,12 +38,13 @@ public class PageBean<T> {
     this.posts = posts;
     this.currentPage = currentPage;
     this.cntPerPageGroup = cntPerPageGroup;
+    this.cntPerPage = cntPerPage;
 
     this.totalPage = (int) Math.ceil((double) totalRows / cntPerPage);
 
     if (this.currentPage > this.totalPage) {
       this.currentPage = this.totalPage;
-       
+
     }
 
     this.endPage = (int) (Math.ceil((double) currentPage / cntPerPageGroup) * cntPerPageGroup);

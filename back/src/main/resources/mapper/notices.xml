@@ -5,12 +5,11 @@
 
   <resultMap id="NoticeMap" type="Notice" autoMapping="true">
     <id property="noticeNo" column="notice_no" />
-    <collection property="noticeImages" column="notice_no" javaType="List" ofType="NoticeImage" select="selectNoticeImages"/>
   </resultMap>
 
   <insert id="insert" parameterType="Notice">
-		INSERT INTO notices (notice_no, admin_id, notice_title, notice_content,
-		                     notice_writing_time, notice_modifying_time, notice_view_cnt)
+		INSERT INTO notices (notice_no, admin_id, notice_title, notice_content, 
+		                     notice_writing_time, notice_modifying_time, notice_view_cnt) 
 		      VALUES (notice_no_SEQ.NEXTVAL
 		            , #{adminId}
 		            , #{noticeTitle}
@@ -25,7 +24,7 @@
 	<set>
 		   notice_title = #{noticeTitle}
 		 , notice_content = #{noticeContent}
-		 , notice_modifying_time = SYSDATE
+		 , notice_modifying_time = SYSDATE  
 	</set>
 		WHERE notice_no = #{noticeNo}
   </update>
@@ -35,16 +34,9 @@
 		notice_no= #{noticeNo}
   </delete>
 
-	<!-- selectNotice()에 필요한 코드 START -->
   <select id="selectNotice" parameterType="Notice" resultMap="NoticeMap">
 		SELECT * FROM notices WHERE notice_no = #{noticeNo}
   </select>
-  <select id="selectNoticeImages" parameterType="int" resultType="NoticeImage">
-		         SELECT *
-		           FROM notice_images
-		          WHERE notice_no = #{noticeNo}
-  </select>
-	<!-- selectNotice()에 필요한 코드 END -->
 
   <select id="selectCount" resultType="int">
 		SELECT COUNT(*) FROM notices
@@ -70,15 +62,15 @@
 		)
 		WHERE r BETWEEN #{startRow} AND #{endRow}
   </select>
-
+  
   <update id="updateViewCnt" parameterType="Notice">
 		UPDATE notices
 	<set>
-		   notice_view_cnt = notice_view_cnt + 1
+		   notice_view_cnt = notice_view_cnt + 1  
 	</set>
 		WHERE notice_no = #{noticeNo}
   </update>
-
+  
   <select id="selectLatestNoticeNo" resultType="int">
     SELECT notice_no_seq.CURRVAL FROM dual
   </select>

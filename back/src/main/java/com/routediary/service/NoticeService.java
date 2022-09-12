@@ -3,6 +3,7 @@ package com.routediary.service;
 import com.routediary.dto.Notice;
 import com.routediary.dto.PageBean;
 import com.routediary.exception.FindException;
+import com.routediary.exception.NumberNotFoundException;
 
 
 public interface NoticeService {
@@ -33,7 +34,8 @@ public interface NoticeService {
    * 
    * @return noticeNo
    * @throws FindException
+   * @throws NumberNotFoundException
    */
-  public Notice showNotice(int noticeNo) throws FindException;
+  public Notice showNotice(int noticeNo) throws FindException, NumberNotFoundException;
 
 }

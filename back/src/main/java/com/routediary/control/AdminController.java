@@ -5,197 +5,163 @@ import java.util.Optional;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.multipart.MultipartFile;
 import com.routediary.dto.Admin;
+import com.routediary.dto.Comment;
 import com.routediary.dto.Diary;
 import com.routediary.dto.Notice;
 import com.routediary.dto.PageBean;
 import com.routediary.dto.ResultBean;
+import com.routediary.enums.ErrorCode;
+import com.routediary.enums.SuccessCode;
 import com.routediary.exception.AddException;
+import com.routediary.exception.EmptyContentException;
 import com.routediary.exception.FindException;
+import com.routediary.exception.LogoutFailureException;
+import com.routediary.exception.MismatchException;
 import com.routediary.exception.ModifyException;
+import com.routediary.exception.NotLoginedException;
+import com.routediary.exception.NumberNotFoundException;
 import com.routediary.exception.RemoveException;
-import com.routediary.service.AdminServiceImpl;
-import com.routediary.service.NoticeServiceImpl;
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
-@RestController
+import com.routediary.service.AdminService;
+@CrossOrigin(origins = "*")
+@RestControllerAdvice
 @RequestMapping("admin/*")
 public class AdminController {
   @Autowired
-  private AdminServiceImpl adminService;
-  @Autowired
-  private NoticeServiceImpl noticeService;
+  private AdminService adminService;
 
-
-  @GetMapping(value = "write")
-  public String write() {
-    return "write";
-  }
-
-  // -------로그인 관련 START
-  @GetMapping(value = {"login"})
-  public ResultBean<?> login(@RequestParam(name = "adminId", required = true) String adminId,
-      @RequestParam(name = "adminPwd", required = true) String adminPwd, HttpSession session)
-      throws FindException {
-
-    ResultBean<?> resultBean = new ResultBean();
-    Admin admin = adminService.login(adminId, adminPwd);
-    resultBean.setStatus(1);
-    resultBean.setMessage("로그인 성공입니다^_^");
+  @GetMapping(value = "login")
+  public ResponseEntity<?> login(@RequestBody Admin admin, HttpSession session)
+      throws MismatchException, FindException {
+    String adminId = admin.getAdminId();
+    String adminPwd = admin.getAdminPwd();
+    adminService.login(adminId, adminPwd);
     session.setAttribute("loginInfo", adminId);
-
-    return resultBean;
-
+    ResultBean<?> resultBean = new ResultBean(SuccessCode.LOGIN_SUCCESS);
+    return new ResponseEntity<>(resultBean, HttpStatus.OK);
   }
 
-  @GetMapping(value = {"loginstatus"})
-  public ResultBean<?> loginStatus(HttpSession session) {
-    ResultBean<?> resultBean = new ResultBean();
-    String adminId = (String) session.getAttribute("loginInfo");
-
-    if (adminId == null) {
-      resultBean.setStatus(0);
-    } else {
-      resultBean.setStatus(1);
-      resultBean.setMessage("로그인 되어있습니다");
-    }
-    return resultBean;
-  }
-
-  @GetMapping(value = {"logout"})
-  public ResponseEntity<?> logout(HttpSession session) {
-    session.removeAttribute("loginInfo"); 
+  @GetMapping(value = "logout")
+  public ResponseEntity<?> logout(HttpSession session) throws LogoutFailureException {
+    session.removeAttribute("loginInfo");
     String adminId = (String) session.getAttribute("loginInfo");
     if (adminId == null) {
-      return new ResponseEntity<>(HttpStatus.OK);
+      ResultBean<?> resultBean = new ResultBean(SuccessCode.LOGOUT_SUCCESS);
+      return new ResponseEntity<>(resultBean, HttpStatus.OK);
     } else {
-      return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new LogoutFailureException(ErrorCode.FAILED_TO_LOGOUT);
     }
-
   }
 
-  // --------로그인 관련 END
-  // --------다이어리 관련 START
-  @GetMapping(value = {"diary/list", "diary/list/{currentPageOpt}"})
-  public ResultBean<PageBean<Diary>> showDiaryBoard(@PathVariable Optional<Integer> currentPageOpt,
-      @RequestParam(name = "order", required = false, defaultValue = "2") int order)
-      throws FindException {
-    ResultBean<PageBean<Diary>> resultBean = new ResultBean<PageBean<Diary>>();
-    int currentPage;
-    if (currentPageOpt.isPresent()) {
-      currentPage = currentPageOpt.get();
+  @GetMapping(value = {"diary/list/{order}", "diary/list/{order}/{pageNo}"})
+  public ResponseEntity<?> showDiaryBoard(@PathVariable Optional<Integer> pageNo,
+      @PathVariable int order, @RequestBody List<String> hashtags)
+      throws FindException, NumberNotFoundException {
+    int currentPageNo;
+    if (pageNo.isPresent()) {
+      currentPageNo = pageNo.get();
     } else {
-      currentPage = 1;
+      currentPageNo = 1;
     }
-
-    PageBean<Diary> diaries = adminService.showDiaryBoard(order, currentPage, null);
-    resultBean.setStatus(1);
-    resultBean.setMessage("다이어리 가져오는데 성공했습니다");
-    resultBean.setT(diaries);
-    return resultBean;
-
+    PageBean<Diary> pageBean = adminService.showDiaryBoard(order, currentPageNo, hashtags);
+    ResultBean<PageBean<Diary>> resultBean = new ResultBean(SuccessCode.PAGE_LOAD_SUCCESS);
+    resultBean.setT(pageBean);
+    return new ResponseEntity<>(resultBean, HttpStatus.OK);
   }
 
-  @GetMapping(value = {"diary/{diaryNoOpt}"})
-  public ResultBean<Diary> showDiary(@PathVariable Optional<Integer> diaryNoOpt)
-      throws FindException {
-    ResultBean<Diary> resultBean = new ResultBean<Diary>();
-    int diaryNo;
-    if (diaryNoOpt.isPresent()) {
-      diaryNo = diaryNoOpt.get();
-    } else {
-      throw new FindException("다이어리가 없습니다");
-    }
+  @GetMapping(value = "diary/{diaryNo}")
+  public ResponseEntity<?> showDiary(@PathVariable int diaryNo)
+      throws FindException, NumberNotFoundException {
     Diary diary = adminService.showDiary(diaryNo);
-    resultBean.setStatus(1);
-    resultBean.setMessage("다이어리 가져오는데 성공했습니다");
+    ResultBean<Diary> resultBean = new ResultBean(SuccessCode.PAGE_LOAD_SUCCESS);
     resultBean.setT(diary);
-    return resultBean;
-
+    return new ResponseEntity<>(resultBean, HttpStatus.OK);
   }
 
-  @DeleteMapping(value = {"diary/{diaryNo}"}, produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<String> removeDiary(@PathVariable int diaryNo, HttpSession session)
-      throws RemoveException {
+  @DeleteMapping(value = "diary/{diaryNo}")
+  public ResponseEntity<?> removeDiary(@PathVariable int diaryNo, HttpSession session)
+      throws RemoveException, NotLoginedException {
     String adminId = (String) session.getAttribute("loginInfo");
     if (adminId == null) {
-      return new ResponseEntity<String>("관리자가 아닙니다", HttpStatus.BAD_REQUEST);
+      throw new NotLoginedException(ErrorCode.NOT_LOGINED);
+    } else {
+      adminService.removeDiary(diaryNo);
+      ResultBean<?> resultBean = new ResultBean(SuccessCode.SUCCESS_TO_REMOVE);
+      return new ResponseEntity<>(resultBean, HttpStatus.OK);
     }
-    adminService.removeDiary(diaryNo);
-    return new ResponseEntity<String>("삭제되었습니다", HttpStatus.OK);
   }
 
-  @DeleteMapping(value = {"diary/{diaryNo}/comment"}, produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<?> removeComment(@PathVariable int diaryNo,
-      @RequestParam(name = "commentNo", required = true) int commentNo, HttpSession session)
-      throws RemoveException {
+  @DeleteMapping(value = "diary/{diaryNo}/comment")
+  public ResponseEntity<?> removeComment(@PathVariable int diaryNo, @RequestBody Comment comment,
+      HttpSession session) throws RemoveException, NotLoginedException {
+    String adminId = (String) session.getAttribute("loginInfo");
+    if (adminId != null) {
+      adminService.removeComment(diaryNo, comment.getCommentNo());
+      ResultBean<?> resultBean = new ResultBean(SuccessCode.SUCCESS_TO_REMOVE);
+      return new ResponseEntity<>(resultBean, HttpStatus.OK);
+    } else {
+      throw new NotLoginedException(ErrorCode.NOT_LOGINED);
+    }
+  }
+
+  @PostMapping(value = "notice/write")
+  public ResponseEntity<?> writeNotice(
+      @RequestPart(required = false) List<MultipartFile> imageFiles, @RequestPart Notice notice,
+      HttpSession session) throws AddException, NotLoginedException, EmptyContentException {
     String adminId = (String) session.getAttribute("loginInfo");
     if (adminId == null) {
-      return new ResponseEntity<String>("관리자가 아닙니다", HttpStatus.BAD_REQUEST);
+      throw new NotLoginedException(ErrorCode.NOT_LOGINED);
+    } else if (notice.getNoticeTitle().equals("") || notice.getNoticeTitle() == null) {
+      throw new EmptyContentException(ErrorCode.EMPTY_TITLE);
+    } else if (notice.getNoticeContent().equals("") || notice.getNoticeContent() == null) {
+      throw new EmptyContentException(ErrorCode.EMPTY_CONTENT);
+    } else {
+      adminService.writeNotice(notice, imageFiles);
+      ResultBean<?> resultBean = new ResultBean(SuccessCode.SUCCESS_TO_WRITE);
+      return new ResponseEntity<>(resultBean, HttpStatus.OK);
     }
-    adminService.removeComment(diaryNo, commentNo);
-    return new ResponseEntity<String>("댓글이 삭제되었습니다", HttpStatus.OK);
-
   }
 
-  // --------다이어리 관련 END
-  // --------공지사항 관련 START
-  @PutMapping(value = {"notice/{noticeNo}"}, consumes = {"multipart/form-data"})
+  @PutMapping(value = "notice/{noticeNo}")
   public ResponseEntity<?> modifyNotice(@PathVariable int noticeNo,
-      @RequestPart(required = false) List<MultipartFile> imgFiles, @RequestPart Notice notice,
-      HttpSession session) throws ModifyException {
-
-    String adminId = (String) session.getAttribute("loginInfo");
-    if (notice.getNoticeTitle() == null || notice.getNoticeTitle().equals("")
-        || notice.getNoticeContent() == null || notice.getNoticeContent().equals("")) {
-      return new ResponseEntity<>("공지사항이 없습니다", HttpStatus.BAD_REQUEST);
-    } else if (adminId == null) {
-      return new ResponseEntity<>("관리자가 아닙니다", HttpStatus.BAD_REQUEST);
-    }
-    adminService.modifyNotice(notice, imgFiles);
-    return new ResponseEntity<>("공지사항이 수정되었습니다", HttpStatus.OK);
-
-  }
-
-  @DeleteMapping(value = {"notice/{noticeNo}"}, produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<?> removeNotice(
-      @PathVariable @RequestParam(name = "noticeNo", required = true) int noticeNo,
-      HttpSession session) throws RemoveException {
-
+      @RequestPart(required = false) List<MultipartFile> imageFiles, @RequestPart Notice notice,
+      HttpSession session) throws ModifyException, NotLoginedException, EmptyContentException {
     String adminId = (String) session.getAttribute("loginInfo");
     if (adminId == null) {
-      return new ResponseEntity<>("관리자가 아닙니다", HttpStatus.BAD_REQUEST);
+      throw new NotLoginedException(ErrorCode.NOT_LOGINED);
+    } else if (notice.getNoticeTitle().equals("") || notice.getNoticeTitle() == null) {
+      throw new EmptyContentException(ErrorCode.EMPTY_TITLE);
+    } else if (notice.getNoticeContent().equals("") || notice.getNoticeContent() == null) {
+      throw new EmptyContentException(ErrorCode.EMPTY_CONTENT);
+    } else {
+      adminService.modifyNotice(notice, imageFiles);
+      ResultBean<?> resultBean = new ResultBean(SuccessCode.SUCCESS_TO_MODIFY);
+      return new ResponseEntity<>(resultBean, HttpStatus.OK);
     }
-    adminService.removeNotice(noticeNo);
-    return new ResponseEntity<>("공지사항이 삭제되었습니다", HttpStatus.OK);
   }
 
-  @PostMapping(value = "notice/write", consumes = {"multipart/form-data"})
-  public ResultBean<?> writeNotice(@RequestPart(required = false) List<MultipartFile> imgFiles,
-      @RequestPart Notice notice, HttpSession session) throws AddException {
-    ResultBean<?> resultBean = new ResultBean<>();
+  @DeleteMapping(value = "notice/{noticeNo}")
+  public ResponseEntity<?> removeNotice(@PathVariable int noticeNo, HttpSession session)
+      throws RemoveException, NotLoginedException, EmptyContentException {
     String adminId = (String) session.getAttribute("loginInfo");
-    notice.setAdminId(adminId);
-
-    adminService.writeNotice(notice, imgFiles);
-    resultBean.setStatus(1);
-    resultBean.setMessage("공지사항 작성 성공했습니다");
-    return resultBean;
-
-
+    if (adminId == null) {
+      throw new NotLoginedException(ErrorCode.NOT_LOGINED);
+    } else {
+      adminService.removeNotice(noticeNo);
+      ResultBean<?> resultBean = new ResultBean(SuccessCode.SUCCESS_TO_REMOVE);
+      return new ResponseEntity<>(resultBean, HttpStatus.OK);
+    }
   }
-  // --------공지사항 관련 END
 }

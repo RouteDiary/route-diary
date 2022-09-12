@@ -8,23 +8,17 @@
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
 
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="../js/view_notice.js"></script>
+
     <!-- Bootstrap CSS -->
-    <link
-      rel="stylesheet"
-      href="../resource/static/css/bootstrap.min.css"
-      integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N"
-      crossorigin="anonymous"
-    />
-    <script src="../jq/viewboard.js"></script>
-    <title>공지사항 보기</title>
+    <link rel="stylesheet" href="../resource/static/css/bootstrap.min.css"/>
+
+    <title>공지사항 12보기</title>
   </head>
   <body>
-    <script
-      src="../resource/static/js/bootstrap.min.js"
-      integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct"
-      crossorigin="anonymous"
-    ></script>
+    <script src="../resource/static/js/bootstrap.min.js"></script>
 
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <a class="navbar-brand" href="#">Navbar</a>
@@ -84,5 +78,36 @@
         </form>
       </div>
     </nav>
+    <br>
+    <div class="notice">
+    <table class="table notice_board">
+      <thead>
+        <tr class="table-info notice_column">
+          <th scope="col">#</th>
+          <th scope="col">제목</th>
+          <th scope="col">작성자</th>
+          <th scope="col">조회수</th>
+          <th scope="col">작성시간</th>
+          <th scope="col">수정시간</th>
+        </tr>
+      </thead>
+      <tbody class="table-hover notice_tbody">
+        <tr class="table-light notice_tr">
+          <th scope="row" class ="notice_th"></th>
+          <td class="notice_td1"></td>
+          <td class="notice_td2"></td>
+          <td class="notice_td3"></td>
+          <td class="notice_td4"></td>
+          <td class="notice_td5"></td>
+          </a>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+     <!-- 페이징 시작 -->
+    <div class="pagegroup"></div>
+  </html>
   </body>
+  <footer>
+  </footer>
 </html>

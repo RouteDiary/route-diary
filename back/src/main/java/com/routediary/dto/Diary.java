@@ -31,7 +31,6 @@ public class Diary {
   private int diaryLikeCnt;
   private Client client;
   private List<Route> routes;
-  private List<DiaryImage> diaryImages;
   private List<Comment> comments;
   private List<Hashtag> hashtags;
 }

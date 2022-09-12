@@ -6,10 +6,10 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @Getter
-public class RemoveException extends Exception {
+public class WithdrawnClientException extends Exception {
   private ErrorCode errorCode;
 
-  public RemoveException(ErrorCode errorCode) {
+  public WithdrawnClientException(ErrorCode errorCode) {
     super();
     this.errorCode = errorCode;
   }

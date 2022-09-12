@@ -1,11 +1,17 @@
 package com.routediary.exception;
 
-public class FindException extends Exception {
-  public FindException() {
-    super();
-  }
+import com.routediary.enums.ErrorCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-  public FindException(String message) {
-    super(message);
+@NoArgsConstructor
+@Getter
+public class FindException extends Exception {
+  private ErrorCode errorCode;
+
+  public FindException(ErrorCode errorCode) {
+    super();
+    this.errorCode = errorCode;
   }
 }
+
