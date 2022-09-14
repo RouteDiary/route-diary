@@ -55,6 +55,11 @@ class DiaryRepositoryTest {
     List<String> hashtags = new ArrayList<String>();
     hashtags.add("여행");
     hashtags.add("양양");
+    ObjectMapper mapper = new ObjectMapper();
+    Map<String, Object> map = new HashMap<String, Object>();
+    map.put("hashtags", hashtags);
+    System.out.println(mapper.writeValueAsString(map));
+
     String expectedTitle = "즐거운 부산으로 떠나요";
     String expectedClientNickname = "한국남자6";
     int expectedDiariesCount = 6;
@@ -63,7 +68,7 @@ class DiaryRepositoryTest {
     assertEquals(expectedTitle, diaries.get(0).getDiaryTitle());
     assertEquals(expectedClientNickname, diaries.get(0).getClient().getClientNickname());
     assertEquals(expectedDiariesCount, diaries.size());
-
+    System.out.println(mapper.writeValueAsString(map));
     // hashtag 검색을 안하는 경우
     String expectedTitle2 = "즐거운 광주으로 떠나요";
     String expectedClientNickname2 = "한국남자4";

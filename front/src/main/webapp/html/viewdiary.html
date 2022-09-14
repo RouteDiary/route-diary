@@ -1,40 +1,49 @@
 <!DOCTYPE html>
-<html>
   <head>
-    <meta charset="utf-8" />
+    <link rel="shortcut icon" href="#" />
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
     <link rel="stylesheet" href="../css/viewdiary.css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <script src="../js/viewdiary.js"></script>
-    <title>viewdiary.html</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="../resource/static/css/bootstrap.css">
+    <script src="../resource/static/js/bootstrap.js"></script>
+    <title>view_diary.html</title>
   </head>
 
-  <body>
-      <div class="diary">
-        <div class="title">다이어리 제목 :<span class=diary_title></span></div>
-
+<body>
+    <div class = "diary">
+      <div class="title">다이어리 제목 :<span class="diary_title"></span></div>
         <div class="info">
-          <dl>
-            <dt>다이어리 번호 :<span class="diary_no"></span></dt>
-          </dl>
-          <dl>
-            <dt>작성자 :<span class="client"></span></dt>
-          </dl>
-          <dl>
-            <dt>작성날짜 :<span class ="diary_writing_time"></span></dt>
-          </dl>
-          <dl>
-            <dt>조회수 :<span class="diary_view_cnt"></span></dt>
-          </dl>
-          <dl>
-            <dt>좋아요 :<span class="diary_like_cnt"></span></dt>
-          </dl>
+          <div class="info">
+            <dl>
+              <dt>다이어리 번호 :<span class="diary_no"></span></dt>
+            </dl>
+            <dl>
+              <dt>작성자 :<span class="client"></span></dt>
+            </dl>
+            <dl>
+              <dt>작성날짜 :<span class ="diary_writing_time"></span></dt>
+            </dl>
+            <dl>
+              <dt>여행시작날짜 :<span class ="diary_start_date"></span></dt>
+            </dl>
+            <dl>
+              <dt>여행종료날짜 :<span class ="diary_end_date"></span></dt>
+            </dl>
+            <dl>
+              <dt>조회수 :<span class="diary_view_cnt"></span></dt>
+            </dl>
+            <dl>
+              <dt>좋아요 :<span class="diary_like_cnt"></span></dt>
+            </dl>
+          </div>
         </div>
       </div>
-    </div>
-    
-    <div class="diary_start_date">여행시작날짜:<span class="diary_start_date"></span>
-    </div>
 
+<!--like start-->
     <div class="like_view">
       <button type="button" name="button" class="like">
       <img src="../resource/like.png" width="40px" height="40px"
@@ -45,42 +54,45 @@
     <div class="routes">
       <div class="route">
         <fieldset>
-          <legend>다이어리 사진</legend>
-        <p><img src="" alt="" width="600" height="300" /></p>
-        </fieldset>
-
-        <fieldset>
-          <legend>다이어리 기록</legend>
-          <form method="post" action="http://localhost:8888/back/viewdiary">
-            <textarea style="resize: none" name="text" id="text" cols="85" rows="15">
-          </textarea>
-          </form>
+          <legend>여행 일지</legend>
+          <img src="" alt="" width="600" height="300"/>
+          <div class="form-group">
+            <label for="exampleFormControlTextarea1"></label>
+            <textarea class="form-control" style="resize: none" name="text" id="text" rows="15"></textarea>
+          </div>
         </fieldset>
       </div>
-    </div> 
-    <!--routes end-->    
+    </div>
+    <!--route end-->
 
-    <!-- <script src="viewdiary.js" charset="utf-8"></script> -->
-    <fieldset >
-      <legend>댓글</legend>
+ <!--comment start-->
+    <div class="card mb-2">
+      <div class="card-header bg-light">
+              <i class="comment"></i> 댓글
+      </div>
+      
       <div class="comments">
         <div class="comment">
           <span class="clientNickname"></span><!--닉네임-->
           <span class="commentWritingTime"></span><!--댓글작성시간-->
-          <input type="text" name="commentContent" placeholder="댓글을 입력해 주세요!" />
+          <textarea class="form-control" name="commentContent" style="resize: none;" row="3" placeholder="댓글을 입력해 주세요"></textarea>
           <button type="button" name="button" class="insert" >등록</button>
         </div>
         <hr/>
 
-        <div class="comment_view">
-          <span class="clientNickname"></span><!--닉네임-->
-          <span class="commentWritingTime"></span><!--댓글작성시간-->
-          <span class="commentContent"></span><!--댓글-->
+            
+        <div class="comment_view">    
+          <span class="clientId"></span>
+          <span class="commentNo"></span>
+          <span class="clientNickname"></span>
+          <span class="commentWritingTime"></span>
+          <input type = "text" class="commentContent"></input><!--댓글내용-->
           <button type="button" name="button" class="update" style="display:inline;">수정</button>
           <button type="button" name="button" class="delete" style="display:inline;">삭제</button>
         </div>    
-      </div>
-    </fieldset>
-  <a href="diaryboard.html">다이어리 게시판으로 돌아가기</a>
+      </div> 
+    <!--comment end-->
+
+<a href="diaryboard.html">다이어리 게시판으로 돌아가기</a>
   </body>
 </html>

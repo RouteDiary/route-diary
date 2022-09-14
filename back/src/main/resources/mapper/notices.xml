@@ -5,7 +5,6 @@
 
   <resultMap id="NoticeMap" type="Notice" autoMapping="true">
     <id property="noticeNo" column="notice_no" />
-    <collection property="noticeImages" column="notice_no" javaType="List" ofType="NoticeImage" select="selectNoticeImages"/>
   </resultMap>
 
   <insert id="insert" parameterType="Notice">
@@ -35,16 +34,9 @@
 		notice_no= #{noticeNo}
   </delete>
 
-	<!-- selectNotice()에 필요한 코드 START -->
   <select id="selectNotice" parameterType="Notice" resultMap="NoticeMap">
 		SELECT * FROM notices WHERE notice_no = #{noticeNo}
   </select>
-  <select id="selectNoticeImages" parameterType="int" resultType="NoticeImage">
-		         SELECT *
-		           FROM notice_images
-		          WHERE notice_no = #{noticeNo}
-  </select>	
-	<!-- selectNotice()에 필요한 코드 END -->
 
   <select id="selectCount" resultType="int">
 		SELECT COUNT(*) FROM notices
@@ -78,4 +70,8 @@
 	</set>
 		WHERE notice_no = #{noticeNo}
   </update>
+  
+  <select id="selectLatestNoticeNo" resultType="int">
+    SELECT notice_no_seq.CURRVAL FROM dual
+  </select>
 </mapper>
