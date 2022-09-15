@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+  <title>비밀번호 확인</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <link rel="stylesheet" href="../resource/static/css/bootstrap.css">
+  <script src=" ../resource/static/js/bootstrap.js"></script>
+  <link rel="stylesheet" href="../css/client_check.css" />
+  <script src="../js/init.js"></script>
+  <script src="../js/client_check.js"></script>
+</head>
+
+<body>
+  <div class="clientupdate">
+    <h1>비밀번호확인</h1>
+    <hr />
+    <div class="form-group">
+      <label for="client-id">ID</label>
+      <input type="email" class="form-control client-id" id="client-id" aria-describedby="emailHelp" readonly="readonly"
+        required>
+    </div>
+    <div class="form-group">
+      <label for="client-pwd">비밀번호</label>
+      <input type="password" class="form-control client-pwd" id="client-pwd" required>
+    </div>
+    <input type="hidden" class="client-pwd-check">
+    <br><br>
+    <button class="btn btn-primary back" type="button">
+      <a href="javascript:history.back();">이전 페이지로 이동</a>
+    </button>
+    <button type="click" class="btn btn-primary check">확인</button>
+  </div>
+</body>
+
+</html>
