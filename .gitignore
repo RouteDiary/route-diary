@@ -1,7 +1,11 @@
 *.DS_Store
 .metadata/
+<<<<<<< HEAD
 back/.mvn/
 
+=======
+back/.mvn/src/main/webapp/resource
+>>>>>>> 71c06e1 (Feat: front(client_check, client_update, diary_modify, diary_write) 완성)
 ### Java ###
 # Compiled class file
 *.class
