@@ -6,17 +6,6 @@ $(function () {
     success: (jsonObj) => {
       console.log(jsonObj);
       if (jsonObj.status == 200) {
-        let $navObj = $(".loginnav");
-        $navObjHtml = "";
-        if (jsonObj.status == 0) {
-          // 로그인안된경우
-          $navObjHtml += '<a href="login.html">로그인</a>';
-        } else {
-          // 로그인 된 경우
-          $navObjHtml += '<a href="/back/logout">로그아웃</a>';
-        }
-        $navObj.html($navObjHtml);
-
         //좋아요순 다이어리 불러오기
         let $likeCntOriginalObj = $("div.like-cnt.carousel-item.active")
           .not(".copy")

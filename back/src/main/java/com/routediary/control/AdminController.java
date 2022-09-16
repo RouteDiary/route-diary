@@ -124,7 +124,6 @@ public class AdminController {
       HttpSession session) throws AddException, NotLoginedException, EmptyContentException,
       JsonMappingException, JsonProcessingException {
     String adminId = (String) session.getAttribute("loginInfo");
-    adminId = "1111";
     ObjectMapper mapper = new ObjectMapper();
     Notice n = null;
     n = mapper.readValue(notice, Notice.class);
