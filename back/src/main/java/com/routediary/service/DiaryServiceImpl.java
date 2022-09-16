@@ -24,6 +24,7 @@ import com.routediary.exception.InvalidActionException;
 import com.routediary.exception.ModifyException;
 import com.routediary.exception.NumberNotFoundException;
 import com.routediary.exception.RemoveException;
+import com.routediary.functions.ServiceFunctions;
 import com.routediary.repository.CommentRepository;
 import com.routediary.repository.DiaryRepository;
 import com.routediary.repository.HashtagRepository;

@@ -1,7 +1,6 @@
 package com.routediary.service;
 
 import java.util.List;
-import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import com.routediary.dto.Admin;
 import com.routediary.dto.Diary;
@@ -13,6 +12,7 @@ import com.routediary.exception.MismatchException;
 import com.routediary.exception.ModifyException;
 import com.routediary.exception.NumberNotFoundException;
 import com.routediary.exception.RemoveException;
+
 
 public interface AdminService {
   /**
@@ -97,5 +97,4 @@ public interface AdminService {
    * @throws RemoveException
    */
   public void removeNotice(int noticeNo) throws RemoveException;
-
 }

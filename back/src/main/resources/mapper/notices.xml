@@ -41,6 +41,9 @@
   <select id="selectCount" resultType="int">
 		SELECT COUNT(*) FROM notices
   </select>
+  <select id="selectCountkeyword" resultType="int">
+  		SELECT COUNT(*) FROM notices WHERE notice_title LIKE '%${keyword}%' OR notice_content LIKE '%${keyword}%'
+  </select>
 
   <select id="selectNotices" parameterType="map"
 		resultType="Notice">

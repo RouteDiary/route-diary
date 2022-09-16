@@ -9,6 +9,7 @@ import com.routediary.dto.PageBean;
 import com.routediary.enums.ErrorCode;
 import com.routediary.exception.FindException;
 import com.routediary.exception.NumberNotFoundException;
+import com.routediary.functions.ServiceFunctions;
 import com.routediary.repository.NoticeRepository;
 
 @Service(value = "NoticeService")
@@ -36,7 +37,8 @@ public class NoticeServiceImpl implements NoticeService {
   public PageBean<Notice> showNoticeBoardByKeyword(int currentPage, String keyword)
       throws FindException {
     List<Notice> notices = null;
-    int totalRows = noticeRepository.selectCount();
+    int totalRows = noticeRepository.selectCountByKeyword(keyword);
+    System.out.println("totalRows:" + totalRows);
     int[] rowArr = serviceFunctions.calculateStartAndEndRow(currentPage, totalRows);
     int startRow = rowArr[0];
     int endRow = rowArr[1];

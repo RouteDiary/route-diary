@@ -13,7 +13,8 @@ public enum ErrorCode {
                   "날자를 입력하지 않있습니다."), ALREADY_WITHDRAWN_CLIENT(403,
                       "이미 탈퇴한 회원입니다."), ID_DUPLICATION(400, "중복된 아이디입니다."), NICKNAME_DUPLICATION(
                           400, "중복된 닉네임입니다."), LIKE_CANCLE_FAILURE(400,
-                              "이미 좋아요한 다이어리에만 좋아요 취소를 할 수 있습니다.");
+                              "이미 좋아요한 다이어리에만 좋아요 취소를 할 수 있습니다."), INVALID_DTO_NAME(400,
+                                  "부정확한 dto 이름입니다.");
 
   private int status;
   private String message;

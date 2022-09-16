@@ -1,6 +1,9 @@
 package com.routediary.control;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
+import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,15 +15,18 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import com.routediary.dto.Notice;
 import com.routediary.dto.PageBean;
 import com.routediary.dto.ResultBean;
+import com.routediary.enums.Dto;
 import com.routediary.enums.SuccessCode;
 import com.routediary.exception.FindException;
 import com.routediary.exception.NumberNotFoundException;
+import com.routediary.functions.ServiceFunctions;
 import com.routediary.service.NoticeService;
-
-@CrossOrigin(origins = "*")
+@CrossOrigin("*")
 @RestControllerAdvice
 @RequestMapping("notice/*")
 public class NoticeController {
+  @Autowired
+  ServiceFunctions serviceFunctions;
   @Autowired
   NoticeService noticeService;
 
@@ -57,11 +63,18 @@ public class NoticeController {
   }
 
   @GetMapping(value = {"/{noticeNo}"})
-  public ResponseEntity<?> showNotice(@PathVariable int noticeNo)
+  public ResponseEntity<?> showNotice(@PathVariable int noticeNo, HttpSession session)
       throws FindException, NumberNotFoundException {
+    String adminId = (String) session.getAttribute("adminLoginInfo");
     Notice notice = noticeService.showNotice(noticeNo);
-    ResultBean<Notice> resultBean = new ResultBean<Notice>(SuccessCode.NOTICE_LOAD_SUCCESS);
-    resultBean.setT(notice);
+    int imageFilesCount = serviceFunctions.getImageFilesCount(noticeNo, Dto.NOTICE);
+    Map<String, Object> map = new HashMap<String, Object>();
+    map.put("adminLoginInfo", adminId);
+    map.put("notice", notice);
+    map.put("imageFilesCount", imageFilesCount);
+    ResultBean<Map<String, Object>> resultBean =
+        new ResultBean<Map<String, Object>>(SuccessCode.NOTICE_LOAD_SUCCESS);
+    resultBean.setT(map);
     return new ResponseEntity<>(resultBean, HttpStatus.OK);
   }
 }

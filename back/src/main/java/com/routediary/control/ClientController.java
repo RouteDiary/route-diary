@@ -4,6 +4,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,7 +28,7 @@ import com.routediary.exception.NotLoginedException;
 import com.routediary.exception.RemoveException;
 import com.routediary.exception.WithdrawnClientException;
 import com.routediary.service.ClientService;
-
+@CrossOrigin(origins="*")
 @RestController
 @RequestMapping("client/*")
 public class ClientController {
@@ -106,10 +107,25 @@ public class ClientController {
   }
 
   @GetMapping("/nicknamecheck")
-  public ResponseEntity<?> NicknameDuplicationCheck(@RequestParam String clientNickname)
+  public ResponseEntity<?> nicknameDuplicationCheck(@RequestParam String clientNickname)
       throws FindException, DuplicationException {
     clientService.nicknameDuplicationCheck(clientNickname);
     ResultBean<?> resultBean = new ResultBean(SuccessCode.VAILD_NICKNAME);
     return new ResponseEntity<>(resultBean, HttpStatus.OK);
+  }
+
+  @GetMapping("/clientinfo")
+  public ResponseEntity<?> bringClientInfo(HttpSession session)
+      throws FindException, NotLoginedException, NoPermissionException {
+    String clientId = (String) session.getAttribute("loginInfo");
+    if (clientId == null) {
+      throw new NotLoginedException(ErrorCode.NOT_LOGINED);
+    } else {
+      Client client = clientService.bringClientInfo(clientId);
+      ResultBean<Client> resultBean =
+          new ResultBean<Client>(SuccessCode.SUCCESS_TO_BRING_CLIENT_INFO);
+      resultBean.setT(client);
+      return new ResponseEntity<>(resultBean, HttpStatus.OK);
+    }
   }
 }

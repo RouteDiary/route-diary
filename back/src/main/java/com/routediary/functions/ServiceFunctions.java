@@ -1,4 +1,4 @@
-package com.routediary.service;
+package com.routediary.functions;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -112,6 +112,23 @@ public class ServiceFunctions {
   }
 
   /**
+   * 각 다이어리나 공지사항 폴더에 저장된 이미지의 갯수를 반환함 *주의 : 다이어리의 경우에는 thumbnail image 파일까지 포함한 갯수임
+   * 
+   * @param postNo
+   * @param dto
+   * @return int
+   */
+  public int getImageFilesCount(int postNo, Dto dto) {
+    String path = findOriginalPath(postNo, dto);
+    File folder = new File(path);
+    int count = 0;
+    if (folder.exists()) {
+      count = folder.listFiles().length;
+    }
+    return count;
+  }
+
+  /**
    * repository에서 Diary, Notice 등을 불러오기 위해 필요한 startRow(index = 0), endRow(index = 1)를 배열로 반환한다.
    * 
    * @param currentPage
@@ -131,6 +148,23 @@ public class ServiceFunctions {
     }
     int[] rowArr = {startRow, endRow};
     return rowArr;
+  }
+
+  /**
+   * 공지사항이나 다이어리의 번호에 따른 이미지저장 파일 경로를 반환함
+   * 
+   * @param postNo
+   * @param dto
+   * @return String
+   */
+  public String findOriginalPath(int postNo, Dto dto) {
+    // File.separator = window, linux, mac 등 서로 다른 운영체제에서 폴더경로를 인식하게 하는 역할
+    String dtoName = dto.getName();
+    String specificPath = "images" + File.separator + dtoName + "_images" + File.separator + dtoName
+        + postNo + File.separator;
+    String path = UPLOAD_PATH + specificPath;
+    log.info(postNo + "번 " + dtoName + "의 이미지파일 저장 경로 : " + path);
+    return path;
   }
 
   /**
@@ -221,16 +255,6 @@ public class ServiceFunctions {
     if (!file.exists()) {
       file.mkdirs();
     }
-  }
-
-  private String findOriginalPath(int postNo, Dto dto) {
-    // File.separator = window, linux, mac 등 서로 다른 운영체제에서 폴더경로를 인식하게 하는 역할
-    String dtoName = dto.getName();
-    String specificPath = "images" + File.separator + dtoName + "_images" + File.separator + dtoName
-        + postNo + File.separator;
-    String path = UPLOAD_PATH + specificPath;
-    log.info(postNo + "번 " + dtoName + "의 이미지파일 저장 경로 : " + path);
-    return path;
   }
 
   private String findTempPath(int postNo, Dto dto) {

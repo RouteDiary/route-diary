@@ -71,5 +71,15 @@ public class ClientServicelmpl implements ClientService {
       return true;
     }
   }
+
+  @Override
+  public Client bringClientInfo(String clientId) throws FindException {
+    Client client = clientRepository.selectClientById(clientId);
+    if (client == null) {
+      throw new FindException();
+    } else {
+      return client;
+    }
+  }
 }
 

@@ -69,4 +69,6 @@ public interface ClientService {
   public boolean nicknameDuplicationCheck(String clientNickname)
       throws FindException, DuplicationException;
 
+  public Client bringClientInfo(String clientId) throws FindException;
+
 }

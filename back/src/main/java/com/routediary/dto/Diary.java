@@ -33,4 +33,5 @@ public class Diary {
   private List<Route> routes;
   private List<Comment> comments;
   private List<Hashtag> hashtags;
+  private List<Like> likes;
 }

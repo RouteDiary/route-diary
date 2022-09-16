@@ -21,6 +21,7 @@ import com.routediary.exception.MismatchException;
 import com.routediary.exception.ModifyException;
 import com.routediary.exception.NumberNotFoundException;
 import com.routediary.exception.RemoveException;
+import com.routediary.functions.ServiceFunctions;
 import com.routediary.repository.AdminRepository;
 import com.routediary.repository.CommentRepository;
 import com.routediary.repository.DiaryRepository;
@@ -99,7 +100,9 @@ public class AdminServiceImpl implements AdminService {
     try {
       noticeRepository.insert(notice);
       noticeNo = noticeRepository.selectLatestNoticeNo();
-      serviceFunctions.saveImages(noticeNo, Dto.NOTICE, imgFiles);
+      if(imgFiles !=null) {
+     serviceFunctions.saveImages(noticeNo, Dto.NOTICE, imgFiles);
+      }
     } catch (Exception e) {
       serviceFunctions.removeOriginalFiles(noticeNo, Dto.NOTICE);
       throw new AddException();
@@ -112,7 +115,9 @@ public class AdminServiceImpl implements AdminService {
     try {
       serviceFunctions.transferFilesToTempFolder(noticeNo, Dto.NOTICE);
       noticeRepository.update(notice);
-      serviceFunctions.saveImages(noticeNo, Dto.NOTICE, imgFiles);
+      if(imgFiles != null) {
+        serviceFunctions.saveImages(noticeNo, Dto.NOTICE, imgFiles);
+      }
       serviceFunctions.removeTempFiles(noticeNo, Dto.NOTICE);
     } catch (Exception e) {
       serviceFunctions.transferFilesToOriginalFolder(noticeNo, Dto.NOTICE);
@@ -145,9 +150,9 @@ public class AdminServiceImpl implements AdminService {
     int startRow = rowArr[0];
     int endRow = rowArr[1];
     if (hashtags == null) {
-      diaries = diaryRepository.selectDiaries(order, startRow, endRow, null);
+      diaries = diaryRepository.selectAllDiaries(order, startRow, endRow, null);
     } else {
-      diaries = diaryRepository.selectDiaries(order, startRow, endRow, hashtags);
+      diaries = diaryRepository.selectAllDiaries(order, startRow, endRow, hashtags);
     }
 
     PageBean<Diary> pageBean = (PageBean<Diary>) serviceFunctions.calculatePageBean(currentPage,
