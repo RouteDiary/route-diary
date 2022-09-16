@@ -8,7 +8,6 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -46,7 +45,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RestController
 @RequestMapping
-@CrossOrigin(origins = "*")
 public class DiaryController {
   @Autowired
   ServiceFunctions serviceFunctions;
@@ -148,8 +146,7 @@ public class DiaryController {
   @GetMapping(value = "diary/{diaryNo}")
   public ResponseEntity<?> showDiary(@PathVariable int diaryNo, HttpSession session)
       throws FindException, NumberNotFoundException {
-    // String clientId = (String) session.getAttribute("loginInfo");
-    String clientId = "japanwoman@gmail.com";
+    String clientId = (String) session.getAttribute("loginInfo");
     Diary diary = diaryService.showDiary(diaryNo);
     int imageFilesCount = serviceFunctions.getImageFilesCount(diaryNo, Dto.DIARY) - 1; // 섬네일 파일 제외한
                                                                                        // 갯수
@@ -175,8 +172,7 @@ public class DiaryController {
       HttpSession session) throws AddException, RemoveException, InvalidActionException,
       NotLoginedException, FindException, NumberNotFoundException {
     String clientId = (String) session.getAttribute("loginInfo");
-    clientId = "japanwoman@gmail.com";
-    log.error("isLike" + isLike + " /like" + like);
+    log.info("isLike : " + isLike + " /like : " + like);
     if (clientId == null) {
       throw new NotLoginedException(ErrorCode.NOT_LOGINED);
     } else {
@@ -203,7 +199,6 @@ public class DiaryController {
   public ResponseEntity<?> writeComment(@PathVariable int diaryNo, @RequestBody Comment comment,
       HttpSession session) throws AddException, NotLoginedException, EmptyContentException {
     String clientId = (String) session.getAttribute("loginInfo");
-    clientId = "koreawoman@gmail.com";
     if (clientId == null) {
       throw new NotLoginedException(ErrorCode.NOT_LOGINED);
     } else if (comment == null || comment.getCommentContent() == null
@@ -224,8 +219,7 @@ public class DiaryController {
   public ResponseEntity<Object> modifyComment(@PathVariable int diaryNo,
       @RequestBody Comment comment, HttpSession session)
       throws ModifyException, NotLoginedException, EmptyContentException {
-    // String clientId = (String) session.getAttribute("loginInfo");
-    String clientId = "koreawoman@gmail.com";
+    String clientId = (String) session.getAttribute("loginInfo");
     if (clientId == null) {
       throw new NotLoginedException(ErrorCode.NOT_LOGINED);
     } else if (comment.getCommentContent().equals("") || comment.getCommentContent() == null) {
@@ -240,8 +234,7 @@ public class DiaryController {
   @DeleteMapping(value = "diary/{diaryNo}/comment")
   public ResponseEntity<?> removeComment(@PathVariable int diaryNo, @RequestBody Comment comment,
       HttpSession session) throws RemoveException, NotLoginedException, NoPermissionException {
-    // String clientId = (String) session.getAttribute("loginInfo");
-    String clientId = "koreaman@gmail.com";
+    String clientId = (String) session.getAttribute("loginInfo");
     String writerId = comment.getClient().getClientId();
     if (clientId == null) {
       throw new NotLoginedException(ErrorCode.NOT_LOGINED);
