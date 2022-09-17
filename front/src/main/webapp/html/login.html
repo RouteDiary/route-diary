@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<!-- Bootstrap CSS -->
+<script src="../resource/static/js/bootstrap.js"></script>
+<link rel="stylesheet" href="../resource/static/css/bootstrap.css" />
+<link rel="stylesheet" href="../css/login.css" />
+<script src="../js/login.js"></script>
+</head>
+<title>login.html</title>
+
+<body>
+  <div class="login_div">
+    <form class="login_form"  onsumbmit="return false;" method="post" action="http://localhost:9997/back/client/login">
+      <div class="row">
+        <div class="col-8 offset-4">
+          <h2>로그인</h2>
+        </div>
+      </div>
+      <label class="col-form-label col-4">ID</label>
+      <div class="form-group row">
+        <div class="col-8">
+          <input type="email" class="form-control client-id" required="required">
+        </div>
+      </div>
+      <label class="col-form-label col-4">Password</label>
+      <div class="form-group row">
+        <div class="col-8">
+          <input type="password" class="form-control client-pwd" required="required">
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-8 offset-4">
+          <input type="submit" class="btn btn-primary btn-lg" value="로그인">
+
+        </div>
+      </div>
+    </form>
+    <div class="text-center">아직 회원이 아닌가요? <a href="../html/signup.html">회원가입</a></div>
+  </div>
+</body>
+
+</html>

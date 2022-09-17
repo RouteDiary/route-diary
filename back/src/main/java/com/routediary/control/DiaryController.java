@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -42,6 +43,7 @@ import com.routediary.functions.ServiceFunctions;
 import com.routediary.service.DiaryService;
 import lombok.extern.slf4j.Slf4j;
 
+@CrossOrigin(origins = "*")
 @Slf4j
 @RestController
 @RequestMapping
@@ -187,11 +189,15 @@ public class DiaryController {
   }
 
   @GetMapping(value = "/")
-  public ResponseEntity<?> showIndexPage() throws FindException {
+  public ResponseEntity<?> showIndexPage(HttpSession session) throws FindException {
+    String clientId = (String) session.getAttribute("loginInfo");
+    Map<String, Object> map = new HashMap<String, Object>();
     Map<String, List<Diary>> diaries = diaryService.showIndexPage();
-    ResultBean<Map<String, List<Diary>>> resultBean =
-        new ResultBean<Map<String, List<Diary>>>(SuccessCode.PAGE_LOAD_SUCCESS);
-    resultBean.setT(diaries);
+    map.put("diaries", diaries);
+    map.put("loginedId", clientId);
+    ResultBean<Map<String, Object>> resultBean =
+        new ResultBean<Map<String, Object>>(SuccessCode.PAGE_LOAD_SUCCESS);
+    resultBean.setT(map);
     return new ResponseEntity<>(resultBean, HttpStatus.OK);
   }
 
@@ -208,7 +214,6 @@ public class DiaryController {
       Client client = new Client();
       client.setClientId(clientId);
       comment.setClient(client);
-      // comment.setDiaryNo(diaryNo);
       diaryService.writeComment(comment);
       ResultBean<?> resultBean = new ResultBean(SuccessCode.SUCCESS_TO_WRITE);
       return new ResponseEntity<>(resultBean, HttpStatus.OK);
