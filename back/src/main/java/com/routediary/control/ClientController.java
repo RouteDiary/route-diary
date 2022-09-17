@@ -4,6 +4,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,19 +37,22 @@ public class ClientController {
   private ClientService clientService;
 
   @PostMapping("/signup")
-  public ResponseEntity<?> signup(@RequestBody Client client) throws AddException {
+  public ResponseEntity<?> signup(
+      @RequestBody Client client)  throws AddException {
     clientService.signup(client);
     ResultBean<?> resultBean = new ResultBean(SuccessCode.SIGNUP_SUCCESS);
     return new ResponseEntity<>(resultBean, HttpStatus.OK);
   }
 
-  @GetMapping("/login")
-  public ResponseEntity<?> login(@RequestParam String clientId, @RequestParam String clientPwd,
+  @PostMapping("/login")
+  public ResponseEntity<?> login(@RequestBody Client client,
       HttpSession session) throws FindException, MismatchException, WithdrawnClientException {
+    String clientId = client.getClientId();
+    String clientPwd = client.getClientPwd();
     boolean isLoginSucceeded = clientService.login(clientId, clientPwd);
     if (isLoginSucceeded) {
       session.setAttribute("loginInfo", clientId);
-      ResultBean<?> resultBean = new ResultBean(SuccessCode.SIGNUP_SUCCESS);
+      ResultBean<?> resultBean = new ResultBean(SuccessCode.LOGIN_SUCCESS);
       return new ResponseEntity<>(resultBean, HttpStatus.OK);
     } else {
       throw new FindException();

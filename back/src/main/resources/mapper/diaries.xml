@@ -24,11 +24,7 @@
     <collection property="routes" column="diary_no" javaType="List" ofType="Route" resultMap="RouteMap"/>
     <collection property="comments" column="diary_no" javaType="List" ofType="Comment" resultMap="CommentMap"/>
     <collection property="hashtags" column="diary_no" javaType="List" ofType="Hashtag" resultMap="HashtagMap"/>
-  	<collection property="likes" ofType="Like" autoMapping="true">
-  	  <!-- <id property="diaryNo" column="likes_diary_no"/>
-  	  <id property="clientId" column="likes_client_id"/> -->
-  	</collection>
-  	
+  	<collection property="likes" ofType="Like" autoMapping="true"/>
   </resultMap>
   
   <!--  다이어리 상세용 ResultMap :작성자 오문정 
@@ -61,7 +57,7 @@
   	    <id property="clientId" column="like_client_id" />
   	</collection>
   </resultMap>
-  <!-- 오문정 END  -->
+  <!-- 다이어리 상세용 ResultMap END  -->
   <resultMap id="ClientMap" type="Client">
     <id property="clientId" column="client_id" />
     <result property="clientNickname" column="client_nickname" />
@@ -199,39 +195,21 @@
     				        diary_writing_time DESC
   </select>
 
-	<!-- selectDiary()에 필요한 코드 START -->
-	<!--  SELECT d.*, cl.*, r.*, c.*, cli.*,  h.*, 
-		                likes.diary_no likes_diary_no, 
-		                likes.client_id likes_client_id -->
-<!-- 
-  <select id="selectDiary" parameterType="int" resultMap="DiaryMap">
-		        SELECT *
-		           FROM diaries d
-		LEFT OUTER JOIN clients cl ON (d.client_id = cl.client_id)
-		LEFT OUTER JOIN routes r ON (d.diary_no = r.diary_no)
-		LEFT OUTER JOIN comments c ON (d.diary_no = c.diary_no)
-		LEFT OUTER JOIN (SELECT * FROM comments c LEFT OUTER JOIN clients cli 
-		                     ON (c.client_id = cli.client_id)) c ON (d.diary_no = c.diary_no)
-		LEFT OUTER JOIN hashtags h ON (d.diary_no = h.diary_no)
-		LEFT OUTER JOIN likes ON (d.diary_no = likes.diary_no)		
-		          WHERE d.diary_no = #{diaryNo}
-  </select>
--->
   <select id="selectDiary" parameterType="int" resultMap="DiaryMapTest">
-SELECT d.*, 
-c.client_id, c.client_nickname,
-r.*, 
-h.hashtag,
-com.comment_no comment_no, com.client_id com_client_id, com.comment_content, com.comment_writing_time, cl.client_nickname com_client_nickname,
-l.diary_no like_diary_no, l.client_id like_client_id
-FROM diaries d JOIN clients c ON (d.client_id = c.client_id)
-               JOIN routes r ON (d.diary_no = r.diary_no)
-               LEFT JOIN hashtags h ON (d.diary_no = h.diary_no)
-               LEFT JOIN comments com ON (d.diary_no = com.diary_no)
-                JOIN clients  cl ON (com.client_id = cl.client_id)
- JOIN clients  cl ON (com.client_id = cl.client_id)
-               LEFT JOIN likes l ON (d.diary_no = l.diary_no)
-WHERE d.diary_no = #{diaryNo}
+	SELECT d.*, 
+	c.client_id, c.client_nickname,
+	r.*, 
+	h.hashtag,
+	com.comment_no comment_no, com.client_id com_client_id, com.comment_content, com.comment_writing_time, cl.client_nickname com_client_nickname,
+	l.diary_no like_diary_no, l.client_id like_client_id
+	FROM diaries d JOIN clients c ON (d.client_id = c.client_id)
+				JOIN routes r ON (d.diary_no = r.diary_no)
+				LEFT JOIN hashtags h ON (d.diary_no = h.diary_no)
+				LEFT JOIN comments com ON (d.diary_no = com.diary_no)
+					JOIN clients  cl ON (com.client_id = cl.client_id)
+	JOIN clients  cl ON (com.client_id = cl.client_id)
+				LEFT JOIN likes l ON (d.diary_no = l.diary_no)
+	WHERE d.diary_no = #{diaryNo}
   </select>
 
 	<!-- selectDiary()에 필요한 코드 END -->

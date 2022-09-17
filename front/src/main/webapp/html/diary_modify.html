@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="../resource/static/css/bootstrap.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <!-- 카카오맵 services 라이브러리 불러오기 -->
+    <script type="text/javascript"
+        src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d63482176883c681a9885823e0d05369&libraries=services,clusterer,drawing""></script>
+    <script src=" ../resource/static/js/bootstrap.js"></script>
+    <!--해시태그용 라이브러리-->
+    <script src="https://unpkg.com/@yaireo/tagify"></script>
+    <!-- 폴리필 (구버젼 브라우저 지원) -->
+    <script src="https://unpkg.com/@yaireo/tagify/dist/tagify.polyfills.min.js"></script>
+    <link href="https://unpkg.com/@yaireo/tagify/dist/tagify.css" rel="stylesheet" type="text/css" />
+    <script src="../js/init.js"></script>
+    <script src="../js/diary_modify.js"></script>
+    <link rel="stylesheet" href="../css/diary_modify.css">
+    <title>다이어리 수정</title>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row">
+                    <div id="map" style="width:100%;height:350px;"></div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="map_wrap">
+                    <div id="map" style="width:100%;height:100%;position:relative;overflow:hidden;"></div>
+
+                    <div id="menu_wrap" class="bg_white">
+                        <div class="option">
+                            <div>
+                                <form id="search">
+                                    여행지 : <input type="text" value="" id="keyword" size="15">
+                                    <button type="button">검색하기</button>
+                                </form>
+                            </div>
+                        </div>
+                        <hr>
+                        <ul id="placesList"></ul>
+                        <div id="pagination"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <form class="write-diary" method="post" action="http://localhost:9997/back/diary/write"
+                    enctype="multipart/form-data">
+                    <div class="page-item"><br>
+                        <input type="text" class="form-control diary-title" placeholder="다이어리의 제목을 입력해주세요" required><br>
+                        <input type="date" class="form-control diary-start-date" required>
+                        <small class="text-muted">여행 시작일</small>
+                        <input type="date" class="form-control diary-end-date" required>
+                        <small class="text-muted">여행 종료일</small>
+                        <input type="hidden" class="form-control client-id"><br>
+                        <div class="form-group FileForm">
+                            <label>이미지 파일 업로드</label>
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input files" id="fileInput" name="imageFiles"
+                                    accept="image/*" multiple>
+                                <label class="custom-file-label" data-breose="Browse"></label>
+                                <div class="images"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <br><br>
+                    <div class="accordion" id="accordionExample">
+                        <div class="card">
+                            <span class="btn-close"></span>
+                            <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse"
+                                data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                루트
+                            </button>
+                            <div class="card-header" id="headingOne">
+                                <h2 class="mb-0">
+                                    <div class="kakao-map-id">검색한 여행지 주소를 여기에 drag & drop 해주세요.</div>
+                                </h2>
+                            </div>
+                            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
+                                data-parent="#accordionExample">
+                                <div class="card-body">
+                                    <textarea class="form-control route-content" rows="10"
+                                        placeholder="해당 여행지의 여행 후기는 여기에 작성해주세요"
+                                        required>여행지 이름 : &#10;여행지 주소 : &#10;내용 : </textarea>
+                                    <input type="hidden" class="form-control route-no">
+                                </div>
+                            </div>
+                        </div><br>
+                    </div>
+                    <button type="button" class="btn btn-primary float-right">루트 추가</button><br><br>
+                    <input class="hashtags" name="input" placeholder="해시태그를 입력해주세요" value="">
+                    <div class="form-check float-left">
+                        <input class="form-check-input" id="radio1" name="diary-disclosure-flag" type="radio" value="1">
+                          <label for="radio1">공개</label><br>
+                        <input class="form-check-input" id="radio2" name="diary-disclosure-flag" type="radio" value="0"
+                            checked>
+                          <label for="radio2">비공개</label><br>
+                    </div>
+                    <div class="btn-group btn-group-md float-right" role="group">
+                        <button class="btn btn-secondary back" type="button">
+                            <a href="javascript:history.back();">이전 페이지로 이동</a>
+                        </button>
+                        <button class="btn btn-secondary write" type="button">
+                            수정
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
