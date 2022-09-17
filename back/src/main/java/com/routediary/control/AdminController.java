@@ -21,8 +21,8 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.routediary.dto.Admin;
 import com.routediary.dto.Comment;
-import com.routediary.dto.Diary;
 import com.routediary.dto.Notice;
+import com.routediary.dto.Diary;
 import com.routediary.dto.PageBean;
 import com.routediary.dto.ResultBean;
 import com.routediary.enums.ErrorCode;
@@ -51,7 +51,9 @@ public class AdminController {
     String adminPwd = admin.getAdminPwd();
     adminService.login(adminId, adminPwd);
     session.setAttribute("loginInfo", adminId);
+    String adminLoginedId = (String) session.getAttribute("loginInfo");
     ResultBean<?> resultBean = new ResultBean(SuccessCode.LOGIN_SUCCESS);
+    resultBean.setLoginInfo(adminLoginedId);
     return new ResponseEntity<>(resultBean, HttpStatus.OK);
   }
 
@@ -61,6 +63,7 @@ public class AdminController {
     String adminId = (String) session.getAttribute("loginInfo");
     if (adminId == null) {
       ResultBean<?> resultBean = new ResultBean(SuccessCode.LOGOUT_SUCCESS);
+      resultBean.setLoginInfo(adminId);
       return new ResponseEntity<>(resultBean, HttpStatus.OK);
     } else {
       throw new LogoutFailureException(ErrorCode.FAILED_TO_LOGOUT);
@@ -69,7 +72,7 @@ public class AdminController {
 
   @GetMapping(value = {"diary/list/{order}", "diary/list/{order}/{pageNo}"})
   public ResponseEntity<?> showDiaryBoard(@PathVariable Optional<Integer> pageNo,
-      @PathVariable int order, @RequestBody List<String> hashtags)
+      @PathVariable int order, @RequestBody List<String> hashtags, HttpSession session)
       throws FindException, NumberNotFoundException {
     int currentPageNo;
     if (pageNo.isPresent()) {
@@ -78,17 +81,21 @@ public class AdminController {
       currentPageNo = 1;
     }
     PageBean<Diary> pageBean = adminService.showDiaryBoard(order, currentPageNo, hashtags);
+    String adminId = (String) session.getAttribute("loginInfo");
     ResultBean<PageBean<Diary>> resultBean = new ResultBean(SuccessCode.PAGE_LOAD_SUCCESS);
     resultBean.setT(pageBean);
+    resultBean.setLoginInfo(adminId);
     return new ResponseEntity<>(resultBean, HttpStatus.OK);
   }
 
   @GetMapping(value = "diary/{diaryNo}")
-  public ResponseEntity<?> showDiary(@PathVariable int diaryNo)
+  public ResponseEntity<?> showDiary(@PathVariable int diaryNo, HttpSession session)
       throws FindException, NumberNotFoundException {
     Diary diary = adminService.showDiary(diaryNo);
+    String adminId = (String) session.getAttribute("loginInfo");
     ResultBean<Diary> resultBean = new ResultBean(SuccessCode.PAGE_LOAD_SUCCESS);
     resultBean.setT(diary);
+    resultBean.setLoginInfo(adminId);
     return new ResponseEntity<>(resultBean, HttpStatus.OK);
   }
 
@@ -101,6 +108,7 @@ public class AdminController {
     } else {
       adminService.removeDiary(diaryNo);
       ResultBean<?> resultBean = new ResultBean(SuccessCode.SUCCESS_TO_REMOVE);
+      resultBean.setLoginInfo(adminId);
       return new ResponseEntity<>(resultBean, HttpStatus.OK);
     }
   }
@@ -112,6 +120,7 @@ public class AdminController {
     if (adminId != null) {
       adminService.removeComment(diaryNo, comment.getCommentNo());
       ResultBean<?> resultBean = new ResultBean(SuccessCode.SUCCESS_TO_REMOVE);
+      resultBean.setLoginInfo(adminId);
       return new ResponseEntity<>(resultBean, HttpStatus.OK);
     } else {
       throw new NotLoginedException(ErrorCode.NOT_LOGINED);
@@ -137,6 +146,7 @@ public class AdminController {
       n.setAdminId(adminId);
       adminService.writeNotice(n, imageFiles);
       ResultBean<?> resultBean = new ResultBean(SuccessCode.SUCCESS_TO_WRITE);
+      resultBean.setLoginInfo(adminId);
       return new ResponseEntity<>(resultBean, HttpStatus.OK);
     }
   }
@@ -159,6 +169,7 @@ public class AdminController {
     } else {
       adminService.modifyNotice(n, imageFiles);
       ResultBean<?> resultBean = new ResultBean(SuccessCode.SUCCESS_TO_MODIFY);
+      resultBean.setLoginInfo(adminId);
       return new ResponseEntity<>(resultBean, HttpStatus.OK);
     }
   }
@@ -172,6 +183,7 @@ public class AdminController {
     } else {
       adminService.removeNotice(noticeNo);
       ResultBean<?> resultBean = new ResultBean(SuccessCode.SUCCESS_TO_REMOVE);
+      resultBean.setLoginInfo(adminId);
       return new ResponseEntity<>(resultBean, HttpStatus.OK);
     }
   }

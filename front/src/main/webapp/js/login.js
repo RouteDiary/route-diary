@@ -1,7 +1,7 @@
-$(function () {
+$(() => {
   let $form = $("form.login_form");
-  $form.submit(function () {
-    let url = "http://localhost:9997/back/client/login";
+  $form.submit(() => {
+    let url = `${backPath}/client/login`;
     let $clientId = $("input.form-control.client-id");
     let $clientPwd = $("input.form-control.client-pwd");
     let loginData = { clientId: $clientId.val(), clientPwd: $clientPwd.val() };
@@ -14,12 +14,12 @@ $(function () {
       headers: {
         "content-Type": "application/json",
       },
-      success: function (jsonObj) {
+      success: (jsonObj) => {
         alert(jsonObj.message);
         location.href = "index.html";
       },
 
-      error: function (jqXHR) {
+      error: (jqXHR) => {
         alert(" 에러 : [" + jqXHR.message + "]");
       },
     });

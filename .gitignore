@@ -1,8 +1,9 @@
 *.DS_Store
 .metadata/
 back/.mvn/src/main/webapp/resource
-back/bin/
-/front/
+front/src/main/webapp/resource
+
+
 ### Java ###
 # Compiled class file
 *.class
@@ -127,3 +128,4 @@ back/.classpath
 
 back/src/main/webapp/WEB-INF/web.xml
 
+back/src/main/java/com/routediary/control/AdminController.java

@@ -8,7 +8,6 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -66,6 +65,7 @@ public class DiaryController {
     } else {
       diaryService.writeDiary(diary, imageFiles);
       ResultBean<?> resultBean = new ResultBean(SuccessCode.SUCCESS_TO_WRITE);
+      resultBean.setLoginInfo(clientId);
       return new ResponseEntity<>(resultBean, HttpStatus.OK);
     }
   }
@@ -84,6 +84,7 @@ public class DiaryController {
     } else {
       diaryService.modifyDiary(diary, imageFiles);
       ResultBean<?> resultBean = new ResultBean(SuccessCode.SUCCESS_TO_MODIFY);
+      resultBean.setLoginInfo(clientId);
       return new ResponseEntity<>(resultBean, HttpStatus.OK);
     }
   }
@@ -99,6 +100,7 @@ public class DiaryController {
     } else {
       diaryService.removeDiary(diaryNo);
       ResultBean<?> resultBean = new ResultBean(SuccessCode.SUCCESS_TO_REMOVE);
+      resultBean.setLoginInfo(clientId);
       return new ResponseEntity<>(resultBean, HttpStatus.OK);
     }
   }
@@ -107,8 +109,9 @@ public class DiaryController {
   @LogExecutionTime
   public ResponseEntity<?> showDiaryBoard(@PathVariable Optional<Integer> pageNo,
       @PathVariable int order,
-      @RequestParam(value = "hashtags[]", required = false) List<String> hashtags)
-      throws FindException, NumberNotFoundException {
+      @RequestParam(value = "hashtags[]", required = false) List<String> hashtags,
+      HttpSession session) throws FindException, NumberNotFoundException {
+    String clientId = (String) session.getAttribute("loginInfo");
     int currentPageNo;
     if (pageNo.isPresent()) {
       currentPageNo = pageNo.get();
@@ -119,6 +122,7 @@ public class DiaryController {
     ResultBean<PageBean<Diary>> resultBean =
         new ResultBean<PageBean<Diary>>(SuccessCode.PAGE_LOAD_SUCCESS);
     resultBean.setT(pageBean);
+    resultBean.setLoginInfo(clientId);
     return new ResponseEntity<>(resultBean, HttpStatus.OK);
   }
 
@@ -139,6 +143,7 @@ public class DiaryController {
       ResultBean<PageBean<Diary>> resultBean =
           new ResultBean<PageBean<Diary>>(SuccessCode.PAGE_LOAD_SUCCESS);
       resultBean.setT(pageBean);
+      resultBean.setLoginInfo(clientId);
       return new ResponseEntity<>(resultBean, HttpStatus.OK);
     }
   }
@@ -164,6 +169,7 @@ public class DiaryController {
     map.put("imageFilesCount", imageFilesCount);
     map.put("likeFlag", likeFlag);
     resultBean.setT(map);
+    resultBean.setLoginInfo(clientId);
     return new ResponseEntity<>(resultBean, HttpStatus.OK);
   }
 
@@ -182,6 +188,7 @@ public class DiaryController {
       int likeCnt = d.getDiaryLikeCnt();
       ResultBean<Integer> resultBean = new ResultBean(SuccessCode.LIKE_HANDLING_SUCCESS);
       resultBean.setT(new Integer(likeCnt));
+      resultBean.setLoginInfo(clientId);
       return new ResponseEntity<>(resultBean, HttpStatus.OK);
     }
   }
@@ -189,13 +196,11 @@ public class DiaryController {
   @GetMapping(value = "/")
   public ResponseEntity<?> showIndexPage(HttpSession session) throws FindException {
     String clientId = (String) session.getAttribute("loginInfo");
-    Map<String, Object> map = new HashMap<String, Object>();
     Map<String, List<Diary>> diaries = diaryService.showIndexPage();
-    map.put("diaries", diaries);
-    map.put("loginedId", clientId);
-    ResultBean<Map<String, Object>> resultBean =
-        new ResultBean<Map<String, Object>>(SuccessCode.PAGE_LOAD_SUCCESS);
-    resultBean.setT(map);
+    ResultBean<Map<String, List<Diary>>> resultBean =
+        new ResultBean<Map<String, List<Diary>>>(SuccessCode.PAGE_LOAD_SUCCESS);
+    resultBean.setT(diaries);
+    resultBean.setLoginInfo(clientId);
     return new ResponseEntity<>(resultBean, HttpStatus.OK);
   }
 
@@ -214,6 +219,7 @@ public class DiaryController {
       comment.setClient(client);
       diaryService.writeComment(comment);
       ResultBean<?> resultBean = new ResultBean(SuccessCode.SUCCESS_TO_WRITE);
+      resultBean.setLoginInfo(clientId);
       return new ResponseEntity<>(resultBean, HttpStatus.OK);
     }
   }
@@ -230,6 +236,7 @@ public class DiaryController {
     } else {
       diaryService.modifyComment(comment);
       ResultBean<?> resultBean = new ResultBean(SuccessCode.SUCCESS_TO_MODIFY);
+      resultBean.setLoginInfo(clientId);
       return new ResponseEntity<>(resultBean, HttpStatus.OK);
     }
   }
@@ -246,6 +253,7 @@ public class DiaryController {
     } else {
       diaryService.removeComment(diaryNo, comment.getCommentNo());
       ResultBean<?> resultBean = new ResultBean(SuccessCode.SUCCESS_TO_REMOVE);
+      resultBean.setLoginInfo(clientId);
       return new ResponseEntity<>(resultBean, HttpStatus.OK);
     }
   }

@@ -5,16 +5,35 @@ $(() => {
 
   //회원정보 불러오기
   $.ajax({
-    url: "http://localhost:9997/back/client/clientinfo",
+    url: `${backPath}/client/clientinfo`,
     method: "get",
     success: (jsonObj) => {
-      console.log(jsonObj);
-      if (jsonObj.status == 200) {
-        $inputId.val(jsonObj.t.clientId);
-        $inputPwdCheck.val(jsonObj.t.clientPwd);
+      // nav bar start
+      if (jsonObj.loginInfo == null) {
+        let loginHtml =
+          '<a class="nav-link login" data-value="Login" href="login.html">로그인</a>';
+        $("li.nav-item.login").html(loginHtml);
       } else {
-        alert(jsonObj.message);
+        let myDiaryBoardHtml =
+          '<a class="nav-link my-diary-board" data-value="MyDiaryBoard" href="my_diary_board.html">내 다이어리 게시판</a>';
+        $("li.nav-item.my-diary-board").html(myDiaryBoardHtml);
+        let diaryWriteHtml =
+          '<a class="nav-link write-diary" data-value="DiaryWrite" href="diary_write.html" >다이어리 작성하기</a>';
+        $("li.nav-item.write-diary").html(diaryWriteHtml);
+        let clientUpdateHtml =
+          '<a class="nav-link client-update" data-value="ClientUpdate" href="client_check.html" >회원정보 수정/탈퇴</a>';
+        $("li.nav-item.client-update").html(clientUpdateHtml);
+        let logoutHtml =
+          '<a class="nav-link logout" data-value="Logout" href=' +
+          `${backPath}/client/logout` +
+          ">로그아웃</a>";
+        $("li.nav-item.login").html(logoutHtml);
       }
+      //navbar end
+
+      console.log(jsonObj);
+      $inputId.val(jsonObj.t.clientId);
+      $inputPwdCheck.val(jsonObj.t.clientPwd);
     },
     error: (jqXHR, textStatus, errorThrown) => {
       alert("에러 : " + jqXHR.status);

@@ -3,6 +3,10 @@
 back/.mvn/
 /bin/
 
+#admin 컨트롤러 제외
+back/src/main/java/com/routediary/control/AdminController.java
+
+
 ### Java ###
 # Compiled class file
 *.class

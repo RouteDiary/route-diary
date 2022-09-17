@@ -256,15 +256,15 @@ $(() => {
   $("input.custom-file-input.files").change({ $galary: $divImage }, showImage);
 
   //drag and drop 기능 구현
-  $("#placesList").on("dragstart", "li.item", function (ev) {
+  $("#placesList").on("dragstart", "li.item", (ev) => {
     dragStart(ev);
   });
-  $("div.accordion").on("dragover", "div.kakao-map-id", function (ev) {
+  $("div.accordion").on("dragover", "div.kakao-map-id", (ev) => {
     $(ev.target).empty();
     allowDrop(ev);
   });
 
-  $("div.accordion").on("drop", "div.kakao-map-id", function (ev) {
+  $("div.accordion").on("drop", "div.kakao-map-id", (ev) => {
     drop(ev);
   });
 
@@ -381,11 +381,11 @@ $(() => {
     console.log("---formData---");
     console.log(formData.get("diary"));
     console.log(formData.getAll("imageFiles"));
-    formData.forEach(function (value, key) {
+    formData.forEach((value, key) => {
       console.log(key + ":" + value);
     });
     $.ajax({
-      url: "http://localhost:9997/back/diary/write",
+      url: `${backPath}/diary/write`,
       method: "post",
       contentType: false,
       processData: false,

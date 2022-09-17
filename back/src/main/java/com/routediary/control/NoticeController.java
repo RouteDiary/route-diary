@@ -30,50 +30,54 @@ public class NoticeController {
   NoticeService noticeService;
 
   @GetMapping(value = {"list", "list/{pageNo}"})
-  public ResponseEntity<?> showNoticeBoard(@PathVariable Optional<Integer> pageNo)
-      throws FindException {
+  public ResponseEntity<?> showNoticeBoard(@PathVariable Optional<Integer> pageNo,
+      HttpSession session) throws FindException {
     int currentPage;
     if (pageNo.isPresent()) {
       currentPage = pageNo.get();
     } else {
       currentPage = 1;
     }
+    String loginedId = (String) session.getAttribute("loginInfo");
     PageBean<Notice> pageBean = noticeService.showNoticeBoard(currentPage);
     ResultBean<PageBean<Notice>> resultBean =
         new ResultBean<PageBean<Notice>>(SuccessCode.PAGE_LOAD_SUCCESS);
     resultBean.setT(pageBean);
+    resultBean.setLoginInfo(loginedId);
     return new ResponseEntity<>(resultBean, HttpStatus.OK);
   }
 
   @GetMapping(value = "list/{keyword}/{pageNo}")
   public ResponseEntity<?> showNoticeBoardByKeyword(@PathVariable Optional<Integer> pageNo,
-      @PathVariable String keyword) throws FindException {
+      @PathVariable String keyword, HttpSession session) throws FindException {
     int currentPage;
     if (pageNo.isPresent()) {
       currentPage = pageNo.get();
     } else {
       currentPage = 1;
     }
+    String loginedId = (String) session.getAttribute("loginInfo");
     PageBean<Notice> pageBean = noticeService.showNoticeBoardByKeyword(currentPage, keyword);
     ResultBean<PageBean<Notice>> resultBean =
         new ResultBean<PageBean<Notice>>(SuccessCode.PAGE_LOAD_SUCCESS);
     resultBean.setT(pageBean);
+    resultBean.setLoginInfo(loginedId);
     return new ResponseEntity<>(resultBean, HttpStatus.OK);
   }
 
   @GetMapping(value = {"/{noticeNo}"})
   public ResponseEntity<?> showNotice(@PathVariable int noticeNo, HttpSession session)
       throws FindException, NumberNotFoundException {
-    String adminId = (String) session.getAttribute("adminLoginInfo");
+    String loginedId = (String) session.getAttribute("loginInfo");
     Notice notice = noticeService.showNotice(noticeNo);
     int imageFilesCount = serviceFunctions.getImageFilesCount(noticeNo, Dto.NOTICE);
     Map<String, Object> map = new HashMap<String, Object>();
-    map.put("adminLoginInfo", adminId);
     map.put("notice", notice);
     map.put("imageFilesCount", imageFilesCount);
     ResultBean<Map<String, Object>> resultBean =
         new ResultBean<Map<String, Object>>(SuccessCode.NOTICE_LOAD_SUCCESS);
     resultBean.setT(map);
+    resultBean.setLoginInfo(loginedId);
     return new ResponseEntity<>(resultBean, HttpStatus.OK);
   }
 }

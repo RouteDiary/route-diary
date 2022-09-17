@@ -3,77 +3,89 @@ $(() => {
   let diaryNo = location.search.substring(1).split("=")[1]; //ex. diary_no=104
   $.ajax({
     contentType: "application/x-www-form-urlencoded; charset=UTF-8",
-    url: "http://localhost:9997/back/diary/" + diaryNo,
+    url: `${backPath}/diary/` + diaryNo,
     method: "get",
     success: (jsonObj) => {
       console.log(jsonObj);
-      if (jsonObj.status == 200) {
-        //----기존 정보 채우기----
-        $("input.form-control.client-id").val(jsonObj.t.diary.client.clientId);
-        let $diaryTitle = $("div.page-item>input.form-control.diary-title");
-        let $diaryStartDate = $(
-          "div.page-item>input.form-control.diary-start-date"
-        );
-        let $diaryEndDate = $(
-          "div.page-item>input.form-control.diary-end-date"
-        );
-        $diaryTitle.val(jsonObj.t.diary.diaryTitle);
-        let diaryStartDateVal = getFormatDate(
-          jsonObj.t.diary.diaryStartDate,
-          "-"
-        );
-        let diaryEndDateVal = getFormatDate(jsonObj.t.diary.diaryEndDate, "-");
-        $diaryStartDate.val(diaryStartDateVal);
-        $diaryEndDate.val(diaryEndDateVal);
-        let routesObj = jsonObj.t.diary.routes;
-        let $routeFormObj = $("div.card");
-        $(routesObj).each((i, element) => {
-          if (i == 0) {
-            $routeFormObj
-              .find("div.kakao-map-id")
-              .html(
-                '여헹지의 장소 ID : <span class="kakao-map-id-value">' +
-                  element.kakaoMapId +
-                  "</span>"
-              );
-            $routeFormObj
-              .find("textarea.form-control.route-content")
-              .html(element.routeContent);
-            $routeFormObj
-              .find("input.form-control.route-no")
-              .val(element.routeNo);
-          } else {
-            let $copiedRouteFormObj = $routeFormObj.clone();
-            let closeTag =
-              '<button type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>';
-            $copiedRouteFormObj.find("span.btn-close").html(closeTag);
-            $copiedRouteFormObj
-              .find("div.kakao-map-id")
-              .html(
-                '여헹지의 장소 ID : <span class="kakao-map-id-value">' +
-                  element.kakaoMapId +
-                  "</span>"
-              );
-            $copiedRouteFormObj
-              .find("textarea.form-control.route-content")
-              .html(element.routeContent);
-            $copiedRouteFormObj
-              .find("input.form-control.route-no")
-              .val(element.routeNo);
-            $("div.accordion").append($copiedRouteFormObj);
-          }
-        });
-        let hashtagsObj = jsonObj.t.diary.hashtags;
-        let $hashtagFormObj = $("input.hashtags");
-        let hashtagsVal = "";
-        $(hashtagsObj).each((i, element) => {
-          hashtagsVal += element.hashtag;
-          hashtagsVal += ",";
-        });
-        $hashtagFormObj.val(hashtagsVal);
+      // nav bar start
+      if (jsonObj.loginInfo == null) {
+        let loginHtml =
+          '<a class="nav-link login" data-value="Login" href="login.html">로그인</a>';
+        $("li.nav-item.login").html(loginHtml);
       } else {
-        alert(jsonObj.message);
+        let myDiaryBoardHtml =
+          '<a class="nav-link my-diary-board" data-value="MyDiaryBoard" href="my_diary_board.html">내 다이어리 게시판</a>';
+        $("li.nav-item.my-diary-board").html(myDiaryBoardHtml);
+        let diaryWriteHtml =
+          '<a class="nav-link write-diary" data-value="DiaryWrite" href="diary_write.html" >다이어리 작성하기</a>';
+        $("li.nav-item.write-diary").html(diaryWriteHtml);
+        let clientUpdateHtml =
+          '<a class="nav-link client-update" data-value="ClientUpdate" href="client_check.html" >회원정보 수정/탈퇴</a>';
+        $("li.nav-item.client-update").html(clientUpdateHtml);
       }
+      //navbar end
+
+      //----기존 정보 채우기----
+      $("input.form-control.client-id").val(jsonObj.t.diary.client.clientId);
+      let $diaryTitle = $("div.page-item>input.form-control.diary-title");
+      let $diaryStartDate = $(
+        "div.page-item>input.form-control.diary-start-date"
+      );
+      let $diaryEndDate = $("div.page-item>input.form-control.diary-end-date");
+      $diaryTitle.val(jsonObj.t.diary.diaryTitle);
+      let diaryStartDateVal = getFormatDate(
+        jsonObj.t.diary.diaryStartDate,
+        "-"
+      );
+      let diaryEndDateVal = getFormatDate(jsonObj.t.diary.diaryEndDate, "-");
+      $diaryStartDate.val(diaryStartDateVal);
+      $diaryEndDate.val(diaryEndDateVal);
+      let routesObj = jsonObj.t.diary.routes;
+      let $routeFormObj = $("div.card");
+      $(routesObj).each((i, element) => {
+        if (i == 0) {
+          $routeFormObj
+            .find("div.kakao-map-id")
+            .html(
+              '여헹지의 장소 ID : <span class="kakao-map-id-value">' +
+                element.kakaoMapId +
+                "</span>"
+            );
+          $routeFormObj
+            .find("textarea.form-control.route-content")
+            .html(element.routeContent);
+          $routeFormObj
+            .find("input.form-control.route-no")
+            .val(element.routeNo);
+        } else {
+          let $copiedRouteFormObj = $routeFormObj.clone();
+          let closeTag =
+            '<button type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>';
+          $copiedRouteFormObj.find("span.btn-close").html(closeTag);
+          $copiedRouteFormObj
+            .find("div.kakao-map-id")
+            .html(
+              '여헹지의 장소 ID : <span class="kakao-map-id-value">' +
+                element.kakaoMapId +
+                "</span>"
+            );
+          $copiedRouteFormObj
+            .find("textarea.form-control.route-content")
+            .html(element.routeContent);
+          $copiedRouteFormObj
+            .find("input.form-control.route-no")
+            .val(element.routeNo);
+          $("div.accordion").append($copiedRouteFormObj);
+        }
+      });
+      let hashtagsObj = jsonObj.t.diary.hashtags;
+      let $hashtagFormObj = $("input.hashtags");
+      let hashtagsVal = "";
+      $(hashtagsObj).each((i, element) => {
+        hashtagsVal += element.hashtag;
+        hashtagsVal += ",";
+      });
+      $hashtagFormObj.val(hashtagsVal);
     },
     error: (jqXHR, textStatus, errorThrown) => {
       alert(" 에러. 사유 : " + jqXHR.message);
@@ -336,15 +348,15 @@ $(() => {
   $("input.custom-file-input.files").change({ $galary: $divImage }, showImage);
 
   //drag and drop 기능 구현
-  $("#placesList").on("dragstart", "li.item", function (ev) {
+  $("#placesList").on("dragstart", "li.item", (ev) => {
     dragStart(ev);
   });
-  $("div.accordion").on("dragover", "div.kakao-map-id", function (ev) {
+  $("div.accordion").on("dragover", "div.kakao-map-id", (ev) => {
     $(ev.target).empty();
     allowDrop(ev);
   });
 
-  $("div.accordion").on("drop", "div.kakao-map-id", function (ev) {
+  $("div.accordion").on("drop", "div.kakao-map-id", (ev) => {
     drop(ev);
   });
 
@@ -469,11 +481,11 @@ $(() => {
     console.log("---formData---");
     console.log(formData.get("diary"));
     console.log(formData.getAll("imageFiles"));
-    formData.forEach(function (value, key) {
+    formData.forEach((value, key) => {
       console.log(key + ":" + value);
     });
     $.ajax({
-      url: "http://localhost:9997/back/diary/" + diaryNo,
+      url: `${backPath}/diary/` + diaryNo,
       method: "put",
       contentType: false,
       processData: false,

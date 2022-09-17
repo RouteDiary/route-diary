@@ -1,4 +1,4 @@
-$(function () {
+$(() => {
   //id & id 중복확인
   let $clientId = $("input.form-control.id");
   let $clientPwd = $("input.form-control.pwd");
@@ -11,17 +11,17 @@ $(function () {
   let $nicknameCheckBtn = $("button.btn.btn-primary.nicknamecheck");
 
   //아이디 중복체크
-  $idCheckBtn.click(function () {
+  $idCheckBtn.click(() => {
     let idForCheck = {
       clientId: $clientId.val(),
     };
     $.ajax({
-      url: "http://localhost:9997/back/client/idcheck",
+      url: `${backPath}/client/idcheck`,
       method: "get",
       data: idForCheck,
       success: (jsonObj) => {
         console.log(jsonObj);
-        if (jsonObj.status == 200 && $clientId.val() != "") {
+        if ($clientId.val() != "") {
           alert("사용가능");
           // $submitBtn.show();
         } else {
@@ -29,7 +29,7 @@ $(function () {
         }
       },
       error: (jqXHR, textStatus, errorThrown) => {
-        alert("사용불가능한 닉네임 : " + jqXHR.status);
+        alert(jqXHR.message);
       },
     });
     return false;
@@ -44,12 +44,12 @@ $(function () {
       clientNickname: $clientNickname.val(),
     };
     $.ajax({
-      url: "http://localhost:9997/back/client/nicknamecheck",
+      url: `${backPath}/client/nicknamecheck`,
       method: "get",
       data: nicknameForCheck,
       success: (jsonObj) => {
         console.log(jsonObj);
-        if (jsonObj.status == 200 && $clientNickname.val() != "") {
+        if ($clientNickname.val() != "") {
           alert("사용가능");
           // $submitBtn.show();
         } else {
@@ -57,7 +57,7 @@ $(function () {
         }
       },
       error: (jqXHR, textStatus, errorThrown) => {
-        alert("사용불가능한 닉네임 : " + jqXHR.status);
+        alert(jqXHR.message);
       },
     });
     return false;
@@ -70,7 +70,7 @@ $(function () {
   //form submit이벤트 발생 -> 기본처리 (전송)
   //form 객체 찾기
   let $form = $("form.signup_form");
-  $form.submit(function () {
+  $form.submit(() => {
     //비밀번호 일치 확인
     if ($clientPwd.val() != $clientPwdCheck.val()) {
       alert("비밀번호가 일치하지 않습니다.");
@@ -78,7 +78,7 @@ $(function () {
       return false;
     }
     alert("비밀번호 일치합니다");
-    let url = "http://localhost:9997/back/client/signup";
+    let url = `${backPath}/client/signup`;
     let clientObj = {
       clientId: $clientId.val(),
       clientPwd: $clientPwd.val(),
@@ -94,12 +94,12 @@ $(function () {
       },
       method: "post",
       data: data,
-      success: function (jsonObj) {
+      success: (jsonObj) => {
         alert(jsonObj.message);
         console.log(jsonObj);
         location.href = "login.html";
       },
-      error: function (jqXHR) {
+      error: (jqXHR) => {
         alert("회원가입 실패 : " + jqXHR.message);
       },
     });

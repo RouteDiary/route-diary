@@ -1,3 +1,22 @@
+.navbar {
+  background: #97ebdd;
+}
+
+.nav-link:hover {
+  background: #f4f4f4;
+  color: #1b0bad;
+}
+
+.navbar-collapse {
+  justify-content: flex-end;
+}
+.navbar-toggler {
+  background: #fff !important;
+}
+.navbar-collapse {
+  justify-content: flex-end;
+}
+
 .diary .title {
   margin: 30px;
   padding: 20px 15px;
@@ -83,4 +102,28 @@ height: 20px;
 
 .diary_delete {
   margin: 30px;
+}
+
+footer {
+  /* position: absolute; */
+  height: 200px;
+  margin-bottom: 0vw;
+  width: 100%;
+  padding: 0 25px;
+  background-color: #282828;
+  color: white;
+}
+
+footer > aside a {
+  color: rgb(241, 237, 237);
+}
+
+footer > aside > ul {
+  list-style-type: none;
+  padding-left: 0px;
+}
+
+footer > aside > span {
+  background-color: #282828;
+  height: 100px;
 }
