@@ -18,7 +18,7 @@ class CommentRepositoryTest {
     Client client = new Client();
     Comment comment = new Comment();
     client.setClientId("japanwoman@gmail.com");
-    comment.setDiaryNo(4);
+    comment.setDiaryNo(67);
     comment.setClient(client);
     comment.setCommentContent("유익해요");
     commentRepository.insert(comment);

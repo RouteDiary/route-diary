@@ -1,16 +1,13 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <meta charset="UTF-8" />   
-    <link rel="stylesheet" href="../css/login.css" />
+    <!-- Required meta tags -->
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<<<<<<< HEAD:front/src/main/webapp/html/diaryboard.html
-    <script src="../js/diaryboard.js"></script>
-    <link rel="stylesheet" href="../css/diaryboard.css" />
-
-
-    <title>루트 다이어리</title>
-=======
     <link rel="stylesheet" href="../resource/static/css/bootstrap.css" />
     <script src="../resource/static/js/bootstrap.js"></script>
     <!--해시태그용 라이브러리-->
@@ -32,42 +29,68 @@
       integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N"
       crossorigin="anonymous"
     />
->>>>>>> 71c06e1 (Feat: front(client_check, client_update, diary_modify, diary_write) 완성):front/src/main/webapp/html/diary_board.html
   </head>
+
   <body>
-    <div class="index">위에는그대로받아오고</div>
-    <div class="title">
-      <h2>다이어리 게시판</h2>
+    <input
+      class="hashtags"
+      name="input"
+      placeholder="해시태그를 입력해주세요"
+      value=""
+    />
+    <div class="form-check">
+      <input
+        class="form-check-input"
+        id="radio1"
+        name="order"
+        type="radio"
+        value="1"
+      />
+      <label for="radio1">조회수순으로 보기</label><br />
+      <input
+        class="form-check-input"
+        id="radio2"
+        name="order"
+        type="radio"
+        value="2"
+        checked
+      />
+      <label for="radio2">최신순으로 보기</label><br />
+      <input
+        class="form-check-input"
+        id="radio3"
+        name="order"
+        type="radio"
+        value="3"
+      />
+      <label for="radio3">좋아요순으로 보기</label><br />
     </div>
-    <div class="btr">
-        <button class='btn-primary' value='1'>최신순으로 볼랭</button>
-        <button class='btn-primary' value='2'>조회수순으로 볼랭</button>
-        <button class='btn-primary' value='3'>좋아요순으로 볼랭</button>
-    </div>
+
     <div class="cl">
-    <div class="diary_board">
+      <div class="diary_board">
         <div class="one_diary">
-          <div class="grid-container">
-          <div class="image"></div>
-          <div class="nickname"></div>
-          <div class="diary_title"></div>
-          <div class="travel_date"></div>
-          <div class="view_cnt"></div>
-          <div class="like_cnt"></div>
+          <a class="link">
+            <a href="http://localhost/front/html/viewdiary">
+              <div class="card" style="width: 80vw; margin-left: 10vw">
+                <img src="..." class="card-img-top diary-image" alt="..." />
+                <div class="card-body">
+                  <div class="nickname">작성자 :</div>
+                  <div class="diary_title">제목 :</div>
+                  <div class="travel_date">여행일자 :</div>
+                  <div class="writing_time">작성일자 :</div>
+                  <div class="like_cnt">좋아요 :</div>
+                  <div class="view_cnt">조회수 :</div>
+                </div>
+              </div>
+            </a>
+          </a>
         </div>
       </div>
-    </div>
-</div>
-    <!-- 페이징 시작 -->
-    <ul class="paging">
-
-
-    </ul>
-    <!-- 페이징 끝 -->
-        
+      <!-- 페이징 시작 -->
+      <div class="page">
+        <div class="pagination"></div>
+      </div>
+      <!-- 페이징 끝 -->
     </div>
   </body>
-  <footer>
-
-  </footer>
 </html>

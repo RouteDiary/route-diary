@@ -1,51 +1,46 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>login.html</title>
-    <link rel="stylesheet" href="../css/login.css" />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
-    <script src="../js/login.js"></script>
-  </head>
-  <body>
-    <div class="window">
-      <h1>로그인</h1>
+<html>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 
-      <a href="signup.html">새로 오셨나요? 가입하기</a><br /><br />
-      <form class="general_login" action="/back/login" method="post">
-        <fieldset>
-          <label id="client_id">ID</label><br />
-          <input
-            type="text"
-            id="client_id"
-            name="client_id"
-            size="100%"
-            placeholder="이메일을 입력하세요"
-            required="required"
-          /><br /><br />
-          <label id="client_pwd">PASSWORD</label><br />
-          <input
-            type="password"
-            id="client_pwd"
-            name="client_pwd"
-            size="100%"
-            placeholder="비밀번호를 입력하세요"
-            required="required"
-          /><br /><br />
-          <input type="submit" value="login" />
-        </fieldset>
-      </form>
-      <a class="kakao_login_botton">
-        <img
-          src="../resource/kakao_login.png"
-          width="200px"
-          height="40px"
-          alt="카카오 로그인 버튼"
-        />
-      </a>
-    </div>
-  </body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<!-- Bootstrap CSS -->
+<script src="../resource/static/js/bootstrap.js"></script>
+<link rel="stylesheet" href="../resource/static/css/bootstrap.css" />
+<link rel="stylesheet" href="../css/login.css" />
+<script src="../js/login.js"></script>
+</head>
+<title>login.html</title>
+
+<body>
+  <div class="login_div">
+    <form class="login_form"  onsumbmit="return false;" method="post" action="http://localhost:9997/back/client/login">
+      <div class="row">
+        <div class="col-8 offset-4">
+          <h2>로그인</h2>
+        </div>
+      </div>
+      <label class="col-form-label col-4">ID</label>
+      <div class="form-group row">
+        <div class="col-8">
+          <input type="email" class="form-control client-id" required="required">
+        </div>
+      </div>
+      <label class="col-form-label col-4">Password</label>
+      <div class="form-group row">
+        <div class="col-8">
+          <input type="password" class="form-control client-pwd" required="required">
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-8 offset-4">
+          <input type="submit" class="btn btn-primary btn-lg" value="로그인">
+
+        </div>
+      </div>
+    </form>
+    <div class="text-center">아직 회원이 아닌가요? <a href="../html/signup.html">회원가입</a></div>
+  </div>
+</body>
+
 </html>

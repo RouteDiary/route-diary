@@ -1,11 +1,17 @@
 package com.routediary.exception;
 
-public class RemoveException extends Exception {
-  public RemoveException() {
-    super();
-  }
+import com.routediary.enums.ErrorCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-  public RemoveException(String message) {
-    super(message);
+@NoArgsConstructor
+@Getter
+public class RemoveException extends Exception {
+  private ErrorCode errorCode;
+
+  public RemoveException(ErrorCode errorCode) {
+    super();
+    this.errorCode = errorCode;
   }
 }
+

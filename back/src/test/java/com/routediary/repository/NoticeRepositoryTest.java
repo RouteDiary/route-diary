@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import java.util.List;
-import org.apache.log4j.Logger;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,8 +11,6 @@ import com.routediary.dto.Notice;
 
 @SpringBootTest
 class NoticeRepositoryTest {
-  private Logger logger = Logger.getLogger(getClass());
-
   @Autowired
   NoticeRepository repository;
 

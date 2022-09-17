@@ -18,6 +18,13 @@ public interface NoticeRepository {
   public int selectCount();
 
   /**
+   * 공지사항 키워드에 해당하는 갯수를 반환.
+   * 
+   * @return int
+   */
+  public int selectCountByKeyword(@Param("keyword") String keyword);
+
+  /**
    * 공지사항을 추가한다.
    *
    * @param notice
@@ -60,7 +67,6 @@ public interface NoticeRepository {
 
   /**
    * 공지사항의 조회수(notice_view_cnt)를 증가함
-<<<<<<< HEAD
    *
    * @param noticeNo
    */
@@ -74,10 +80,4 @@ public interface NoticeRepository {
    * @return int
    */
   public int selectLatestNoticeNo();
-=======
-   * 
-   * @param noticeNo
-   */
-  public void updateViewCnt(int NoticeNo);
->>>>>>> 72c97bd (Feat: diary service, control 기능 완성)
 }

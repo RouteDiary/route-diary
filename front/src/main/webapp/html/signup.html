@@ -1,91 +1,85 @@
 <!DOCTYPE html>
 <html>
-  <head>
     <meta charset="utf-8" />
-    <title>signup.html</title>
-    <link rel="stylesheet" href="../css/signup.css" />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
-    <script src="../js/signup.js"></script>
-  </head>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="../resource/static/css/bootstrap.css" />
+    <link rel="stylesheet" href="../css/signup.css" />
+    <script src="../js/signup.js"></script>
+    <script src="../resource/static/js/bootstrap.js"></script>
+  </head>
+  <title>회원가입</title>
+  
   <body>
-    <div class="layout">
-      <h1>회원가입</h1>
-      <form class="signup" action="/back/signup" method="post">
-        <label id="client_id">아이디:</label>
-        <input
-          type="email"
-          name="client_id"
-          id="client_id"
-          placeholder="Email주소를 입력해 주세요."
-          required="required"
-        />
-        <button
-          id="idduplicationcheck"
-          name="idduplicationcheck"
-          type="submit"
-          required
-        >
-          아이디중복확인
-        </button>
-        <br />
-        <label id="pwd">비밀번호:</label>
-        <input
-          type="password"
-          name="client_pwd"
-          id="pwd"
-          placeholder="비밀번호를 입력해 주세요."
-          required="required"
-        />
-        <br />
-        <label id="pwd_check">비밀번호확인:</label>
-        <input
-          type="password"
-          id="pwd_check"
-          class="client_pwd_check"
-          placeholder="비밀번호를 확인해 주세요."
-          required="required"
-        />
-        <br />
-        <label id="client_nickname">닉네임:</label>
-        <input
-          type="text"
-          name="client_nickname"
-          id="client_nickname"
-          placeholder="닉네임을 입력해 주세요."
-          required="required"
-        />
-        <button
-          id="nicknameduplicationcheck"
-          name="nicknameduplicationcheck"
-          type="submit"
-          required
-        >
-          닉네임중복확인
-        </button>
-        <br />
-        <label id="client_cellphone_no">휴대전화번호</label>
-        <input
-          type="text"
-          name="client_cellphone_no"
-          id="client_cellphone_no"
-          placeholder="전화번호를 입력해 주세요."
-          required="required"
-        />
-        <br />
-        <input type="submit" value="SIGNUP" />
-        <input type="reset" value="CLEAR" />
+    <div class="signup_form">
+      <form class="signup_form" onsumbmit="return false;" method="post" action="http://localhost:9997/back/client/signup">
+        <div class="row">
+          <div class="col-8 offset-4">
+            <h2>회원가입</h2>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-form-label col-4">ID(E-MAIL)</label>
+          <div class="col-8">
+            <input
+              type="email"
+              class="form-control id"
+              required="required"
+            />
+          </div>
+        </div>
+        <!-- <button type="button" class="btn btn-primary idcheck">ID중복체크</button> -->
+        <div class="form-group row">
+          <label class="col-form-label col-4">비밀번호</label>
+          <div class="col-8">
+            <input
+              type="password"
+              class="form-control pwd"
+              required="required"
+            />
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-form-label col-4">비밀번호확인</label>
+          <div class="col-8">
+            <input
+            type="password"
+              class="form-control pwd-check"
+              required="required"
+            />
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-form-label col-4">닉네임</label>
+          <div class="col-8">
+            <input
+              type="text"
+              class="form-control nickname"
+              required="required"
+            />
+          </div>
+        </div>
+        <!-- <button type="button" class="btn btn-primary nicknamecheck"> 닉네임중복체크</button> -->
+        <div class="form-group row">
+          <label class="col-form-label col-4">휴대전화번호</label>
+          <div class="col-8">
+            <input
+              type="text"
+              class="form-control cellphone-no"
+              required="required"
+            />
+          </div>
+        </div>
+        <input type="submit" class="btn btn-primary btn-lg" value="가입"/>
       </form>
+      <div class="text-center">
+        이미 가입했나요? <a href="../html/login.html">로그인</a>
+      </div>
     </div>
-    <br />
-    <a class="kakao_signup_botton">
-      <img
-        src="../resource/kakao_signup.png"
-        width="200px"
-        height="40px"
-        alt="카카오 회원가입 버튼"
-      />
-    </a>
   </body>
 </html>

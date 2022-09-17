@@ -16,9 +16,7 @@ import com.routediary.dto.Diary;
 import com.routediary.dto.Hashtag;
 import com.routediary.dto.PageBean;
 import com.routediary.dto.Route;
-import com.routediary.exception.AddException;
 import com.routediary.exception.FindException;
-import com.routediary.exception.RemoveException;
 import com.routediary.repository.CommentRepository;
 import com.routediary.repository.DiaryRepository;
 import com.routediary.repository.HashtagRepository;
@@ -71,7 +69,7 @@ class DiaryServiceTest {
 
 
   @Test
-  void removeDiaryTest() throws RemoveException, FindException {
+  void removeDiaryTest() throws Exception {
 
     // 성공하는 경우의 수
     // int diaryNo = 1;
@@ -103,7 +101,7 @@ class DiaryServiceTest {
   }
 
   @Test
-  void showDiaryBoardTest() throws FindException {
+  void showDiaryBoardTest() throws Exception {
     PageBean<Diary> pageBean = diarySerivce.showDiaryBoard(1, 20, null);
     int expectedDiariesCount = 6;
     int expectedTotalPage = 20;
@@ -116,7 +114,7 @@ class DiaryServiceTest {
   }
 
   @Test
-  void showDiaryTest() throws FindException {
+  void showDiaryTest() throws Exception {
     int diaryNo = 1;
     Diary d = diarySerivce.showDiary(diaryNo);
     d.setDiaryNo(diaryNo);
@@ -197,7 +195,7 @@ class DiaryServiceTest {
   }
 
   @Test
-  void writeCommentTest() throws AddException {
+  void writeCommentTest() throws Exception {
     Client client = new Client();
     Comment comment = new Comment();
     client.setClientId("japanwoman@gmail.com");

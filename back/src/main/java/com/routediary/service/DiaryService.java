@@ -9,7 +9,9 @@ import com.routediary.dto.Like;
 import com.routediary.dto.PageBean;
 import com.routediary.exception.AddException;
 import com.routediary.exception.FindException;
+import com.routediary.exception.InvalidActionException;
 import com.routediary.exception.ModifyException;
+import com.routediary.exception.NumberNotFoundException;
 import com.routediary.exception.RemoveException;
 
 public interface DiaryService {
@@ -71,10 +73,12 @@ public interface DiaryService {
    * 
    * @param isLike
    * @param like
-   * @throws AddException
+   * @throws InvalidActionException
    * @throws RemoveException
+   * @throws AddException
    */
-  public void clickLikeToggle(boolean isLike, Like like) throws AddException, RemoveException;
+  public void clickLikeToggle(boolean isLike, Like like)
+      throws AddException, RemoveException, InvalidActionException;
 
   /**
    * 페이지에 해당하는 다이어리들을 반환한다. (비공개상태의 다이어리는 제외)
@@ -90,9 +94,10 @@ public interface DiaryService {
    * @param hashtags
    * @return PageBean<Diary>
    * @throws FindException
+   * @throws NumberNotFoundException
    */
   public PageBean<Diary> showDiaryBoard(int order, int currentPage, List<String> hashtags)
-      throws FindException;
+      throws FindException, NumberNotFoundException;
 
 
   /**
@@ -106,13 +111,14 @@ public interface DiaryService {
   public PageBean<Diary> showMyDiaryBoard(int currentPage, String clientId) throws FindException;
 
   /**
-   * Diary(다이어리) 객체를 반환한다. (화면에 띄우기 위해 필요한 모든 정보를 객체가 담고 있어야함)
+   * Diary(다이어리) 객체를 반환한다. (화면에 띄우기 위해 필요한 모든 정보를 담고 있음)
    * 
    * @param diaryNo
    * @return Diary
    * @throws FindException
+   * @throws NumberNotFoundException
    */
-  public Diary showDiary(int diaryNo) throws FindException;
+  public Diary showDiary(int diaryNo) throws FindException, NumberNotFoundException;
 
   /**
    * 각각 좋아요(diary_like_cnt)순, 작성일자(diary_writing_time)순으로 상위 5개의 다이어리를 반환 (베스트 다이어리)

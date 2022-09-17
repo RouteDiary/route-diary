@@ -1,77 +1,28 @@
-$(() => {
-  //일반 로그인
-  let $form = $("form.general_login");
-  let url = "/back/login";
-  $form.submit(() => {
-    let $clidntId = $("input[name=client_id]").val();
-    let $clidntPwd = $("input[name=client_pwd]").val();
-    let data = "client_id=" + $clidntId + "&client_pwd=" + $clidntPwd;
-
+$(function () {
+  let $form = $("form.login_form");
+  $form.submit(function () {
+    let url = "http://localhost:9997/back/client/login";
+    let $clientId = $("input.form-control.client-id");
+    let $clientPwd = $("input.form-control.client-pwd");
+    let loginData = { clientId: $clientId.val(), clientPwd: $clientPwd.val() };
+    let loginJson = JSON.stringify(loginData);
     $.ajax({
       url: url,
       method: "post",
-      data: data,
-      success: (jsonObj) => {
-        if (jsonObj.status == 1) {
-          location.href = "/front/html/index1.html";
-        } else {
-          alert(jsonObj.message);
-        }
+      contentType: "application/json",
+      data: loginJson,
+      headers: {
+        "content-Type": "application/json",
       },
-      error: (jqXHR, textStatus, errorThrown) => {
-        errorThrown = "로그인에 실패하였습니다.";
-        alert(errorThrown + " 사유 : " + jqXHR.status);
+      success: function (jsonObj) {
+        alert(jsonObj.message);
+        location.href = "index.html";
+      },
+
+      error: function (jqXHR) {
+        alert(" 에러 : [" + jqXHR.message + "]");
       },
     });
     return false;
-  });
-
-  //카카오 로그인
-  $kakaoLoginButton = $("a.kakao_login_botton");
-  Kakao.init("d3920eee159898958abaa00fc8f0ca01"); //발급받은 javascript키를 사용
-  console.log("sdk초기화여부판단 - " + Kakao.isInitialized()); // sdk초기화여부판단
-  isGottenKakaoIdFromAPI = false;
-  $kakaoLoginButton.click(() => {
-    Kakao.Auth.login({
-      success: (response) => {
-        Kakao.API.request({
-          url: "/v2/user/me",
-          success: (response) => {
-            kakaoId = response.id;
-            isGottenKakaoIdFromAPI = true;
-            console.log(kakaoId);
-          },
-          fail: (response) => {
-            console.log(error);
-          },
-        });
-      },
-      fail: (response) => {
-        console.log(error);
-      },
-    });
-
-    if (isGottenKakaoIdFromAPI == true) {
-      console.log(kakaoId + " in Ajax");
-      let url = "/back/kakaologin";
-      let data = "client_id=" + kakaoId;
-      $.ajax({
-        url: url,
-        method: "post",
-        data: data,
-        success: (jsonObj) => {
-          if (jsonObj.status == 1) {
-            location.href = "/front/html/index.html";
-          } else {
-            alert(jsonObj.message);
-          }
-        },
-        error: (jqXHR, textStatus, errorThrown) => {
-          errorThrown = "로그인에 실패하였습니다.";
-          alert(errorThrown + " 사유 : " + jqXHR.status);
-        },
-      });
-      return false;
-    }
   });
 });

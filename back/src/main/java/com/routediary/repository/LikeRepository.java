@@ -10,7 +10,6 @@ import com.routediary.dto.Like;
 public interface LikeRepository {
   /**
    * DB에 있는 like 행을 찾아 반환함
-<<<<<<< HEAD
    *
    * @param diaryNo
    * @param clientId
@@ -31,28 +30,6 @@ public interface LikeRepository {
    *
    * @param like
    */
-=======
-   * 
-   * @param diaryNo
-   * @param clientId
-   * @return Like
-   */
-  public Like selectLike(@Param("diaryNo") int diaryNo, @Param("clientId") String clientId);
-
-  /**
-   * diaryNo에 해당하는 다이어리의 좋아요 수를 반환함
-   * 
-   * @param diaryNo
-   * @return int
-   */
-  public int selectCount(int diaryNo);
-
-  /**
-   * 좋아요 행을 추가한다.
-   * 
-   * @param like
-   */
->>>>>>> 72c97bd (Feat: diary service, control 기능 완성)
   public void insert(Like like);
 
   /**

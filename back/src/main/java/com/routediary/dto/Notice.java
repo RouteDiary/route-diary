@@ -1,7 +1,6 @@
 package com.routediary.dto;
 
 import java.util.Date;
-import java.util.List;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,5 +21,4 @@ public class Notice {
   private Date noticeModifyingTime;
   private Integer noticeViewCnt;
   private String adminId;
-  private List<NoticeImage> noticeImages;
 }
