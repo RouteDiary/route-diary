@@ -1,0 +1,83 @@
+.pagegroup {
+  text-align: center;
+  font-size: 12px;
+  padding: 10px 0;
+}
+.pagegroup a,
+.pagegroup span {
+  display: inline-block;
+  padding: 0 10px;
+  height: 28px;
+  line-height: 28px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  text-decoration: none;
+  color: rgb(6, 40, 174);
+  cursor: pointer;
+  margin-right: 5px;
+}
+.pagegroup a:hover:not(.disabled):not(.current),
+.pagegroup span:hover:not(.disabled):not(.current) {
+  color: #f04848;
+}
+.pagegroup a.disabled,
+.pagegroup span.disabled {
+  color: #bfbfbf;
+  background: #f5f5f5;
+  cursor: no-drop;
+  border: 1px solid #ddd;
+}
+.pagegroup a.current,
+.pagegroup span.current {
+  color: #fff;
+  background: #f04848;
+  border: 1px solid #f04848;
+}
+.search {
+  margin: auto;
+  text-align: center;
+  padding: 20px;
+}
+.write {
+  text-align: center;
+  margin-top: 5px;
+}
+
+.navbar {
+  background: #dfe152;
+}
+.nav-link:hover {
+  background: #f4f4f4;
+  color: #f97300;
+}
+
+.navbar-collapse {
+  justify-content: flex-end;
+}
+.navbar-toggler {
+  background: #fff !important;
+}
+.navbar-collapse {
+  justify-content: flex-end;
+}
+
+footer {
+  position: absolute;
+  height: 200px;
+  margin-bottom: 0vw;
+  width: 100%;
+  padding: 0 25px;
+  background-color: #282828;
+  color: white;
+}
+footer > aside a {
+  color: rgb(11, 11, 11);
+}
+footer > aside > ul {
+  list-style-type: none;
+  padding-left: 0px;
+}
+footer > aside > span {
+  background-color: #282828;
+  height: 100px;
+}

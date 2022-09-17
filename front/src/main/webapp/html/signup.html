@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="../resource/static/css/bootstrap.css" />
+    <link rel="stylesheet" href="../css/signup.css" />
+    <script src="../js/init.js"></script>
+    <script src="../js/signup.js"></script>
+    <script src="../resource/static/js/bootstrap.js"></script>
+  </head>
+  <title>회원가입</title>
+  
+  <body>
+        <!-- navbar -->
+        <nav class="navbar navbar-expand-lg fixed-top">
+          <a class="navbar-brand" href="index.html">Route Diary</a>
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-4">
+              <li class="nav-item">
+                <a class="nav-link" data-value="Notice" href="notice_list.html"
+                  >공지사항</a
+                >
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" data-value="DiaryBoard" href="diary_board.html"
+                  >다이어리 게시판</a
+                >
+              </li>
+              <li class="nav-item my-diary-board"></li>
+              <li class="nav-item write-diary"></li>
+              <li class="nav-item client-update"></li>
+            </ul>
+          </div>
+        </nav>
+        <br /><br /><br />
+    <div class="signup_form">
+      <form class="signup_form">
+        <div class="row">
+          <div class="col-8 offset-4">
+            <h2>회원가입</h2>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-form-label col-4">ID(E-MAIL)</label>
+          <div class="col-8">
+            <input
+              type="email"
+              class="form-control id"
+              required="required"
+            />
+          </div>
+        </div>
+        <!-- <button type="button" class="btn btn-primary idcheck">ID중복체크</button> -->
+        <div class="form-group row">
+          <label class="col-form-label col-4">비밀번호</label>
+          <div class="col-8">
+            <input
+              type="password"
+              class="form-control pwd"
+              required="required"
+            />
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-form-label col-4">비밀번호확인</label>
+          <div class="col-8">
+            <input
+            type="password"
+              class="form-control pwd-check"
+              required="required"
+            />
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-form-label col-4">닉네임</label>
+          <div class="col-8">
+            <input
+              type="text"
+              class="form-control nickname"
+              required="required"
+            />
+          </div>
+        </div>
+        <!-- <button type="button" class="btn btn-primary nicknamecheck"> 닉네임중복체크</button> -->
+        <div class="form-group row">
+          <label class="col-form-label col-4">휴대전화번호</label>
+          <div class="col-8">
+            <input
+              type="text"
+              class="form-control cellphone-no"
+              required="required"
+            />
+          </div>
+        </div>
+        <input type="submit" class="btn btn-primary btn-lg" value="가입"/>
+      </form>
+      <div class="text-center">
+        이미 가입했나요? <a href="../html/login.html">로그인</a>
+      </div>
+    </div>
+
+    <footer>
+      <aside>
+        <a class="lucky_7k" href="">개인정보처리방침</a>
+        <ul class="compay_menu">
+          <li>TEL : 1522-1234</li>
+          <li>e-mail : lucky_7k@kosta.com</li>
+          <li>사업자등록번호 : 1234567890</li>
+          <li>(株)lucky_7k Company korea 대표이사 : 김준용</li>
+        </ul>
+        <span class="7k"
+          >ⓒ 2022 kosta lucky_7k Company. All Rights Reserved.</span
+        >
+      </aside>
+    </footer>
+  </body>
+</html>

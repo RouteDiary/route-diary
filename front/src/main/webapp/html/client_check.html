@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>비밀번호 확인</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="../resource/static/css/bootstrap.css" />
+    <script src=" ../resource/static/js/bootstrap.js"></script>
+    <link rel="stylesheet" href="../css/client_check.css" />
+    <script src="../js/init.js"></script>
+    <script src="../js/client_check.js"></script>
+  </head>
+
+  <body>
+    <!-- navbar -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+      <a class="navbar-brand" href="index.html">Route Diary</a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-4">
+          <li class="nav-item">
+            <a class="nav-link" data-value="Notice" href="notice_list.html"
+              >공지사항</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-value="DiaryBoard" href="diary_board.html"
+              >다이어리 게시판</a
+            >
+          </li>
+          <li class="nav-item my-diary-board"></li>
+          <li class="nav-item write-diary"></li>
+          <li class="nav-item client-update"></li>
+          <li class="nav-item login">
+            <a class="nav-link login" data-value="Login" href="login.html"
+              >로그인</a
+            >
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <br /><br /><br />
+    <div class="clientupdate">
+      <h1>비밀번호확인</h1>
+      <hr />
+      <div class="form-group">
+        <label for="client-id">ID</label>
+        <input
+          type="email"
+          class="form-control client-id"
+          id="client-id"
+          aria-describedby="emailHelp"
+          readonly="readonly"
+          required
+        />
+      </div>
+      <div class="form-group">
+        <label for="client-pwd">비밀번호</label>
+        <input
+          type="password"
+          class="form-control client-pwd"
+          id="client-pwd"
+          required
+        />
+      </div>
+      <input type="hidden" class="client-pwd-check" />
+      <br /><br />
+      <button class="btn btn-primary back" type="button">
+        <a href="javascript:history.back();">이전 페이지로 이동</a>
+      </button>
+      <button type="click" class="btn btn-primary check">확인</button>
+    </div>
+
+    <footer>
+      <aside>
+        <a class="lucky_7k" href="">개인정보처리방침</a>
+        <ul class="compay_menu">
+          <li>TEL : 1522-1234</li>
+          <li>e-mail : lucky_7k@kosta.com</li>
+          <li>사업자등록번호 : 1234567890</li>
+          <li>(株)lucky_7k Company korea 대표이사 : 김준용</li>
+        </ul>
+        <span class="7k"
+          >ⓒ 2022 kosta lucky_7k Company. All Rights Reserved.</span
+        >
+      </aside>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,45 @@
+body {
+  text-decoration-line: none;
+}
+.clientupdate {
+  margin: 20%;
+}
+
+.navbar {
+  background: #dfe152;
+}
+.nav-link:hover {
+  background: #f4f4f4;
+  color: #f97300;
+}
+
+.navbar-collapse {
+  justify-content: flex-end;
+}
+.navbar-toggler {
+  background: #fff !important;
+}
+.navbar-collapse {
+  justify-content: flex-end;
+}
+
+footer {
+  position: absolute;
+  height: 200px;
+  margin-bottom: 0vw;
+  width: 100%;
+  padding: 0 25px;
+  background-color: #282828;
+  color: white;
+}
+footer > aside a {
+  color: rgb(11, 11, 11);
+}
+footer > aside > ul {
+  list-style-type: none;
+  padding-left: 0px;
+}
+footer > aside > span {
+  background-color: #282828;
+  height: 100px;
+}

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="../js/init.js"></script>
+    <script src="../js/notice_list.js"></script>
+    <link href="../css/notice_list.css" rel="stylesheet" />
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="../resource/static/css/bootstrap.min.css"/>
+
+    <title>공지사항 보기</title>
+  </head>
+  <body>
+    <script src="../resource/static/js/bootstrap.min.js"></script>
+    <!-- navbar -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+      <a class="navbar-brand" href="index.html">Route Diary</a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-4">
+          <li class="nav-item">
+            <a class="nav-link" data-value="Notice" href="notice_list.html"
+              >공지사항</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-value="DiaryBoard" href="diary_board.html"
+              >다이어리 게시판</a
+            >
+          </li>
+          <li class="nav-item my-diary-board"></li>
+          <li class="nav-item write-diary"></li>
+          <li class="nav-item client-update"></li>
+          <li class="nav-item login">
+            <a class="nav-link login" data-value="Login" href="login.html"
+              >로그인</a
+            >
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <br /><br /><br />
+    <!-- <div class="search">
+      <div class="searchInput">
+        <input type="search" name="keyword" placeholder="제목이나 아이디 검색" />
+        <a href="#" class="searchBtn">검색</a>
+      </div>
+    </div> -->
+    <div class="notice">
+    <table class="table notice_board">
+      <thead>
+        <tr class="table-info notice_column">
+          <th scope="col">#</th>
+          <th scope="col">제목</th>
+          <th scope="col">작성자</th>
+          <th scope="col">조회수</th>
+          <th scope="col">작성날짜</th>
+          <!-- <th scope="col">수정시간</th> -->
+        </tr>
+      </thead>
+      <tbody class="table-hover notice_tbody">
+        <tr class="table-light notice_tr">
+          <th scope="row" class ="notice_th"></th>
+          <td class="notice_td1" ></td>
+          <td class="notice_td2"></td>
+          <td class="notice_td3"></td>
+          <td class="notice_td4"></td>
+          <td class="notice_td5"></td>
+          </a>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+     <!-- 페이징 시작 -->
+    <div class="pagegroup"></div>
+    <div class="write">
+
+      <!-- <button type="button" class="btn btn-sm btn-primary" id="btnSave">공지사항 작성</button> -->
+    </div>
+
+    <div class="search">
+      <div class="searchInput">
+        <input type="search" name="keyword" placeholder="제목이나 내용 검색" />
+        <a href="" class="searchBtn">검색</a>
+      </div>
+    </div>
+  
+
+    <footer>
+      <aside>
+        <a class="lucky_7k" href="">개인정보처리방침</a>
+        <ul class="compay_menu">
+          <li>TEL : 1522-1234</li>
+          <li>e-mail : lucky_7k@kosta.com</li>
+          <li>사업자등록번호 : 1234567890</li>
+          <li>(株)lucky_7k Company korea 대표이사 : 김준용</li>
+        </ul>
+        <span class="7k"
+          >ⓒ 2022 kosta lucky_7k Company. All Rights Reserved.</span
+        >
+      </aside>
+    </footer>
+  </body>
+
+</html>
