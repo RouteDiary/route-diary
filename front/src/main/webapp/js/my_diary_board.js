@@ -94,7 +94,6 @@ $(() => {
               $imgObj.attr("src", url);
               $imgObj.attr("alt", "다이어리이미지");
             },
-            error: (jqXHR) => {},
           });
           // 다이어리 내용 불러오기
           let $url = $copyObj.find("a.link");
@@ -124,7 +123,11 @@ $(() => {
         $tdObj.hide();
       },
       error: (jqXHR) => {
-        alert("에러 : " + jqXHR.status);
+        if (jqXHR.status == 500) {
+          alert("서버 오류 : " + jqXHR.status);
+        } else {
+          alert(jqXHR.status + "오류 : " + jqXHR.responseJSON.message);
+        }
       },
     });
   }

@@ -87,7 +87,13 @@ $(() => {
         }
         $pagegroup.html($pagegroupHtml);
       },
-      error: (jqXHR) => {},
+      error: (jqXHR) => {
+        if (jqXHR.status == 500) {
+          alert("서버 오류 : " + jqXHR.status);
+        } else {
+          alert(jqXHR.status + "오류 : " + jqXHR.responseJSON.message);
+        }
+      },
     });
   }
   showNotice(`${backPath}/notice/list/1`);

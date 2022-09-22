@@ -28,8 +28,12 @@ $(() => {
           alert("중복된 닉네임");
         }
       },
-      error: (jqXHR, textStatus, errorThrown) => {
-        alert(jqXHR.message);
+      error: (jqXHR) => {
+        if (jqXHR.status == 500) {
+          alert("서버 오류 : " + jqXHR.status);
+        } else {
+          alert(jqXHR.status + "오류 : " + jqXHR.responseJSON.message);
+        }
       },
     });
     return false;
@@ -100,7 +104,11 @@ $(() => {
         location.href = "login.html";
       },
       error: (jqXHR) => {
-        alert("회원가입 실패 : " + jqXHR.message);
+        if (jqXHR.status == 500) {
+          alert("서버 오류 : " + jqXHR.status);
+        } else {
+          alert(jqXHR.status + "오류 : " + jqXHR.responseJSON.message);
+        }
       },
     });
     return false;

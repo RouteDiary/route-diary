@@ -91,8 +91,12 @@ $(() => {
         $hashtagFormObj.val(hashtagsVal);
       }
     },
-    error: (jqXHR, textStatus, errorThrown) => {
-      alert(" 에러. 사유 : " + jqXHR.message);
+    error: (jqXHR) => {
+      if (jqXHR.status == 500) {
+        alert("서버 오류 : " + jqXHR.status);
+      } else {
+        alert(jqXHR.status + "오류 : " + jqXHR.responseJSON.message);
+      }
     },
   });
   //-----카카오 맵 지도 생성 관련 코드-----
@@ -500,10 +504,10 @@ $(() => {
         location.href = "view_diary.html?diaryNo=" + diaryNo;
       },
       error: (jqXHR) => {
-        if (jqXHR.status == 400) {
-          alert(jqXHR.responseJSON.message);
+        if (jqXHR.status == 500) {
+          alert("서버 오류 : " + jqXHR.status);
         } else {
-          alert("알 수 없는 에러[" + jqXHR.status + "]");
+          alert(jqXHR.status + "오류 : " + jqXHR.responseJSON.message);
         }
       },
     });

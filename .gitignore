@@ -2,7 +2,7 @@
 .metadata/
 back/.mvn/src/main/webapp/resource
 front/src/main/webapp/resource
-
+Servers/
 
 ### Java ###
 # Compiled class file
@@ -10,6 +10,7 @@ front/src/main/webapp/resource
 
 # Log file
 *.log
+log_info.txt
 
 # BlueJ files
 *.ctxt
@@ -24,6 +25,7 @@ front/src/main/webapp/resource
 *.zip
 *.tar.gz
 *.rar
+*.gz
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
@@ -128,4 +130,9 @@ back/.classpath
 
 back/src/main/webapp/WEB-INF/web.xml
 
+
+# admin project
 back/src/main/java/com/routediary/control/AdminController.java
+front/src/main/webapp/html/a_*
+front/src/main/webapp/css/a_*
+front/src/main/webapp/js/a_*

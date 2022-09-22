@@ -61,14 +61,14 @@ $(() => {
             //이미지 다운로드용 설정 (필수)
             responseType: "blob",
           },
-          success: function (responseData) {
+          success: (responseData) => {
             let url = URL.createObjectURL(responseData);
             let $imgObj = $copyImageObj.find("img.notice_image");
             $imgObj.attr("src", url);
             $imgObj.attr("style", "width:300px");
             $imgObj.attr("alt", "공지사항이미지");
           },
-          error: function (jqXHR) {
+          error: (jqXHR) => {
             //응답실패
             alert("이미지 다운로드 에러:" + jqXHR.status);
           },
@@ -95,7 +95,11 @@ $(() => {
       }
     },
     error: (jqXHR) => {
-      alert("에러:" + jqXHR.status);
+      if (jqXHR.status == 500) {
+        alert("서버 오류 : " + jqXHR.status);
+      } else {
+        alert(jqXHR.status + "오류 : " + jqXHR.responseJSON.message);
+      }
     },
   });
   //   --- 세션 받아오면 사용해봐야함 ;;
@@ -119,7 +123,11 @@ $(() => {
         location.href = "./notice_list.html";
       },
       error: (jqXHR) => {
-        alert("에러:" + jqXHR.message);
+        if (jqXHR.status == 500) {
+          alert("서버 오류 : " + jqXHR.status);
+        } else {
+          alert(jqXHR.status + "오류 : " + jqXHR.responseJSON.message);
+        }
       },
     });
   });

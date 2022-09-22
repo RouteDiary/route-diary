@@ -1,15 +1,13 @@
 $(() => {
   let queryString = location.search.substring(1); //다이어리 목록에서 다이어리 1개를 선택 했을 때 ?에 대한 값을 가져오는 역할
   let diary_no = queryString.split("=")[1]; //=로 split으로 나눈 1번 인덱스
+
   $.ajax({
     url: `${backPath}/diary/` + diary_no,
     method: "GET",
-    error: (jqXHR) => {
-      alert(jqXHR.stauts);
-    },
     success: (jsonObj) => {
       console.log(jsonObj);
-      // let resultBeanObj = jsonObj;
+
       // nav bar start
       if (jsonObj.loginInfo == null) {
         let loginHtml =
@@ -30,6 +28,7 @@ $(() => {
         $("li.nav-item.login").html(logoutHtml);
       }
       //navbar end
+
       //--다이어리 정보 호출--
       let loginedId = jsonObj.t.loginedId;
       $("div.diary input.loginedId").val(loginedId);
@@ -83,13 +82,20 @@ $(() => {
             $imgObj.attr("src", url);
             $imgObj.attr("alt", "다이어리이미지");
           },
-          error: (jqXHR) => {},
         });
 
         $("div.images").append($copyImageObj);
       }
       $imageObj.hide();
 
+      //--다이어리 수정버튼 생성
+      if (clientId == loginedId) {
+        $("div.modify").html(
+          '<button type="button" ><a href="diary_modify.html?diaryNo=' +
+            diary_no +
+            '">다이어리 수정</a></button>'
+        );
+      }
       //--해시태그 for문--
       let hashtags = jsonObj.t.diary.hashtags;
       let hashtagsStr = "";
@@ -235,6 +241,13 @@ $(() => {
           alert(jsonObj.message);
         }
       },
+      error: (jqXHR) => {
+        if (jqXHR.status == 500) {
+          alert("서버 오류 : " + jqXHR.status);
+        } else {
+          alert(jqXHR.status + "오류 : " + jqXHR.responseJSON.message);
+        }
+      },
     });
     return false;
   });
@@ -249,14 +262,12 @@ $(() => {
         .siblings("input.commentContent")
         .attr({ readonly: false, onfocus: false });
       $(e.currentTarget).html("수정완료");
-      alert("댓글을 수정하세요");
     } else {
       $(e.target)
         .siblings("input.commentContent")
         .attr({ readonly: "readonly", onfocus: "this.blur()" });
 
       $(e.currentTarget).html("수정");
-      alert("댓글 수정완료");
     }
     let clientId = $(e.target).siblings("span.clientId").html();
     console.log("아이디:" + clientId);
@@ -290,8 +301,11 @@ $(() => {
         }
       },
       error: (jqXHR) => {
-        alert("수정 권한이 업습니다.:" + jqXHR.status);
-        location.reload();
+        if (jqXHR.status == 500) {
+          alert("서버 오류 : " + jqXHR.status);
+        } else {
+          alert(jqXHR.status + "오류 : " + jqXHR.responseJSON.message);
+        }
       },
     });
     return false;
@@ -311,7 +325,6 @@ $(() => {
       commentNo: commentNo,
       client: { clientId: clientId },
     };
-    alert("삭제되었습니다.");
 
     $.ajax({
       url: `${backPath}/diary/` + diaryNo + "/comment",
@@ -326,7 +339,11 @@ $(() => {
         }
       },
       error: (jqXHR) => {
-        alert("삭제 권한이 없습니다.:" + jqXHR.status);
+        if (jqXHR.status == 500) {
+          alert("서버 오류 : " + jqXHR.status);
+        } else {
+          alert(jqXHR.status + "오류 : " + jqXHR.responseJSON.message);
+        }
       },
     });
     return false;
@@ -365,7 +382,11 @@ $(() => {
         }
       },
       error: (jqXHR) => {
-        alert("에러:" + jqXHR.status);
+        if (jqXHR.status == 500) {
+          alert("서버 오류 : " + jqXHR.status);
+        } else {
+          alert(jqXHR.status + "오류 : " + jqXHR.responseJSON.message);
+        }
       },
     });
     return false;
@@ -393,7 +414,11 @@ $(() => {
         }
       },
       error: (jqXHR) => {
-        alert("에러:" + jqXHR.message);
+        if (jqXHR.status == 500) {
+          alert("서버 오류 : " + jqXHR.status);
+        } else {
+          alert(jqXHR.status + "오류 : " + jqXHR.responseJSON.message);
+        }
       },
     });
     return false;

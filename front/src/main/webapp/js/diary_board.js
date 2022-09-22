@@ -69,9 +69,15 @@ $(() => {
             '<a class="nav-link login" data-value="Login" href="login.html">로그인</a>';
           $("li.nav-item.login").html(loginHtml);
         } else {
+          let myDiaryBoardHtml =
+            '<a class="nav-link my-diary-board" data-value="MyDiaryBoard" href="my_diary_board.html">내 다이어리 게시판</a>';
+          $("li.nav-item.my-diary-board").html(myDiaryBoardHtml);
           let diaryWriteHtml =
-            '<a class="nav-link write-diary" data-value="DiaryWrite" href="notice_write.html" >공지사항 작성하기</a>';
+            '<a class="nav-link write-diary" data-value="DiaryWrite" href="diary_write.html" >다이어리 작성하기</a>';
           $("li.nav-item.write-diary").html(diaryWriteHtml);
+          let clientUpdateHtml =
+            '<a class="nav-link client-update" data-value="ClientUpdate" href="client_check.html" >회원정보 수정/탈퇴</a>';
+          $("li.nav-item.client-update").html(clientUpdateHtml);
           let logoutHtml =
             '<a class="nav-link logout" data-value="Logout" href="logout.html">로그아웃</a>';
           $("li.nav-item.login").html(logoutHtml);
@@ -103,7 +109,7 @@ $(() => {
 
           let diaryNo = item.diaryNo;
           $copyObj.on("click", () => {
-            location.href = "./a_view_diary.html?diaryNo=" + diaryNo;
+            location.href = "./view_diary.html?diaryNo=" + diaryNo;
           });
           // $url.attr("href", "./a_view_diary.html?diaryNo=" + diaryNo);
           let $like_cnt = $copyObj.find("div.like_cnt");
@@ -146,7 +152,6 @@ $(() => {
               $imgObj.attr("src", url);
               $imgObj.attr("alt", "다이어리이미지");
             },
-            error: (jqXHR) => {},
           });
 
           $("div.diary_board").append($copyObj); //div.table의 막내 자식으로 $copyObj를 추가
@@ -155,7 +160,11 @@ $(() => {
         $tdObj.hide();
       },
       error: (jqXHR) => {
-        alert("에러 : " + jqXHR.status);
+        if (jqXHR.status == 500) {
+          alert("서버 오류 : " + jqXHR.status);
+        } else {
+          alert(jqXHR.status + "오류 : " + jqXHR.responseJSON.message);
+        }
       },
     });
   }

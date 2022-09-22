@@ -60,7 +60,11 @@ $(() => {
         $buttonUpdateSubmit.show();
       },
       error: (jqXHR, textStatus, errorThrown) => {
-        alert("사용불가능한 닉네임 : " + jqXHR.status);
+        if (jqXHR.status == 500) {
+          alert("서버 오류 : " + jqXHR.status);
+        } else {
+          alert(jqXHR.status + "오류 : " + jqXHR.responseJSON.message);
+        }
       },
     });
     return false;
@@ -98,8 +102,11 @@ $(() => {
           location.href = "index.html";
         },
         error: (jqXHR, textStatus, errorThrown) => {
-          errorThrown = "회원정보수정에 실패하였습니다.";
-          alert(errorThrown + " 사유 : " + jqXHR.status);
+          if (jqXHR.status == 500) {
+            alert("서버 오류 : " + jqXHR.status);
+          } else {
+            alert(jqXHR.status + "오류 : " + jqXHR.responseJSON.message);
+          }
         },
       });
       return false;
@@ -125,8 +132,11 @@ $(() => {
         location.href = "index.html";
       },
       error: (jqXHR, textStatus, errorThrown) => {
-        errorThrown = "회원탈퇴에 실패하였습니다.";
-        alert(errorThrown + " 사유 : " + jqXHR.status);
+        if (jqXHR.status == 500) {
+          alert("서버 오류 : " + jqXHR.status);
+        } else {
+          alert(jqXHR.status + "오류 : " + jqXHR.responseJSON.message);
+        }
       },
     });
     return false;
