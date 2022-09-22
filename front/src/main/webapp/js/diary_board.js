@@ -5,6 +5,21 @@ $(() => {
   //1페이지 불러오기 (작성일자순)
   viewDiaryBoard(2, 1, null);
 
+  $("div.form-check").on("click", () => {
+    let hashtagsArr = new Array();
+    $(tagify.value).each((index, item) => {
+      console.log("item.value : " + item.value);
+      hashtagsArr.push(item.value);
+    });
+    let paramObj = {
+      hashtags: hashtagsArr,
+    };
+    let orderNo = $("input[name=order]:checked").val();
+    console.log(orderNo);
+    console.log("paramObj-------");
+    // console.log(paramObj);
+    viewDiaryBoard(orderNo, 1, paramObj);
+  });
   //페이지에 따른 다이어리 불러오기
   $("div.pagination").on("click", "span", (e) => {
     //해시태그
@@ -26,7 +41,9 @@ $(() => {
     } else {
       pageNo = parseInt($(e.target).html());
     }
+
     let orderNo = $("input[name=order]:checked").val();
+    console.log(orderNo);
     console.log("paramObj-------");
     console.log(paramObj);
     viewDiaryBoard(orderNo, pageNo, paramObj);
@@ -40,35 +57,34 @@ $(() => {
     // 변수선언끝
 
     $.ajax({
-      url: `${backPath}/diary/list/` + order + "/" + pageNo,
+      url: `${backPath}/admin/diary/list/` + order + `/` + pageNo,
       method: "get",
       data: hashtagsObj,
       dataType: "json",
       //contentType: "application/x-www-form-urlencoded; charset=UTF-8",
       success: (jsonObj) => {
-        console.log(jsonObj);
-        // nav bar start
+        //nav bar start
         if (jsonObj.loginInfo == null) {
           let loginHtml =
             '<a class="nav-link login" data-value="Login" href="login.html">로그인</a>';
           $("li.nav-item.login").html(loginHtml);
-        } else {
-          let myDiaryBoardHtml =
-            '<a class="nav-link my-diary-board" data-value="MyDiaryBoard" href="my_diary_board.html">내 다이어리 게시판</a>';
-          $("li.nav-item.my-diary-board").html(myDiaryBoardHtml);
-          let diaryWriteHtml =
-            '<a class="nav-link write-diary" data-value="DiaryWrite" href="diary_write.html" >다이어리 작성하기</a>';
-          $("li.nav-item.write-diary").html(diaryWriteHtml);
-          let clientUpdateHtml =
-            '<a class="nav-link client-update" data-value="ClientUpdate" href="client_check.html" >회원정보 수정/탈퇴</a>';
-          $("li.nav-item.client-update").html(clientUpdateHtml);
-          let logoutHtml =
-            '<a class="nav-link logout" data-value="Logout" href=' +
-            `${backPath}/client/logout` +
-            ">로그아웃</a>";
-          $("li.nav-item.login").html(logoutHtml);
-        }
-        //navbar end
+      } else {
+        let myDiaryBoardHtml =
+          '<a class="nav-link my-diary-board" data-value="MyDiaryBoard" href="my_diary_board.html">내 다이어리 게시판</a>';
+        $("li.nav-item.my-diary-board").html(myDiaryBoardHtml);
+        let diaryWriteHtml =
+          '<a class="nav-link write-diary" data-value="DiaryWrite" href="diary_write.html" >다이어리 작성하기</a>';
+        $("li.nav-item.write-diary").html(diaryWriteHtml);
+        let clientUpdateHtml =
+          '<a class="nav-link client-update" data-value="ClientUpdate" href="client_check.html" >회원정보 수정/탈퇴</a>';
+        $("li.nav-item.client-update").html(clientUpdateHtml);
+        let logoutHtml =
+          '<a class="nav-link logout" data-value="Logout" href="logout.html">로그아웃</a>';
+        $("li.nav-item.login").html(logoutHtml);
+      }
+        //nav bar end
+
+        console.log(jsonObj);
         //페이지 create
         $pageObj = $("div.pagination");
         let startPage = jsonObj.t.startPage;
@@ -89,38 +105,13 @@ $(() => {
         //다이어리 불러오기
         $(jsonObj.t.posts).each((index, item) => {
           let $copyObj = $tdObj.clone(); // tdObj의 복제본 만들기
-          let $imgObj = $copyObj.find("img");
-          // $imgObj.attr(
-          //   "src",
-          //   "D:/files/images/diary_images/diary" + diaryNo + "/thumbnail.png"
-          // );
-          // $imgObj.attr("alt", "썸네일이미지");
-          $.ajax({
-            url: `${backPath}/imagedownload`,
-            method: "get",
-            data: {
-              imageFileName: "thumbnail.png",
-              postNo: item.diaryNo,
-              dto: "diary",
-            },
+          // let $imgObj = $copyObj.find("img");
 
-            cache: false, //이미지 다운로드용 설정 (필수)
-            xhrFields: {
-              //이미지 다운로드용 설정 (필수)
-              responseType: "blob",
-            },
-            success: (responseData) => {
-              let url = URL.createObjectURL(responseData);
-              let $imgObj = $copyObj.find("img");
-              $imgObj.attr("src", url);
-              $imgObj.attr("alt", "다이어리이미지");
-            },
-            error: (jqXHR) => {},
-          });
-          // 다이어리 내용 불러오기
-          let $url = $copyObj.find("a.link");
           let diaryNo = item.diaryNo;
-          $url.attr("href", "view_diary.html?diaryNo=" + diaryNo);
+          $copyObj.on("click", () => {
+            location.href = "./view_diary.html?diaryNo=" + diaryNo;
+          });
+          // $url.attr("href", "./a_view_diary.html?diaryNo=" + diaryNo);
           let $like_cnt = $copyObj.find("div.like_cnt");
           $like_cnt.html("좋아요수 : " + item.diaryLikeCnt);
 
@@ -141,13 +132,39 @@ $(() => {
           let $view_cnt = $copyObj.find("div.view_cnt");
           $view_cnt.html("조회수 : " + item.diaryViewCnt);
 
+          $.ajax({
+            url: `${backPath}/imagedownload`,
+            method: "get",
+            data: {
+              imageFileName: "thumbnail.png",
+              postNo: item.diaryNo,
+              dto: "diary",
+            },
+
+            cache: false, //이미지 다운로드용 설정 (필수)
+            xhrFields: {
+              //이미지 다운로드용 설정 (필수)
+              responseType: "blob",
+            },
+            success: (responseData) => {
+              let url = URL.createObjectURL(responseData);
+              let $imgObj = $copyObj.find("img");
+              $imgObj.attr("src", url);
+              $imgObj.attr("alt", "다이어리이미지");
+            },
+          });
+
           $("div.diary_board").append($copyObj); //div.table의 막내 자식으로 $copyObj를 추가
           $copyObj.addClass("copy");
         });
         $tdObj.hide();
       },
       error: (jqXHR) => {
-        alert("에러 : " + jqXHR.status);
+        if (jqXHR.status == 500) {
+          alert("서버 오류 : " + jqXHR.status);
+        } else {
+          alert(jqXHR.status + "오류 : " + jqXHR.responseJSON.message);
+        }
       },
     });
   }

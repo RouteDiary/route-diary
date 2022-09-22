@@ -24,9 +24,7 @@ $(() => {
           '<a class="nav-link client-update" data-value="ClientUpdate" href="client_check.html" >회원정보 수정/탈퇴</a>';
         $("li.nav-item.client-update").html(clientUpdateHtml);
         let logoutHtml =
-          '<a class="nav-link logout" data-value="Logout" href=' +
-          `${backPath}/client/logout` +
-          ">로그아웃</a>";
+          '<a class="nav-link logout" data-value="Logout" href="logout.html">로그아웃</a>';
         $("li.nav-item.login").html(logoutHtml);
       }
       //navbar end
@@ -63,14 +61,14 @@ $(() => {
             //이미지 다운로드용 설정 (필수)
             responseType: "blob",
           },
-          success: function (responseData) {
+          success: (responseData) => {
             let url = URL.createObjectURL(responseData);
             let $imgObj = $copyImageObj.find("img.notice_image");
             $imgObj.attr("src", url);
-            $imgObj.attr("style", "height:100vw");
+            $imgObj.attr("style", "width:300px");
             $imgObj.attr("alt", "공지사항이미지");
           },
-          error: function (jqXHR) {
+          error: (jqXHR) => {
             //응답실패
             alert("이미지 다운로드 에러:" + jqXHR.status);
           },
@@ -97,7 +95,11 @@ $(() => {
       }
     },
     error: (jqXHR) => {
-      alert("에러:" + jqXHR.status);
+      if (jqXHR.status == 500) {
+        alert("서버 오류 : " + jqXHR.status);
+      } else {
+        alert(jqXHR.status + "오류 : " + jqXHR.responseJSON.message);
+      }
     },
   });
   //   --- 세션 받아오면 사용해봐야함 ;;
@@ -121,8 +123,15 @@ $(() => {
         location.href = "./notice_list.html";
       },
       error: (jqXHR) => {
-        alert("에러:" + jqXHR.message);
+        if (jqXHR.status == 500) {
+          alert("서버 오류 : " + jqXHR.status);
+        } else {
+          alert(jqXHR.status + "오류 : " + jqXHR.responseJSON.message);
+        }
       },
     });
+  });
+  $("#btnList").click(() => {
+    window.location.href = "./notice_list.html";
   });
 });

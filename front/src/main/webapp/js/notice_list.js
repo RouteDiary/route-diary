@@ -24,9 +24,7 @@ $(() => {
             '<a class="nav-link client-update" data-value="ClientUpdate" href="client_check.html" >회원정보 수정/탈퇴</a>';
           $("li.nav-item.client-update").html(clientUpdateHtml);
           let logoutHtml =
-            '<a class="nav-link logout" data-value="Logout" href=' +
-            `${backPath}/client/logout` +
-            ">로그아웃</a>";
+            '<a class="nav-link logout" data-value="Logout" href="logout.html">로그아웃</a>';
           $("li.nav-item.login").html(logoutHtml);
         }
         //navbar end
@@ -89,28 +87,35 @@ $(() => {
         }
         $pagegroup.html($pagegroupHtml);
       },
-      error: (jqXHR) => {},
+      error: (jqXHR) => {
+        if (jqXHR.status == 500) {
+          alert("서버 오류 : " + jqXHR.status);
+        } else {
+          alert(jqXHR.status + "오류 : " + jqXHR.responseJSON.message);
+        }
+      },
     });
   }
   showNotice(`${backPath}/notice/list/1`);
 
-  $("div.pagegroup").on("click", "span:not(.disabled)", () => {
-    let pageNo = 1;
+  $("div.pagegroup").on("click", "span:not(.disabled)", (e) => {
+    // let pageNo = 1;
+    let pageNo = $(e.target).html();
     let totalPage = $("#last1").html();
-    if ($(this).hasClass("prev")) {
-      pageNo = parseInt($(this).next().html()) - 1;
+    if ($(e.target).hasClass("prev")) {
+      pageNo = parseInt($(e.target).next().html()) - 1;
       console.log("prev:" + pageNo);
-    } else if ($(this).hasClass("next")) {
-      pageNo = parseInt($(this).prev().html()) + 1;
+    } else if ($(e.target).hasClass("next")) {
+      pageNo = parseInt($(e.target).prev().html()) + 1;
       console.log("next:" + pageNo);
-    } else if ($(this).hasClass("first")) {
+    } else if ($(e.target).hasClass("first")) {
       pageNo = 1;
       console.log("first:" + pageNo);
-    } else if ($(this).hasClass("end")) {
+    } else if ($(e.target).hasClass("end")) {
       pageNo = totalPage;
       console.log(pageNo);
     } else {
-      pageNo = parseInt($(this).html());
+      pageNo = parseInt($(e.target).html());
       console.log(pageNo);
     }
 
@@ -139,8 +144,5 @@ $(() => {
     }
     showNotice(url);
     return false;
-  });
-  $("#btnSave").click(() => {
-    window.location.href = "./a_notice_write.html";
   });
 });

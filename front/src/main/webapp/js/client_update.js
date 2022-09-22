@@ -7,7 +7,7 @@ $(() => {
 
   //회원정보 불러오기
   $.ajax({
-    url: "http://localhost:9997/back/client/clientinfo",
+    url: "/back/client/clientinfo",
     method: "get",
     success: (jsonObj) => {
       // nav bar start
@@ -26,9 +26,7 @@ $(() => {
           '<a class="nav-link client-update" data-value="ClientUpdate" href="client_check.html" >회원정보 수정/탈퇴</a>';
         $("li.nav-item.client-update").html(clientUpdateHtml);
         let logoutHtml =
-          '<a class="nav-link logout" data-value="Logout" href=' +
-          `${backPath}/client/logout` +
-          ">로그아웃</a>";
+          '<a class="nav-link logout" data-value="Logout" href="logout.html">로그아웃</a>';
         $("li.nav-item.login").html(logoutHtml);
       }
       //navbar end
@@ -62,7 +60,11 @@ $(() => {
         $buttonUpdateSubmit.show();
       },
       error: (jqXHR, textStatus, errorThrown) => {
-        alert("사용불가능한 닉네임 : " + jqXHR.status);
+        if (jqXHR.status == 500) {
+          alert("서버 오류 : " + jqXHR.status);
+        } else {
+          alert(jqXHR.status + "오류 : " + jqXHR.responseJSON.message);
+        }
       },
     });
     return false;
@@ -100,8 +102,11 @@ $(() => {
           location.href = "index.html";
         },
         error: (jqXHR, textStatus, errorThrown) => {
-          errorThrown = "회원정보수정에 실패하였습니다.";
-          alert(errorThrown + " 사유 : " + jqXHR.status);
+          if (jqXHR.status == 500) {
+            alert("서버 오류 : " + jqXHR.status);
+          } else {
+            alert(jqXHR.status + "오류 : " + jqXHR.responseJSON.message);
+          }
         },
       });
       return false;
@@ -127,8 +132,11 @@ $(() => {
         location.href = "index.html";
       },
       error: (jqXHR, textStatus, errorThrown) => {
-        errorThrown = "회원탈퇴에 실패하였습니다.";
-        alert(errorThrown + " 사유 : " + jqXHR.status);
+        if (jqXHR.status == 500) {
+          alert("서버 오류 : " + jqXHR.status);
+        } else {
+          alert(jqXHR.status + "오류 : " + jqXHR.responseJSON.message);
+        }
       },
     });
     return false;

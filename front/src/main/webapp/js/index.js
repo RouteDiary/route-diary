@@ -21,9 +21,7 @@ $(() => {
           '<a class="nav-link client-update" data-value="ClientUpdate" href="client_check.html" >회원정보 수정/탈퇴</a>';
         $("li.nav-item.client-update").html(clientUpdateHtml);
         let logoutHtml =
-          '<a class="nav-link logout" data-value="Logout" href=' +
-          `${backPath}/client/logout` +
-          ">로그아웃</a>";
+          '<a class="nav-link logout" data-value="Logout" href="logout.html">로그아웃</a>';
         $("li.nav-item.login").html(logoutHtml);
       }
       //navbar end
@@ -52,11 +50,12 @@ $(() => {
           },
           success: (responseData) => {
             let url = URL.createObjectURL(responseData);
-            let $imgObj = $copyObj.find("img");
+            let $imgObj = $copyObj.find("img.d-block.w-100");
+            console.log("테스트");
+            console.log($imgObj);
             $imgObj.attr("src", url);
             $imgObj.attr("alt", "다이어리이미지");
           },
-          error: (jqXHR) => {},
         });
 
         let diaryNo = item.diaryNo;
@@ -95,7 +94,6 @@ $(() => {
             $imgObj.attr("src", url);
             $imgObj.attr("alt", "다이어리이미지");
           },
-          error: (jqXHR) => {},
         });
         let diaryNo = item.diaryNo;
         $diaryUrl = $copyObj.find("a.diary-url");
@@ -107,7 +105,11 @@ $(() => {
       });
     },
     error: (jqXHR) => {
-      alert(jqXHR.message);
+      if (jqXHR.status == 500) {
+        alert("서버 오류 : " + jqXHR.status);
+      } else {
+        alert(jqXHR.status + "오류 : " + jqXHR.responseJSON.message);
+      }
     },
   });
   return false;

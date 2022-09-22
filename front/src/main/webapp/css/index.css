@@ -19,11 +19,15 @@
 .carousel-indicators.write {
   background: rgb(148, 148, 137);
   height: 30px;
+  width: 50vw;
+  margin-left: 25vw;
   position: relative;
 }
 .carousel-indicators.like {
   background: rgb(148, 148, 137);
+  width: 50vw;
   height: 30px;
+  margin-left: 25vw;
   position: relative;
 }
 
@@ -35,6 +39,7 @@
 img {
   max-width: 100%;
   max-height: 100%;
+  margin-left: 35vw;
   color: rgb(52, 41, 27);
 }
 footer {

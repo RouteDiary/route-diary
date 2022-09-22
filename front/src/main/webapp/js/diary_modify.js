@@ -81,14 +81,22 @@ $(() => {
       let hashtagsObj = jsonObj.t.diary.hashtags;
       let $hashtagFormObj = $("input.hashtags");
       let hashtagsVal = "";
-      $(hashtagsObj).each((i, element) => {
-        hashtagsVal += element.hashtag;
-        hashtagsVal += ",";
-      });
-      $hashtagFormObj.val(hashtagsVal);
+      if (hashtagsObj == null) {
+        $hashtagFormObj.val("");
+      } else {
+        $(hashtagsObj).each((i, element) => {
+          hashtagsVal += element.hashtag;
+          hashtagsVal += ",";
+        });
+        $hashtagFormObj.val(hashtagsVal);
+      }
     },
-    error: (jqXHR, textStatus, errorThrown) => {
-      alert(" 에러. 사유 : " + jqXHR.message);
+    error: (jqXHR) => {
+      if (jqXHR.status == 500) {
+        alert("서버 오류 : " + jqXHR.status);
+      } else {
+        alert(jqXHR.status + "오류 : " + jqXHR.responseJSON.message);
+      }
     },
   });
   //-----카카오 맵 지도 생성 관련 코드-----
@@ -492,10 +500,15 @@ $(() => {
       enctype: "multipart/form-data",
       data: formData,
       success: (jsonObj) => {
-        console.log(jsonObj.message);
+        alert(jsonObj.message);
+        location.href = "view_diary.html?diaryNo=" + diaryNo;
       },
       error: (jqXHR) => {
-        alert("에러:" + jqXHR.status);
+        if (jqXHR.status == 500) {
+          alert("서버 오류 : " + jqXHR.status);
+        } else {
+          alert(jqXHR.status + "오류 : " + jqXHR.responseJSON.message);
+        }
       },
     });
     return false;

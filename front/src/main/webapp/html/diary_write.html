@@ -84,14 +84,14 @@
                 </div>
             </div>
             <div class="col-md-9">
-                <form class="write-diary" method="post" action="http://localhost:9997/back/diary/write"
+                <form class="write-diary" method="post" action="/back/diary/write"
                     enctype="multipart/form-data">
                     <div class="page-item"><br>
-                        <input type="text" class="form-control diary-title" placeholder="다이어리의 제목을 입력해주세요" value="테스트"
+                        <input type="text" class="form-control diary-title" placeholder="다이어리의 제목을 입력해주세요"
                             required><br>
-                        <input type="date" class="form-control diary-start-date" required value="2022-09-01">
+                        <input type="date" class="form-control diary-start-date" required>
                         <small class="text-muted">여행 시작일</small>
-                        <input type="date" class="form-control diary-end-date" required value="2022-09-02">
+                        <input type="date" class="form-control diary-end-date" required>
                         <small class="text-muted">여행 종료일</small><br><br>
                         <div class="form-group FileForm">
                             <label>이미지 파일 업로드</label>
@@ -127,7 +127,7 @@
                         </div><br>
                     </div>
                     <button type="button" class="btn btn-primary float-right">루트 추가</button><br><br>
-                    <input class="hashtags" name="input" placeholder="해시태그를 입력해주세요" value="테스트, xptmxm">
+                    <input class="hashtags" name="input" placeholder="해시태그를 입력해주세요">
                     <div class="form-check float-left">
                         <input class="form-check-input" id="radio1" name="diary-disclosure-flag" type="radio" value="1">
                           <label for="radio1">공개</label><br>
@@ -139,9 +139,7 @@
                         <button class="btn btn-secondary back" type="button">
                             <a href="javascript:history.back();">이전 페이지로 이동</a>
                         </button>
-                        <button class="btn btn-secondary write" type="button">
-                            작성
-                        </button>
+                        <button class="btn btn-secondary write" type="submit">작성</button>
                     </div>
                 </form>
             </div>

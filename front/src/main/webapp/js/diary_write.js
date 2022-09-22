@@ -321,7 +321,7 @@ $(() => {
   }
 
   //-----ajax 요청-----
-  $("button.btn.btn-secondary.write").click(() => {
+  $("form.write-diary").submit(() => {
     //----루트내용 가져오기----
     let diaryTitle = $("div.page-item>input.form-control.diary-title").val();
     let oldDiaryStartDate = $(
@@ -392,10 +392,15 @@ $(() => {
       enctype: "multipart/form-data",
       data: formData,
       success: (jsonObj) => {
-        console.log(jsonObj.message);
+        alert(jsonObj.message);
+        location.href = "diary_board.html";
       },
       error: (jqXHR) => {
-        alert("에러:" + jqXHR.status);
+        if (jqXHR.status == 500) {
+          alert("서버 오류 : " + jqXHR.status);
+        } else {
+          alert(jqXHR.status + "오류 : " + jqXHR.responseJSON.message);
+        }
       },
     });
     return false;

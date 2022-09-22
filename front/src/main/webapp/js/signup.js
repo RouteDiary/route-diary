@@ -28,8 +28,12 @@ $(() => {
           alert("중복된 닉네임");
         }
       },
-      error: (jqXHR, textStatus, errorThrown) => {
-        alert(jqXHR.message);
+      error: (jqXHR) => {
+        if (jqXHR.status == 500) {
+          alert("서버 오류 : " + jqXHR.status);
+        } else {
+          alert(jqXHR.status + "오류 : " + jqXHR.responseJSON.message);
+        }
       },
     });
     return false;
@@ -100,60 +104,13 @@ $(() => {
         location.href = "login.html";
       },
       error: (jqXHR) => {
-        alert("회원가입 실패 : " + jqXHR.message);
+        if (jqXHR.status == 500) {
+          alert("서버 오류 : " + jqXHR.status);
+        } else {
+          alert(jqXHR.status + "오류 : " + jqXHR.responseJSON.message);
+        }
       },
     });
     return false;
   });
 });
-
-//  // ------가입버튼 클릭 START----
-//   $('form.form_signup').submit(function(){
-//     console.log(this); //이벤트가 발생된 객체가 this
-//   });
-
-//   $('form.form_signup').submit((e)=>{
-//     console.log(this); //window객체
-//     console.log(e.target); //이벤트가 발생된 객체가
-//   });
-
-//   $('form.form_signup').submit((e)=>{
-//     alert("submit");
-//     let $clientIdVal = $clientId.val();
-//     let $clientPwdVal = $clientPwd.val();
-//     let $clientNicknameVal = $clientNickname.val();
-//     let $clientCellPhoneNoVal = $clientCellPhoneNo.val();
-//     let clientObj = {};
-//     clientObj.clientId = $clientIdVal;
-//     clientObj.clientPwd = $clientPwdVal;
-//     clientObj.clientNickname = $clientNicknameVal;
-//     clientObj.clientCellphoneNo = $clientCellPhoneNoVal;
-
-//     let data = JSON.stringify(clientObj);
-//     $.ajax({
-//       url: "http://localhost:9997/back/client/signup",
-//       method: "POST",
-//       timeout: 0,
-//       headers: {
-//               "": "Content-Type,value:application/json",
-//               "Content-Type": "application/json"
-//       },
-//       data : data,
-//       success: function(jsonObj){
-//         console.log(jsonObj);
-//     //     if(jsonObj.status != 200){
-//     //       alert(jsonObj.message);
-//     //     }else{
-//     //     location.html = "./index.html";
-//     //     }
-//     //   },
-//     //   error: function(jqXHR){
-//     //     alert(jqXHR.status);
-//       }
-
-//     });
-
-//     return false;
-//   });
-// });
-//  // ------가입버튼 클릭 END----
