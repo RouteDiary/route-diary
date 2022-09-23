@@ -174,13 +174,12 @@ public class DiaryController {
     String clientId = (String) session.getAttribute("loginInfo");
     Diary diary = diaryService.showDiary(diaryNo);
     int imageFilesCount = serviceFunctions.getImageFilesCount(diaryNo, Dto.DIARY) - 1; // 섬네일 파일 제외한
+                                                                                       // 갯수
     boolean likeFlag = false; // 좋아요선택안함
-    if (clientId != null) {                                                                                  // 갯수
-	    for (Like like : diary.getLikes()) {
-	      if (clientId.equals(like.getClientId())) {
-	        likeFlag = true; // 좋아요선택한 경우
-	      }
-	    }
+    for (Like like : diary.getLikes()) {
+      if (clientId.equals(like.getClientId())) {
+        likeFlag = true; // 좋아요선택한 경우
+      }
     }
     ResultBean<Map<String, Object>> resultBean =
         new ResultBean<Map<String, Object>>(SuccessCode.DIARY_LOAD_SUCCESS);

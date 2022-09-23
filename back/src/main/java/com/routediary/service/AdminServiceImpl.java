@@ -142,7 +142,7 @@ public class AdminServiceImpl implements AdminService {
     if (order >= 4 || order <= 0) {
       throw new NumberNotFoundException(ErrorCode.INVALID_ORDER);
     }
-    int totalRows = diaryRepository.selectCountAll();
+    int totalRows = diaryRepository.selectCountAll(hashtags);
 
     int[] rowArr = serviceFunctions.calculateStartAndEndRow(currentPage, totalRows);
     int startRow = rowArr[0];

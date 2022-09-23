@@ -12,7 +12,7 @@ import com.routediary.dto.Route;
 @Mapper
 public interface DiaryRepository {
   /**
-   * 전체 다이어리(공개 여부 상관없이)반환
+   * 전체 다이어리(공개 다이어리만)반환
    *
    * @param order
    * @param startRow
@@ -24,21 +24,25 @@ public interface DiaryRepository {
       @Param("endRow") int endRow, @Param("hashtags") @Nullable List<String> hashtags);
 
   /**
-   * 전체 다이어리개수를 반환
-   *
+   * hashtags == null인 경우, 전체 다이어리개수를 반환. hashtags != null 이면, hashtag를 가진 다이어리의 전체 갯수 반환
+   * 
+   * @param hashtags
    * @return int
    */
 
-  public int selectCountAll();
+  public int selectCountAll(@Param("hashtags") @Nullable List<String> hashtags);
 
   /**
    * diaryDisclosureFlag = 1 : DB에 있는 공개상태의 다이어리 전체갯수를 반환 / diaryDisclosureFlag = 0 : DB에 있는 비공개상태의
-   * 다이어리 전체갯수를 반환
-   *
+   * 다이어리 전체갯수를 반환. hashtags == null인 경우, (공개 or 비공개 상태의) 전체 다이어리개수를 반환. hashtags != null 이면, (공개 or
+   * 비공개 상태의) hashtag를 가진 다이어리의 전체 갯수 반환
+   * 
    * @param diaryDisclosureFlag
+   * @param hashtags
    * @return int
    */
-  public int selectCountByDisclosureFlag(int diaryDisclosureFlag);
+  public int selectCountByDisclosureFlag(@Param("diaryDisclosureFlag") int diaryDisclosureFlag,
+      @Param("hashtags") @Nullable List<String> hashtags);
 
   /**
    * clientId(아이디)에 따라 DB에 있는 다이어리 전체갯수를 반환

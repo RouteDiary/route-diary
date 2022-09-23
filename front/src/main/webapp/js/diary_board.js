@@ -57,7 +57,7 @@ $(() => {
     // 변수선언끝
 
     $.ajax({
-      url: `${backPath}/admin/diary/list/` + order + `/` + pageNo,
+      url: `${backPath}/diary/list/` + order + `/` + pageNo,
       method: "get",
       data: hashtagsObj,
       dataType: "json",
