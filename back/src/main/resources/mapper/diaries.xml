@@ -123,12 +123,36 @@
     </choose>
 				        diary_writing_time DESC)
 		  WHERE rnum BETWEEN #{startRow} AND #{endRow}
-	</select>
+  </select>
+	
   <select id="selectCountAll" resultType="int">
   	SELECT COUNT(*) FROM diaries
+	<choose>
+	  <when test="hashtags != null">
+	  		LEFT OUTER JOIN hashtags h ON (d.diary_no = h.diary_no)
+	  		WHERE 
+	    <foreach item="hashtag" collection="hashtags" separator="OR">
+		  <trim prefixOverrides="OR">
+		             OR h.hashtag LIKE '%${hashtag}%' 
+		  </trim>
+		</foreach>
+      </when>
+    </choose>
   </select>
-  <select id="selectCountByDisclosureFlag" parameterType="int" resultType="int">
-		SELECT COUNT(*) FROM diaries WHERE diary_disclosure_flag = #{diaryDisclosureFlag}
+  
+  <select id="selectCountByDisclosureFlag" resultType="int">
+		SELECT COUNT(*) FROM diaries d
+	<choose>
+	  <when test="hashtags != null">
+	  		LEFT OUTER JOIN hashtags h ON (d.diary_no = h.diary_no)
+	  		WHERE diary_disclosure_flag = #{diaryDisclosureFlag} AND
+	    <foreach item="hashtag" collection="hashtags" separator="OR">
+		  <trim prefixOverrides="OR">
+		             OR h.hashtag LIKE '%${hashtag}%' 
+		  </trim>
+		</foreach>
+      </when>
+    </choose>
   </select>
 
   <select id="selectCountByClientId" parameterType="String" resultType="int">
@@ -136,52 +160,44 @@
   </select>
 
   <select id="selectDiariesByClientId" resultMap="DiariesMap">
-				SELECT *
-		  FROM (SELECT d.*
-		             , client_nickname
-		             , client_status_flag
-		             , row_number() OVER (PARTITION BY 1 ORDER BY 1) AS rnum
-		          FROM diaries d
-		LEFT OUTER JOIN clients c ON (d.client_id = c.client_id)
-		          WHERE d.client_id = #{clientId}
-		       ORDER BY diary_writing_time DESC)
+SELECT DISTINCT second.*
+        FROM (SELECT first.* 
+                   , ROWNUM AS rnum
+                FROM (SELECT d.*
+                           , h.hashtag 
+                           , client_nickname
+                        FROM diaries d
+             LEFT OUTER JOIN clients c ON (d.client_id = c.client_id)
+		     LEFT OUTER JOIN hashtags h ON (d.diary_no = h.diary_no)
+                       WHERE d.client_id = #{clientId}
+                    ORDER BY diary_view_cnt DESC, diary_writing_time DESC) first          
+             ) second
 		 WHERE rnum BETWEEN #{startRow} AND #{endRow}
   </select>
 
   <select id="selectDiaries" resultMap="DiariesMap">
-		SELECT DISTINCT diary_no
-		              , client_id
-		              , client_nickname
-		              , diary_title
-		              , diary_writing_time
-		              , diary_modifying_time
-		              , diary_start_date
-		              , diary_end_date
-		              , diary_disclosure_flag
-		              , diary_view_cnt
-		              , diary_like_cnt
-		  FROM  (SELECT d.*
-		              , client_nickname
-		              , client_status_flag
-		              , row_number() OVER (PARTITION BY 1 ORDER BY 1) AS rnum
-		           FROM diaries d
-		LEFT OUTER JOIN clients c ON (d.client_id = c.client_id)
+SELECT DISTINCT second.*
+        FROM (SELECT first.* 
+                   , ROWNUM AS rnum
+                FROM (SELECT d.*
+                           , client_nickname
+                        FROM diaries d
+             LEFT OUTER JOIN clients c ON (d.client_id = c.client_id)
     <choose>
 	  <when test="hashtags != null">
 		LEFT OUTER JOIN hashtags h ON (d.diary_no = h.diary_no)
 		          WHERE diary_disclosure_flag = 1 AND
 	    <foreach item="hashtag" collection="hashtags" separator="OR">
-		  <trim prefixOverrides="OR">
-		             OR h.hashtag LIKE '%${hashtag}%'
+		  <trim prefixOverrides="(OR" suffixOverrides=")">
+		             (OR h.hashtag LIKE '%${hashtag}%' )
 		  </trim>
 		</foreach>
       </when>
 	  <otherwise>
-		          WHERE diary_disclosure_flag = 1
+	              WHERE diary_disclosure_flag = 1 
 	  </otherwise>
 	</choose>
-		  ) WHERE rnum BETWEEN #{startRow} AND #{endRow}
-		  	<choose>
+	<choose>
 	  <when test="order == 1">
 		       ORDER BY diary_view_cnt DESC,
 	  </when>
@@ -192,7 +208,9 @@
 		       ORDER BY diary_like_cnt DESC,
 	  </when>
     </choose>
-    				        diary_writing_time DESC
+		diary_writing_time DESC) first          
+		             ) second
+		       WHERE rnum BETWEEN #{startRow} AND #{endRow}
   </select>
 
   <select id="selectDiary" parameterType="int" resultMap="DiaryMapTest">

@@ -48,23 +48,20 @@
 
   <select id="selectNotices" parameterType="map"
 		resultType="Notice">
-		SELECT *
+SELECT second.*
 		FROM (
-		SELECT ROW_NUMBER() OVER (PARTITION BY 1 ORDER BY 1) AS r, a.*
-		FROM (SELECT
-		notice_no,
-		admin_id, notice_title,
-		notice_writing_time, notice_modifying_time, notice_view_cnt
-		FROM notices
+		SELECT first.*
+             , ROWNUM rnum
+		FROM (SELECT *
+		        FROM notices
     <trim prefix="WHERE" prefixOverrides="AND |OR">
 	  <if test="keyword != null">
 			notice_title LIKE '%${keyword}%' OR notice_content LIKE '%${keyword}%'
 	  </if>
 	</trim>
-		ORDER BY notice_no DESC
-		) a
-		)
-		WHERE r BETWEEN #{startRow} AND #{endRow}
+		    ORDER BY notice_no DESC) first
+		) second
+		WHERE rnum BETWEEN #{startRow} AND #{endRow}
   </select>
   
   <update id="updateViewCnt" parameterType="Notice">
