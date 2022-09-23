@@ -192,7 +192,7 @@ public class DiaryServiceImpl implements DiaryService {
     if (order >= 4 || order <= 0) {
       throw new NumberNotFoundException(ErrorCode.INVALID_ORDER);
     }
-    int totalRows = diaryRepository.selectCountByDisclosureFlag(1);
+    int totalRows = diaryRepository.selectCountByDisclosureFlag(1, hashtags);
     int[] rowArr = serviceFunctions.calculateStartAndEndRow(currentPage, totalRows);
     int startRow = rowArr[0];
     int endRow = rowArr[1];

@@ -1,12 +1,10 @@
 package com.routediary.dto;
 
 import com.routediary.enums.SuccessCode;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Data
 @Getter
 @Setter
 @NoArgsConstructor
@@ -27,6 +25,4 @@ public class ResultBean<T> {
     this.t = t;
     this.loginInfo = loginInfo;
   }
-
-
 }

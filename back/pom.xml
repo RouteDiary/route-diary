@@ -11,8 +11,8 @@
 	<groupId>com.routediary</groupId>
 	<artifactId>back</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging> 
 	<name>back</name>
+	<packaging>war</packaging> 
 	<description>route diary project for Spring Boot</description>
 	<properties>
 		<java.version>1.8</java.version>
@@ -128,6 +128,10 @@
 		</dependency>
 
 
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>

@@ -181,7 +181,7 @@ $(() => {
 
         $copyObj
           .find("span.clientNickname")
-          .html("작성자: " + jsonarr[i].client.clientNickname);
+          .html("작성자: " + jsonObj.t.diary.client.clientNickname);
 
         $copyObj
           .find("span.commentWritingTime")

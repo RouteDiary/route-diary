@@ -15,7 +15,7 @@
 
 <br><br>
 
-# 🚩 프로젝트 목적
+# 🚩 서비스 취지 및 목적
 
  개발 언어 및 기술 학습 JAVA, Spring Boot, MyBatis, JUnit, REST API, HTML, JavaScript, jQuery 등 <br>
 웹 개발에 필요한 언어 및 기술을 학습, 프로젝트에 적용하여 개발 능력 향상
@@ -40,6 +40,8 @@ Git/GitHub를 사용하여 개발의 편의성을 높이고 효율적인 개발 
 
 <br>
 
+![KakaoTalk_20220927_1553222922](https://user-images.githubusercontent.com/96408941/192459630-a1b7205d-f75b-4d06-bbad-7aa6e224bdf9.jpg)
+
 # 🚩 주요 기능
 
 ### 💡 사용자 (User)
@@ -59,6 +61,41 @@ Git/GitHub를 사용하여 개발의 편의성을 높이고 효율적인 개발 
 1. 사용자(User)의 다이어리 및 댓글 삭제 가능
 2. 공지사항 작성 / 수정 / 삭제
 
+<br><br>
+
+# 🚩 프로젝트 화면
+
+<br><br>
+
+### 📋 ERD
+
+![01](https://user-images.githubusercontent.com/69135840/192665939-42fb72f9-6fa1-4748-8988-9bacd74ac315.png)
+<br>
+
+### 📋 Usecase Diagram
+
+![02](https://user-images.githubusercontent.com/69135840/192665947-f20e9490-557d-448b-9720-d0a55a720d3a.png)
+<br>
+
+### 📋 Class Diagram (DTO)
+
+![03](https://user-images.githubusercontent.com/69135840/192666920-cea38136-1662-48cf-a862-50c2ac7e8582.png)
+
+<br>
+
+### 📋 Class Diagram (Repository)
+
+![04](https://user-images.githubusercontent.com/69135840/192667174-9e797e47-bd68-4d0e-894c-a61ddff045b0.png)
+<br>
+
+### 📋 Class Diagram (Service)
+
+![05](https://user-images.githubusercontent.com/69135840/192666928-5fe632c8-28b9-42be-afc2-05e133218886.png)
+<br>
+
+### 📋 Class Diagram (Controller)
+
+![06](https://user-images.githubusercontent.com/69135840/192666933-93a09c2a-5543-4c06-9cc6-a15a99ef6f3a.png)
 <br><br>
 
 # 📚 사용 기술

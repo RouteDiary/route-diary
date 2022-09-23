@@ -1,9 +1,12 @@
 package com.routediary.control;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,6 +31,7 @@ import com.routediary.exception.RemoveException;
 import com.routediary.exception.WithdrawnClientException;
 import com.routediary.service.ClientService;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("client/*")
 public class ClientController {
@@ -63,7 +67,8 @@ public class ClientController {
   }
 
   @GetMapping("/logout")
-  public ResponseEntity<?> logout(HttpSession session) throws LogoutFailureException {
+  public ResponseEntity<?> logout(HttpSession session, HttpServletRequest request,
+      HttpServletResponse response) throws LogoutFailureException {
     session.removeAttribute("loginInfo");
     String clientId = (String) session.getAttribute("loginInfo");
     if (clientId == null) {
@@ -103,6 +108,7 @@ public class ClientController {
       clientService.removeAccount(client);
       ResultBean<?> resultBean = new ResultBean(SuccessCode.SUCCESS_TO_REMOVE_ACCOUNT);
       resultBean.setLoginInfo(clientId);
+      session.removeAttribute("loginInfo");
       return new ResponseEntity<>(resultBean, HttpStatus.OK);
     }
   }

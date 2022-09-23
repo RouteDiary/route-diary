@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +20,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.routediary.annotation.LogExecutionTime;
 import com.routediary.dto.Client;
 import com.routediary.dto.Comment;
@@ -42,6 +46,7 @@ import com.routediary.functions.ServiceFunctions;
 import com.routediary.service.DiaryService;
 import lombok.extern.slf4j.Slf4j;
 
+@CrossOrigin(origins = "*")
 @Slf4j
 @RestController
 @RequestMapping
@@ -52,18 +57,24 @@ public class DiaryController {
   private DiaryService diaryService;
 
   @PostMapping(value = "diary/write")
-  public ResponseEntity<?> writeDiary(@RequestPart List<MultipartFile> imageFiles,
-      @RequestPart Diary diary, HttpSession session)
-      throws AddException, NotLoginedException, EmptyContentException {
+  public ResponseEntity<?> writeDiary(@RequestPart List<MultipartFile> imageFiles, String diary,
+      HttpSession session) throws AddException, NotLoginedException, EmptyContentException,
+      JsonMappingException, JsonProcessingException {
     String clientId = (String) session.getAttribute("loginInfo");
+    ObjectMapper mapper = new ObjectMapper();
+    Diary d = null;
+    d = mapper.readValue(diary, Diary.class);
     if (clientId == null) {
       throw new NotLoginedException(ErrorCode.NOT_LOGINED);
-    } else if (diary.getDiaryTitle().equals("") || diary.getDiaryTitle() == null) {
+    } else if (d.getDiaryTitle().equals("") || d.getDiaryTitle() == null) {
       throw new EmptyContentException(ErrorCode.EMPTY_TITLE);
-    } else if (diary.getDiaryStartDate() == null || diary.getDiaryEndDate() == null) {
+    } else if (d.getDiaryStartDate() == null || d.getDiaryEndDate() == null) {
       throw new EmptyContentException(ErrorCode.EMPTY_DATE);
     } else {
-      diaryService.writeDiary(diary, imageFiles);
+      Client client = new Client();
+      client.setClientId(clientId);
+      d.setClient(client);
+      diaryService.writeDiary(d, imageFiles);
       ResultBean<?> resultBean = new ResultBean(SuccessCode.SUCCESS_TO_WRITE);
       resultBean.setLoginInfo(clientId);
       return new ResponseEntity<>(resultBean, HttpStatus.OK);
@@ -72,17 +83,26 @@ public class DiaryController {
 
   @PutMapping(value = "diary/{diaryNo}")
   public ResponseEntity<?> modifyDiary(@PathVariable int diaryNo,
-      @RequestPart List<MultipartFile> imageFiles, @RequestPart Diary diary, HttpSession session)
-      throws ModifyException, NotLoginedException, EmptyContentException {
+      @RequestPart List<MultipartFile> imageFiles, String diary, HttpSession session)
+      throws ModifyException, NotLoginedException, EmptyContentException, JsonMappingException,
+      JsonProcessingException, NoPermissionException {
     String clientId = (String) session.getAttribute("loginInfo");
+    ObjectMapper mapper = new ObjectMapper();
+    Diary d = null;
+    d = mapper.readValue(diary, Diary.class);
     if (clientId == null) {
       throw new NotLoginedException(ErrorCode.NOT_LOGINED);
-    } else if (diary.getDiaryTitle().equals("") || diary.getDiaryTitle() == null) {
+    } else if (!clientId.equals(d.getClient().getClientId())) {
+      throw new NoPermissionException(ErrorCode.NO_PERMISSION);
+    } else if (d.getDiaryTitle().equals("") || d.getDiaryTitle() == null) {
       throw new EmptyContentException(ErrorCode.EMPTY_TITLE);
-    } else if (diary.getDiaryStartDate() == null || diary.getDiaryEndDate() == null) {
+    } else if (d.getDiaryStartDate() == null || d.getDiaryEndDate() == null) {
       throw new EmptyContentException(ErrorCode.EMPTY_DATE);
     } else {
-      diaryService.modifyDiary(diary, imageFiles);
+      Client client = new Client();
+      client.setClientId(clientId);
+      d.setClient(client);
+      diaryService.modifyDiary(d, imageFiles);
       ResultBean<?> resultBean = new ResultBean(SuccessCode.SUCCESS_TO_MODIFY);
       resultBean.setLoginInfo(clientId);
       return new ResponseEntity<>(resultBean, HttpStatus.OK);
@@ -154,13 +174,12 @@ public class DiaryController {
     String clientId = (String) session.getAttribute("loginInfo");
     Diary diary = diaryService.showDiary(diaryNo);
     int imageFilesCount = serviceFunctions.getImageFilesCount(diaryNo, Dto.DIARY) - 1; // 섬네일 파일 제외한
+                                                                                       // 갯수
     boolean likeFlag = false; // 좋아요선택안함
-    if (clientId != null) {                                                                                  // 갯수
-	    for (Like like : diary.getLikes()) {
-	      if (clientId.equals(like.getClientId())) {
-	        likeFlag = true; // 좋아요선택한 경우
-	      }
-	    }
+    for (Like like : diary.getLikes()) {
+      if (clientId.equals(like.getClientId())) {
+        likeFlag = true; // 좋아요선택한 경우
+      }
     }
     ResultBean<Map<String, Object>> resultBean =
         new ResultBean<Map<String, Object>>(SuccessCode.DIARY_LOAD_SUCCESS);
@@ -228,10 +247,12 @@ public class DiaryController {
   @PutMapping(value = "diary/{diaryNo}/comment")
   public ResponseEntity<Object> modifyComment(@PathVariable int diaryNo,
       @RequestBody Comment comment, HttpSession session)
-      throws ModifyException, NotLoginedException, EmptyContentException {
+      throws ModifyException, NotLoginedException, EmptyContentException, NoPermissionException {
     String clientId = (String) session.getAttribute("loginInfo");
     if (clientId == null) {
       throw new NotLoginedException(ErrorCode.NOT_LOGINED);
+    } else if (!clientId.equals(comment.getClient().getClientId())) {
+      throw new NoPermissionException(ErrorCode.NO_PERMISSION);
     } else if (comment.getCommentContent().equals("") || comment.getCommentContent() == null) {
       throw new EmptyContentException(ErrorCode.EMPTY_CONTENT);
     } else {
